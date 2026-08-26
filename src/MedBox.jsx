@@ -3339,10 +3339,16 @@ export default function App() {
   const missedToday = todaysDoses.filter((d) => d.status === "missed");
   // A snoozed dose stays out of the "gemist" banner until its 15 minuten om zijn.
   const visibleMissed = missedToday.filter((d) => !(snoozedUntil[logKeyFor(d.med.id, todayISO, d.t)] > now.getTime()));
-  const nextUpcoming = useMemo(() => {
+  // Every upcoming dose that shares the same moment (same maaltijd/tijdstip)
+  // as the very next one is shown together — anders lijkt het net of er maar
+  // 1 medicijn op dat moment moet, terwijl er meerdere tegelijk klaarstaan.
+  const nextUpcomingGroup = useMemo(() => {
     const upcoming = todaysDoses.filter((d) => d.status === "upcoming").sort((a, b) => a.sortValue - b.sortValue);
-    return upcoming[0] || null;
+    if (upcoming.length === 0) return [];
+    const key = momentKeyPart(upcoming[0].t);
+    return upcoming.filter((d) => momentKeyPart(d.t) === key);
   }, [todaysDoses]);
+  const nextUpcoming = nextUpcomingGroup[0] || null;
   const takenToday = todaysDoses.filter((d) => d.status === "taken");
   const allDoneToday = medications.length > 0 && todaysDoses.length > 0 && takenToday.length === todaysDoses.length;
   const prevAllDoneRef = useRef(false);
@@ -3521,7 +3527,7 @@ export default function App() {
           <>
             <div style={{ fontSize: 13, color: T.muted, marginBottom: 18 }}>{DAY_NAMES_BY_LANG[language][(now.getDay() + 6) % 7]} · {now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
 
-            {nextUpcoming && (
+            {nextUpcomingGroup.length === 1 && (
               <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 14 }}>
                 <Compartment status={nextUpcoming.status} color={nextUpcoming.med.color} size={44} onClick={() => toggleTaken(nextUpcoming.med, todayISO, nextUpcoming.t)} pop={poppedKey === logKeyFor(nextUpcoming.med.id, todayISO, nextUpcoming.t)} label={L("aria_dose_label", { name: nextUpcoming.med.name, moment: momentLabel(nextUpcoming.t, L), status: L("aria_dose_upcoming") })} />
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -3529,6 +3535,21 @@ export default function App() {
                   <div style={{ fontSize: 15.5, fontWeight: 700 }}>{nextUpcoming.med.name}</div>
                   <div className="wd-mono" style={{ fontSize: 12, color: T.muted }}>{nextDoseTiming(nextUpcoming.t, now, todayISO, L)}</div>
                 </div>
+              </div>
+            )}
+
+            {nextUpcomingGroup.length > 1 && (
+              <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("home_next")}</div>
+                <div className="wd-mono" style={{ fontSize: 12, color: T.muted, marginBottom: 10 }}>{nextDoseTiming(nextUpcoming.t, now, todayISO, L)}</div>
+                {nextUpcomingGroup.map((d, i) => (
+                  <div key={logKeyFor(d.med.id, todayISO, d.t)} style={{ display: "flex", alignItems: "center", gap: 14, marginTop: i > 0 ? 10 : 0 }}>
+                    <Compartment status={d.status} color={d.med.color} size={44} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: L("aria_dose_upcoming") })} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 15.5, fontWeight: 700 }}>{d.med.name}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
 
