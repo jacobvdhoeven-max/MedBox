@@ -611,6 +611,24 @@ const TRANSLATIONS = {
   "tr": "Hatırlatmalar yalnızca bu uygulama açık kaldığı sürece çalışır. \"Yemekten sonra\" anlarının sabit bir saati yoktur, ancak henüz işaretlenmediyse o gün diliminin sonunda yine de bir hatırlatma alırsın.",
   "ar": "تعمل التذكيرات فقط أثناء بقاء هذا التطبيق مفتوحًا. لحظات \"بعد الوجبة\" ليس لها وقت ثابت، لكنك ستتلقى تذكيرًا بمجرد انتهاء ذلك الجزء من اليوم إذا لم يتم تسجيلها بعد."
  },
+ "settings_notif_denied_label": {
+  "nl": "Geblokkeerd",
+  "en": "Blocked",
+  "de": "Blockiert",
+  "fr": "Bloqué",
+  "es": "Bloqueado",
+  "tr": "Engellendi",
+  "ar": "محظور"
+ },
+ "settings_notif_denied": {
+  "nl": "Je hebt meldingen eerder geblokkeerd in je browser. Om ze weer aan te zetten, moet je dit wijzigen bij de site-instellingen van je browser (vaak via het slotje of i-icoontje naast de adresbalk) — dat kan deze app zelf niet voor je doen.",
+  "en": "You blocked notifications for this site earlier in your browser. To turn them back on, change this in your browser's site settings (often via the lock or info icon next to the address bar) — the app itself can't do this for you.",
+  "de": "Du hast Benachrichtigungen für diese Seite zuvor in deinem Browser blockiert. Um sie wieder zu aktivieren, musst du dies in den Website-Einstellungen deines Browsers ändern (oft über das Schloss- oder Info-Symbol neben der Adressleiste) — das kann die App selbst nicht für dich erledigen.",
+  "fr": "Tu as bloqué les notifications pour ce site plus tôt dans ton navigateur. Pour les réactiver, modifie cela dans les paramètres du site de ton navigateur (souvent via l'icône de cadenas ou d'info à côté de la barre d'adresse) — l'appli elle-même ne peut pas le faire à ta place.",
+  "es": "Bloqueaste las notificaciones de este sitio antes en tu navegador. Para volver a activarlas, cámbialo en la configuración del sitio de tu navegador (a menudo mediante el icono de candado o de información junto a la barra de direcciones) — la app en sí no puede hacerlo por ti.",
+  "tr": "Bu site için bildirimleri daha önce tarayıcında engelledin. Tekrar açmak için bunu tarayıcının site ayarlarından değiştirmen gerekir (genellikle adres çubuğunun yanındaki kilit veya bilgi simgesi üzerinden) — uygulama bunu senin için yapamaz.",
+  "ar": "لقد حظرت الإشعارات لهذا الموقع سابقًا في متصفحك. لإعادة تفعيلها، عليك تغيير ذلك في إعدادات الموقع في متصفحك (غالبًا عبر أيقونة القفل أو المعلومات بجانب شريط العنوان) — لا يمكن للتطبيق نفسه القيام بذلك نيابة عنك."
+ },
  "settings_home_title": {
   "nl": "Beginscherm",
   "en": "Home screen",
@@ -2275,6 +2293,105 @@ const TRANSLATIONS = {
   "es": "No se pudo leer este archivo de copia de seguridad. Comprueba que sea un archivo de exportación de MedBox válido.",
   "tr": "Bu yedek dosyası okunamadı. Geçerli bir MedBox dışa aktarma dosyası olduğundan emin ol.",
   "ar": "تعذّرت قراءة ملف النسخة الاحتياطية هذا. تأكّد من أنه ملف تصدير MedBox صالح."
+ },
+ "undo_toast_text": {
+  "nl": "{name} gemarkeerd als ingenomen",
+  "en": "{name} marked as taken",
+  "de": "{name} als eingenommen markiert",
+  "fr": "{name} marqué comme pris",
+  "es": "{name} marcado como tomado",
+  "tr": "{name} alındı olarak işaretlendi",
+  "ar": "تم تمييز {name} كمأخوذ"
+ },
+ "undo_toast_button": {
+  "nl": "Ongedaan maken",
+  "en": "Undo",
+  "de": "Rückgängig",
+  "fr": "Annuler",
+  "es": "Deshacer",
+  "tr": "Geri al",
+  "ar": "تراجع"
+ },
+ "undo_toast_dismiss": {
+  "nl": "Sluiten",
+  "en": "Dismiss",
+  "de": "Schließen",
+  "fr": "Fermer",
+  "es": "Cerrar",
+  "tr": "Kapat",
+  "ar": "إغلاق"
+ },
+ "settings_install_already": {
+  "nl": "MedBox is al geïnstalleerd als app op dit apparaat.",
+  "en": "MedBox is already installed as an app on this device.",
+  "de": "MedBox ist auf diesem Gerät bereits als App installiert.",
+  "fr": "MedBox est déjà installée en tant qu'application sur cet appareil.",
+  "es": "MedBox ya está instalada como aplicación en este dispositivo.",
+  "tr": "MedBox bu cihazda zaten uygulama olarak yüklü.",
+  "ar": "تم بالفعل تثبيت MedBox كتطبيق على هذا الجهاز."
+ },
+ "settings_install_explain": {
+  "nl": "Zet MedBox op je startscherm als een volwaardige app — sneller opstarten, een eigen icoon, en werkt ook zonder internetverbinding.",
+  "en": "Add MedBox to your home screen as a full app — faster to open, its own icon, and it keeps working without an internet connection.",
+  "de": "Füge MedBox als eigenständige App zu deinem Startbildschirm hinzu — schnellerer Start, ein eigenes Symbol, und funktioniert auch ohne Internetverbindung.",
+  "fr": "Ajoute MedBox à ton écran d'accueil comme une véritable application — démarrage plus rapide, icône dédiée, et fonctionne aussi sans connexion internet.",
+  "es": "Añade MedBox a tu pantalla de inicio como una aplicación completa — se abre más rápido, tiene su propio icono y también funciona sin conexión a internet.",
+  "tr": "MedBox'ı tam bir uygulama olarak ana ekranına ekle — daha hızlı açılır, kendi simgesine sahiptir ve internet bağlantısı olmadan da çalışır.",
+  "ar": "أضف MedBox إلى شاشتك الرئيسية كتطبيق كامل — يفتح أسرع، وله أيقونة خاصة، ويعمل أيضًا بدون اتصال بالإنترنت."
+ },
+ "settings_install_button": {
+  "nl": "Installeer MedBox",
+  "en": "Install MedBox",
+  "de": "MedBox installieren",
+  "fr": "Installer MedBox",
+  "es": "Instalar MedBox",
+  "tr": "MedBox'ı yükle",
+  "ar": "تثبيت MedBox"
+ },
+ "settings_trend_title": {
+  "nl": "Therapietrouw",
+  "en": "Adherence trend",
+  "de": "Therapietreue",
+  "fr": "Observance",
+  "es": "Adherencia al tratamiento",
+  "tr": "Tedaviye uyum",
+  "ar": "الالتزام بالعلاج"
+ },
+ "settings_trend_explain": {
+  "nl": "Percentage ingenomen doses per week, over de laatste 8 weken. Alleen medicatie met een vast schema telt mee.",
+  "en": "Percentage of doses taken per week, over the last 8 weeks. Only medication with a fixed schedule counts.",
+  "de": "Prozentsatz der eingenommenen Dosen pro Woche, über die letzten 8 Wochen. Nur Medikamente mit festem Zeitplan zählen.",
+  "fr": "Pourcentage de doses prises par semaine, sur les 8 dernières semaines. Seuls les médicaments à horaire fixe sont comptabilisés.",
+  "es": "Porcentaje de dosis tomadas por semana, durante las últimas 8 semanas. Solo cuenta la medicación con un horario fijo.",
+  "tr": "Son 8 haftadaki haftalık alınan doz yüzdesi. Yalnızca sabit programı olan ilaçlar sayılır.",
+  "ar": "نسبة الجرعات المأخوذة أسبوعيًا خلال آخر 8 أسابيع. تُحتسب فقط الأدوية ذات الجدول الثابت."
+ },
+ "settings_trend_empty": {
+  "nl": "Nog niet genoeg gegevens om een trend te tonen.",
+  "en": "Not enough data yet to show a trend.",
+  "de": "Noch nicht genug Daten, um einen Trend anzuzeigen.",
+  "fr": "Pas encore assez de données pour afficher une tendance.",
+  "es": "Aún no hay suficientes datos para mostrar una tendencia.",
+  "tr": "Bir eğilim göstermek için henüz yeterli veri yok.",
+  "ar": "لا توجد بيانات كافية بعد لعرض اتجاه."
+ },
+ "settings_trend_avg_one": {
+  "nl": "Gemiddeld {pct}% over de laatste week",
+  "en": "Average {pct}% over the last week",
+  "de": "Durchschnittlich {pct}% in der letzten Woche",
+  "fr": "Moyenne de {pct} % sur la dernière semaine",
+  "es": "Media del {pct}% en la última semana",
+  "tr": "Geçen hafta ortalama %{pct}",
+  "ar": "بمعدل {pct}% خلال الأسبوع الماضي"
+ },
+ "settings_trend_avg_other": {
+  "nl": "Gemiddeld {pct}% over de laatste {n} weken",
+  "en": "Average {pct}% over the last {n} weeks",
+  "de": "Durchschnittlich {pct}% in den letzten {n} Wochen",
+  "fr": "Moyenne de {pct} % sur les {n} dernières semaines",
+  "es": "Media del {pct}% en las últimas {n} semanas",
+  "tr": "Son {n} haftada ortalama %{pct}",
+  "ar": "بمعدل {pct}% خلال آخر {n} أسابيع"
  }
 };
 
@@ -2680,6 +2797,19 @@ export default function App() {
   const [lastBackupAt, setLastBackupAt] = useState(null);
   const [onboardingSeen, setOnboardingSeen] = useState(false);
   const [beheerSearch, setBeheerSearch] = useState("");
+  // "Installeerbaar maken als app": Chrome/Edge/Android fire this event when
+  // the app qualifies for installation (manifest + service worker present);
+  // we stash it so a button can trigger the native prompt on tap instead of
+  // relying on the browser's own, easy-to-miss install icon. iOS Safari
+  // never fires this event — that platform only supports the manual "Zet op
+  // beginscherm" steps already shown further down, which stay in place.
+  const [installPromptEvent, setInstallPromptEvent] = useState(null);
+  const [isStandalone, setIsStandalone] = useState(false);
+  // Brief "ongedaan maken" affordance right after a dose is checked off, so
+  // an accidental tap can be corrected without hunting for the same
+  // compartment again (which may have already collapsed out of view once
+  // its whole dagdeel is done).
+  const [undoToast, setUndoToast] = useState(null);
   const T = darkMode ? DARK : LIGHT;
   // App() renders LangContext.Provider for its own children — it isn't a
   // descendant of that provider itself, so useL()/useContext(LangContext)
@@ -2692,6 +2822,15 @@ export default function App() {
   }, [language]);
   const [now, setNow] = useState(new Date());
   const [notifPerm, setNotifPerm] = useState(typeof Notification !== "undefined" ? Notification.permission : "unsupported");
+  // The browser's own notification permission can only move forward
+  // (default -> granted/denied) via Notification.requestPermission(); once
+  // granted, JavaScript can never revoke it again, and once denied, the
+  // browser silently refuses to re-prompt. So an in-app on/off toggle can't
+  // just re-call requestPermission() for the "off" direction — it needs its
+  // own flag the app respects when deciding whether to actually fire a
+  // Notification, independent of what the browser permission itself says.
+  const [notifDisabledByUser, setNotifDisabledByUser] = useState(false);
+  const notifActive = notifPerm === "granted" && !notifDisabledByUser;
   const [showAdd, setShowAdd] = useState(false);
   const [editingMed, setEditingMed] = useState(null);
   const [restockMed, setRestockMed] = useState(null);
@@ -2710,10 +2849,37 @@ export default function App() {
   const periodEndFiredRef = useRef(new Set());
   const refillFiredRef = useRef(new Set());
   const loadedRef = useRef(false);
+  const undoTimerRef = useRef(null);
 
   // Each bottom-nav item is now a distinct page rather than a scroll anchor
   // on one long page — jump to the top whenever the page changes.
   useEffect(() => { window.scrollTo(0, 0); }, [activeNav]);
+
+  // Installable-app detection: whether we're already running standalone
+  // (installed), and whether the browser is offering a native install
+  // prompt right now (only Chromium-based browsers fire this).
+  useEffect(() => {
+    try {
+      setIsStandalone(window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true);
+    } catch (e) {}
+    const onBeforeInstall = (e) => { e.preventDefault(); setInstallPromptEvent(e); };
+    const onInstalled = () => { setInstallPromptEvent(null); setIsStandalone(true); };
+    window.addEventListener("beforeinstallprompt", onBeforeInstall);
+    window.addEventListener("appinstalled", onInstalled);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onBeforeInstall);
+      window.removeEventListener("appinstalled", onInstalled);
+    };
+  }, []);
+
+  useEffect(() => () => { if (undoTimerRef.current) clearTimeout(undoTimerRef.current); }, []);
+
+  const handleInstallClick = async () => {
+    if (!installPromptEvent) return;
+    installPromptEvent.prompt();
+    try { await installPromptEvent.userChoice; } catch (e) {}
+    setInstallPromptEvent(null);
+  };
 
   useEffect(() => {
     (async () => {
@@ -2742,6 +2908,7 @@ export default function App() {
         setEmergencyInfo({ allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "", ...(data.emergencyInfo || {}) });
         setLastBackupAt(data.lastBackupAt || null);
         setOnboardingSeen(!!data.onboardingSeen);
+        setNotifDisabledByUser(!!data.notifDisabledByUser);
       } else if (!readFailed) {
         // Genuinely nothing saved yet — safe to start fresh.
         setHouseholdCode(genCode());
@@ -2763,10 +2930,10 @@ export default function App() {
     if (!loadedRef.current || storageIssue) return;
     (async () => {
       try {
-        await window.storage.set("medbox_v1", JSON.stringify({ medications, log, householdCode, sharingEnabled, periodBounds, darkMode, language, homeTipDismissed, customMedNames, emergencyInfo, lastBackupAt, onboardingSeen }), false);
+        await window.storage.set("medbox_v1", JSON.stringify({ medications, log, householdCode, sharingEnabled, periodBounds, darkMode, language, homeTipDismissed, customMedNames, emergencyInfo, lastBackupAt, onboardingSeen, notifDisabledByUser }), false);
       } catch (e) { console.error("Opslaan mislukt", e); }
     })();
-  }, [medications, log, householdCode, sharingEnabled, periodBounds, darkMode, language, homeTipDismissed, customMedNames, emergencyInfo, lastBackupAt, onboardingSeen, storageIssue]);
+  }, [medications, log, householdCode, sharingEnabled, periodBounds, darkMode, language, homeTipDismissed, customMedNames, emergencyInfo, lastBackupAt, onboardingSeen, notifDisabledByUser, storageIssue]);
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 30000);
@@ -2775,7 +2942,7 @@ export default function App() {
 
   // Dose-time notifications — only possible for fixed-time moments; "na het ontbijt" etc. has no clock trigger.
   useEffect(() => {
-    if (notifPerm !== "granted") return;
+    if (!notifActive) return;
     const todayISO = isoDate(now);
     medications.forEach((med) => {
       if (!isDayScheduled(med, now)) return;
@@ -2791,13 +2958,13 @@ export default function App() {
         }
       });
     });
-  }, [now, medications, log, notifPerm, L]);
+  }, [now, medications, log, notifActive, L]);
 
   // Period-end catch-up notification — fires once when a dagdeel ends, listing anything in it
   // that's still unchecked (this covers "na maaltijd" moments, which have no clock time of their
   // own; it also quietly catches a missed fixed-time dose from that period).
   useEffect(() => {
-    if (notifPerm !== "granted") return;
+    if (!notifActive) return;
     const todayISO = isoDate(now);
     const ends = periodEndDateTimes(periodBounds, todayISO);
     Object.entries(ends).forEach(([period, endDt]) => {
@@ -2815,11 +2982,26 @@ export default function App() {
         try { new Notification(L("notif_period_title", { period: L(PERIOD_KEY_MAP[period] || period) }), { body: L("notif_period_body", { list: pending.join(", ") }), tag: fireKey }); } catch (e) {}
       }
     });
-  }, [now, medications, log, notifPerm, periodBounds, L]);
+  }, [now, medications, log, notifActive, periodBounds, L]);
 
   const requestNotif = async () => {
     if (typeof Notification === "undefined") return;
-    setNotifPerm(await Notification.requestPermission());
+    if (notifPerm === "granted") {
+      // The browser permission is already granted and can't be revoked from
+      // JavaScript, so "turning off" here just means the app itself stops
+      // firing notifications — tapping again turns it back on.
+      setNotifDisabledByUser((v) => !v);
+      return;
+    }
+    if (notifPerm === "denied") {
+      // The browser will silently re-resolve to "denied" without even
+      // showing a prompt — nothing we do here can change that, only the
+      // browser's own site settings can. The UI explains this instead.
+      return;
+    }
+    const perm = await Notification.requestPermission();
+    setNotifPerm(perm);
+    if (perm === "granted") setNotifDisabledByUser(false);
   };
 
   const todayISO = isoDate(now);
@@ -2830,6 +3012,17 @@ export default function App() {
     const key = logKeyFor(med.id, dateISO, t);
     return momentStatus({ ...t, _logKey: key }, dateISO, log, now, todayISO, periodEnds);
   }, [log, now, todayISO, periodEnds]);
+
+  const hideUndoToast = useCallback(() => {
+    if (undoTimerRef.current) { clearTimeout(undoTimerRef.current); undoTimerRef.current = null; }
+    setUndoToast(null);
+  }, []);
+
+  const showUndoToast = useCallback((med, dateISO, t, key) => {
+    if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+    setUndoToast({ key, med, dateISO, t });
+    undoTimerRef.current = setTimeout(() => { setUndoToast(null); undoTimerRef.current = null; }, 6000);
+  }, []);
 
   const toggleTaken = (med, dateISO, t) => {
     const key = logKeyFor(med.id, dateISO, t);
@@ -2854,6 +3047,12 @@ export default function App() {
       if (stock === null) return m;
       return { ...m, stock: wasTaken ? stock + amount : Math.max(0, stock - amount) };
     }));
+    // Only offer the brief "ongedaan maken" toast when a dose was just
+    // checked off — not when un-checking it again (that IS the undo), and
+    // dismiss it immediately if this toggle is what un-checked the dose the
+    // toast was already offering to undo.
+    if (!wasTaken) showUndoToast(med, dateISO, t, key);
+    else setUndoToast((cur) => (cur?.key === key ? null : cur));
   };
 
   const logPRN = (med) => {
@@ -2905,7 +3104,7 @@ export default function App() {
     const key = logKeyFor(med.id, todayISO, t);
     const minutes = 15;
     setSnoozedUntil((prev) => ({ ...prev, [key]: Date.now() + minutes * 60000 }));
-    if (notifPerm === "granted") {
+    if (notifActive) {
       setTimeout(() => {
         try { new Notification(L("notif_dose_title", { name: med.name }), { body: doseLabel(med, t, L) || L("notif_dose_body_fallback"), tag: key }); } catch (e) {}
       }, minutes * 60000);
@@ -3073,7 +3272,7 @@ export default function App() {
   const needsRefill = lowStock;
 
   useEffect(() => {
-    if (notifPerm !== "granted") return;
+    if (!notifActive) return;
     needsRefill.forEach((m) => {
       const key = `refill_${m.id}_${todayISO}`;
       if (!refillFiredRef.current.has(key)) {
@@ -3083,7 +3282,7 @@ export default function App() {
         try { new Notification(L("notif_refill_title", { name: m.name }), { body: L("notif_refill_body", { days, unit: L(days === 1 ? "stat_streak_days_one" : "stat_streak_days_other"), date }), tag: key }); } catch (e) {}
       }
     });
-  }, [needsRefill, notifPerm, todayISO, L, language]);
+  }, [needsRefill, notifActive, todayISO, L, language]);
 
   useEffect(() => {
     if (!loadedRef.current || !householdCode) return;
@@ -3250,7 +3449,7 @@ export default function App() {
             <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
               <StatTile icon={<Check size={13} />} label={L("stat_taken")} value={`${takenToday.length}/${todaysDoses.length || 0}`} color={T.primary} bg={T.primarySoft} />
               <StatTile icon={streak >= 3 ? <Flame size={13} /> : <Clock size={13} />} label={L("stat_streak")} value={`${streak} ${L(streak === 1 ? "stat_streak_days_one" : "stat_streak_days_other")}`} color={streak >= 3 ? T.gold : T.success} bg={streak >= 3 ? T.goldSoft : T.successSoft} />
-              <StatTile icon={notifPerm === "granted" ? <Bell size={13} /> : <BellOff size={13} />} label={L("stat_notif")} value={notifPerm === "granted" ? L("stat_notif_on") : L("stat_notif_off")} color={notifPerm === "granted" ? T.primary : T.muted} bg={notifPerm === "granted" ? T.primarySoft : T.surfaceSoft} onClick={requestNotif} />
+              <StatTile icon={notifActive ? <Bell size={13} /> : <BellOff size={13} />} label={L("stat_notif")} value={notifActive ? L("stat_notif_on") : L("stat_notif_off")} color={notifActive ? T.primary : T.muted} bg={notifActive ? T.primarySoft : T.surfaceSoft} onClick={requestNotif} />
             </div>
 
             {milestoneHit && (
@@ -3492,16 +3691,28 @@ export default function App() {
 
             <SectionTitle>{L("settings_notif_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: notifPerm !== "granted" ? 8 : 0 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: !notifActive ? 8 : 0 }}>
                 <span style={{ fontSize: 13.5, fontWeight: 600 }}>{L("settings_notif_label")}</span>
-                <IconToggleButton onClick={requestNotif} active={notifPerm === "granted"} icon={notifPerm === "granted" ? <Bell size={16} /> : <BellOff size={16} />} label={notifPerm === "granted" ? L("stat_notif_on") : L("settings_notif_enable")} />
+                <IconToggleButton onClick={requestNotif} active={notifActive} icon={notifActive ? <Bell size={16} /> : <BellOff size={16} />} label={notifPerm === "denied" ? L("settings_notif_denied_label") : notifActive ? L("stat_notif_on") : notifPerm === "granted" ? L("stat_notif_off") : L("settings_notif_enable")} />
               </div>
-              {notifPerm !== "granted" && <div style={{ fontSize: 12, color: T.mutedSoft, lineHeight: 1.4 }}>{L("settings_notif_explain")}</div>}
+              {notifPerm === "denied" ? (
+                <div style={{ fontSize: 12, color: T.warn, lineHeight: 1.4 }}>{L("settings_notif_denied")}</div>
+              ) : !notifActive && (
+                <div style={{ fontSize: 12, color: T.mutedSoft, lineHeight: 1.4 }}>{L("settings_notif_explain")}</div>
+              )}
             </div>
 
             <SectionTitle>{L("settings_home_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              {!homeTipDismissed ? (
+              {isStandalone ? (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.success, fontWeight: 600, fontSize: 13 }}><Check size={16} /> {L("settings_install_already")}</div>
+              ) : installPromptEvent ? (
+                <>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.primary, fontWeight: 700, fontSize: 14, marginBottom: 8 }}><Smartphone size={17} /> {L("settings_home_headline")}</div>
+                  <div style={{ fontSize: 12.5, color: T.ink, lineHeight: 1.5, marginBottom: 12 }}>{L("settings_install_explain")}</div>
+                  <button className="wd-btn" onClick={handleInstallClick} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.primary, color: "#fff", border: "none", borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: 14, cursor: "pointer", minHeight: 44 }}><Download size={17} /> {L("settings_install_button")}</button>
+                </>
+              ) : !homeTipDismissed ? (
                 <>
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8, marginBottom: 8 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.primary, fontWeight: 700, fontSize: 14 }}><Smartphone size={17} /> {L("settings_home_headline")}</div>
@@ -3591,6 +3802,15 @@ export default function App() {
               <button className="wd-btn" onClick={() => setShowEmergencyCard(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.warnSoft, border: `1.5px solid ${T.warn}55`, color: T.warn, borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: 13.5, cursor: "pointer", minHeight: 44, marginTop: 4 }}><AlertTriangle size={16} /> {L("settings_emergency_view_button")}</button>
             </div>
 
+            <SectionTitle>{L("settings_trend_title")}</SectionTitle>
+            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
+              {medications.length === 0 ? (
+                <div style={{ fontSize: 12.5, color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>
+              ) : (
+                <AdherenceTrend medications={medications} log={log} now={now} periodBounds={periodBounds} />
+              )}
+            </div>
+
             <SectionTitle>{L("settings_report_title")}</SectionTitle>
             <button className="wd-btn" onClick={() => setShowReport(true)} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.surface, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "15px", fontWeight: 600, fontSize: 14, cursor: medications.length === 0 ? "not-allowed" : "pointer", marginBottom: 10 }}><Printer size={17} /> {L("settings_report_button")}</button>
           </>
@@ -3621,6 +3841,15 @@ export default function App() {
       {showReport && <ReportView medications={medications} log={log} now={now} periodBounds={periodBounds} onClose={() => setShowReport(false)} />}
 
       {showEmergencyCard && <EmergencyCardView medications={medications} info={emergencyInfo} onClose={() => setShowEmergencyCard(false)} />}
+
+      {undoToast && (
+        <div className="no-print" style={{ position: "fixed", left: "50%", transform: "translateX(-50%)", bottom: 86, zIndex: 55, background: T.ink, color: T.bg, borderRadius: 14, padding: "11px 8px 11px 14px", display: "flex", alignItems: "center", gap: 10, boxShadow: "0 8px 24px rgba(0,0,0,0.28)", maxWidth: "calc(100% - 28px)", width: 380 }}>
+          <Check size={16} style={{ flexShrink: 0 }} />
+          <div style={{ fontSize: 12.5, fontWeight: 600, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{L("undo_toast_text", { name: undoToast.med.name })}</div>
+          <button className="wd-btn" onClick={() => { toggleTaken(undoToast.med, undoToast.dateISO, undoToast.t); hideUndoToast(); }} style={{ background: "none", border: "none", color: "inherit", fontWeight: 700, fontSize: 12.5, cursor: "pointer", flexShrink: 0, textDecoration: "underline", padding: "6px 4px" }}>{L("undo_toast_button")}</button>
+          <button className="wd-iconbtn" onClick={hideUndoToast} aria-label={L("undo_toast_dismiss")} style={{ background: "none", border: "none", color: "inherit", opacity: 0.65, cursor: "pointer", flexShrink: 0, minWidth: 32, minHeight: 32 }}><X size={15} /></button>
+        </div>
+      )}
 
       <BottomNav active={activeNav} onNavigate={navigateTo} />
     </div>
@@ -3821,6 +4050,84 @@ function StatusBadge({ status }) {
   const map = { taken: { text: L("status_taken"), color: T.success, bg: T.successSoft }, missed: { text: L("status_missed"), color: T.warn, bg: T.warnSoft }, upcoming: { text: L("status_upcoming"), color: T.muted, bg: T.surfaceSoft } };
   const s = map[status] || map.upcoming;
   return <span style={{ fontSize: 11.5, fontWeight: 700, color: s.color, background: s.bg, borderRadius: 8, padding: "4px 9px", flexShrink: 0 }}>{s.text}</span>;
+}
+
+// Trendgrafiek therapietrouw: percentage ingenomen doses per week, over de
+// laatste weken — los van het maandelijkse printbare rapport hierboven, dat
+// per dosis een lijst geeft. Alleen doses met een vast schema tellen mee
+// ("indien nodig"-medicatie heeft geen schema om trouw aan af te meten).
+function AdherenceTrend({ medications, log, now, periodBounds }) {
+  const T = useThemeColors();
+  const L = useL();
+  const P = usePlural();
+  const language = React.useContext(LangContext);
+  const todayISO = isoDate(now);
+  const periodEnds = useMemo(() => periodEndDateTimes(periodBounds || DEFAULT_PERIOD_BOUNDS, todayISO), [periodBounds, todayISO]);
+  const NUM_WEEKS = 8;
+
+  const weeks = useMemo(() => {
+    const list = [];
+    for (let w = NUM_WEEKS - 1; w >= 0; w--) {
+      const weekStart = startOfWeek(new Date(now.getTime() - w * 7 * 86400000));
+      let taken = 0, total = 0;
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(weekStart.getTime() + i * 86400000);
+        const dISO = isoDate(d);
+        if (dISO > todayISO) continue;
+        medications.forEach((med) => {
+          if (med.frequency === "indien_nodig") return;
+          if (!isDayScheduled(med, d)) return;
+          med.times.forEach((t) => {
+            const entry = log[logKeyFor(med.id, dISO, t)];
+            // Same "hasn't happened yet" rule as the printable report: don't
+            // count today's still-open doses as missed before their time.
+            if (dISO === todayISO && !entry?.taken) {
+              if (isMeal(t)) {
+                const end = periodEnds[mealInfo(t.meal).period];
+                if (!end || now <= end) return;
+              } else if (scheduledDateTime(dISO, t.time) > now) {
+                return;
+              }
+            }
+            total++;
+            if (entry?.taken) taken++;
+          });
+        });
+      }
+      list.push({ weekStart, taken, total, pct: total > 0 ? Math.round((taken / total) * 100) : null });
+    }
+    return list;
+  }, [medications, log, now, todayISO, periodEnds]);
+
+  const weeksWithData = weeks.filter((w) => w.total > 0);
+  if (weeksWithData.length === 0) {
+    return <div style={{ fontSize: 12.5, color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>;
+  }
+  const avgPct = Math.round(weeksWithData.reduce((sum, w) => sum + w.pct, 0) / weeksWithData.length);
+  const barW = 20, gap = 9, chartH = 84;
+
+  return (
+    <div>
+      <div style={{ fontSize: 12.5, color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_trend_explain")}</div>
+      <div className="wd-scroll" style={{ display: "flex", alignItems: "flex-end", gap, overflowX: "auto", paddingBottom: 6 }}>
+        {weeks.map((w, i) => {
+          const hasData = w.pct != null;
+          const h = hasData ? Math.max(4, Math.round((w.pct / 100) * chartH)) : 4;
+          const color = !hasData ? T.border : w.pct >= 80 ? T.success : w.pct >= 50 ? T.gold : T.warn;
+          return (
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, flexShrink: 0, width: barW + 10 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: hasData ? color : T.mutedSoft }}>{hasData ? `${w.pct}%` : "–"}</div>
+              <div style={{ width: barW, height: chartH, display: "flex", alignItems: "flex-end" }}>
+                <div style={{ width: "100%", height: h, background: color, borderRadius: 4, opacity: hasData ? 1 : 0.35 }} />
+              </div>
+              <div className="wd-mono" style={{ fontSize: 9, color: T.mutedSoft, whiteSpace: "nowrap" }}>{w.weekStart.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "short" })}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ fontSize: 12, fontWeight: 700, color: T.ink, marginTop: 12, textAlign: "center" }}>{P("settings_trend_avg", weeksWithData.length, { pct: avgPct })}</div>
+    </div>
+  );
 }
 
 function ReportView({ medications, log, now, periodBounds, onClose }) {

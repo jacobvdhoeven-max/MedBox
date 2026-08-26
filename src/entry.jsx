@@ -37,3 +37,14 @@ window.storage = {
 
 const root = createRoot(document.getElementById("root"));
 root.render(<App />);
+
+// Registers the service worker that powers "installable as an app" (offline
+// shell + install prompt eligibility). This only exists as sw.js on a real
+// deployment (e.g. GitHub Pages) — in a sandboxed/demo context where that
+// file isn't served, or where service workers aren't allowed at all, this
+// simply fails silently and the app keeps working as a normal web page.
+if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
