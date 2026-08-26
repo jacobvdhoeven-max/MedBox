@@ -297,13 +297,13 @@ const TRANSLATIONS = {
   "ar": "حان وقت طلب إعادة الصرف"
  },
  "refill_days_left": {
-  "nl": "— nog ongeveer {days} {unit} voorraad",
-  "en": "— about {days} {unit} of supply left",
-  "de": "— noch etwa {days} {unit} Vorrat",
-  "fr": "— environ {days} {unit} de stock restant",
-  "es": "— quedan aproximadamente {days} {unit} de existencias",
-  "tr": "— yaklaşık {days} {unit} stok kaldı",
-  "ar": "— تبقّى ما يقارب {days} {unit} من المخزون"
+  "nl": "— nog ongeveer {days} {unit} voorraad, op {date} helemaal op",
+  "en": "— about {days} {unit} of supply left, runs out on {date}",
+  "de": "— noch etwa {days} {unit} Vorrat, leer am {date}",
+  "fr": "— environ {days} {unit} de stock restant, épuisé le {date}",
+  "es": "— quedan aproximadamente {days} {unit} de existencias, se agotan el {date}",
+  "tr": "— yaklaşık {days} {unit} stok kaldı, {date} tarihinde biter",
+  "ar": "— تبقّى ما يقارب {days} {unit} من المخزون، وينفد في {date}"
  },
  "empty_no_meds_title": {
   "nl": "Nog geen medicatie toegevoegd",
@@ -1727,6 +1727,24 @@ const TRANSLATIONS = {
   "tr": "örn. 1",
   "ar": "مثال: 1"
  },
+ "field_count_short": {
+  "nl": "aantal",
+  "en": "amount",
+  "de": "Anzahl",
+  "fr": "quantité",
+  "es": "cantidad",
+  "tr": "miktar",
+  "ar": "الكمية"
+ },
+ "unit_generic_singular": {
+  "nl": "eenheid",
+  "en": "unit",
+  "de": "Einheit",
+  "fr": "unité",
+  "es": "unidad",
+  "tr": "birim",
+  "ar": "وحدة"
+ },
  "field_stock": {
   "nl": "Voorraad (aantal, optioneel)",
   "en": "Stock (amount, optional)",
@@ -2232,13 +2250,13 @@ const TRANSLATIONS = {
   "ar": "أوشك على النفاد: {name}"
  },
  "notif_refill_body": {
-  "nl": "Nog ongeveer {days} {unit} voorraad — tijd om bij te bestellen.",
-  "en": "About {days} {unit} of supply left — time to reorder.",
-  "de": "Noch etwa {days} {unit} Vorrat — Zeit zum Nachbestellen.",
-  "fr": "Environ {days} {unit} de stock restant — il est temps de recommander.",
-  "es": "Quedan aproximadamente {days} {unit} de existencias — hora de volver a pedir.",
-  "tr": "Yaklaşık {days} {unit} stok kaldı — yeniden sipariş zamanı.",
-  "ar": "تبقّى نحو {days} {unit} من المخزون — حان وقت إعادة الطلب."
+  "nl": "Nog ongeveer {days} {unit} voorraad — leeg op {date}. Tijd om bij te bestellen.",
+  "en": "About {days} {unit} of supply left — runs out on {date}. Time to reorder.",
+  "de": "Noch etwa {days} {unit} Vorrat — leer am {date}. Zeit zum Nachbestellen.",
+  "fr": "Environ {days} {unit} de stock restant — épuisé le {date}. Il est temps de recommander.",
+  "es": "Quedan aproximadamente {days} {unit} de existencias — se agotan el {date}. Hora de volver a pedir.",
+  "tr": "Yaklaşık {days} {unit} stok kaldı — {date} tarihinde biter. Yeniden sipariş zamanı.",
+  "ar": "تبقّى نحو {days} {unit} من المخزون — وينفد في {date}. حان وقت إعادة الطلب."
  },
  "confirm_import": {
   "nl": "Dit vervangt je huidige medicijnen en geschiedenis door de back-up. Doorgaan?",
@@ -2620,11 +2638,12 @@ function AvatarBadge({ name, color, photo, size = 32 }) {
 // ---------- Bottom mobile navigation ----------
 function BottomNav({ active, onNavigate }) {
   const T = useThemeColors();
+  const L = useL();
   const items = [
-    { key: "vandaag", label: "Vandaag", icon: <Home size={21} /> },
-    { key: "week", label: "Week", icon: <Calendar size={21} /> },
-    { key: "beheer", label: "Beheer", icon: <ClipboardList size={21} /> },
-    { key: "instellingen", label: "Instellingen", icon: <Settings2 size={21} /> },
+    { key: "vandaag", label: L("nav_today"), icon: <Home size={21} /> },
+    { key: "week", label: L("nav_week"), icon: <Calendar size={21} /> },
+    { key: "beheer", label: L("nav_manage"), icon: <ClipboardList size={21} /> },
+    { key: "instellingen", label: L("nav_settings"), icon: <Settings2 size={21} /> },
   ];
   return (
     <div className="no-print" style={{ position: "fixed", left: 0, right: 0, bottom: 0, background: T.surface, borderTop: `1.5px solid ${T.border}`, display: "flex", justifyContent: "space-around", paddingTop: 6, paddingBottom: "max(6px, env(safe-area-inset-bottom))", zIndex: 40, boxShadow: "0 -3px 14px rgba(27,58,52,0.08)" }}>
@@ -3046,8 +3065,9 @@ export default function App() {
     const dosesPerDay = dosesPerDayFor(m);
     const daysLeft = typeof m.stock === "number" ? Math.floor(m.stock / dosesPerDay) : null;
     const autoThreshold = dosesPerDay * REFILL_LEAD_DAYS;
-    return { ...m, dosesPerDay, daysLeft, autoThreshold };
-  }), [medications]);
+    const runOutDate = daysLeft != null ? new Date(now.getTime() + daysLeft * 86400000) : null;
+    return { ...m, dosesPerDay, daysLeft, autoThreshold, runOutDate };
+  }), [medications, now]);
 
   const lowStock = medsWithSupply.filter((m) => m.frequency !== "indien_nodig" && typeof m.stock === "number" && m.stock <= m.autoThreshold);
   const needsRefill = lowStock;
@@ -3059,10 +3079,11 @@ export default function App() {
       if (!refillFiredRef.current.has(key)) {
         refillFiredRef.current.add(key);
         const days = m.daysLeft <= 0 ? 0 : m.daysLeft;
-        try { new Notification(L("notif_refill_title", { name: m.name }), { body: L("notif_refill_body", { days, unit: L(days === 1 ? "stat_streak_days_one" : "stat_streak_days_other") }), tag: key }); } catch (e) {}
+        const date = m.runOutDate ? m.runOutDate.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) : "";
+        try { new Notification(L("notif_refill_title", { name: m.name }), { body: L("notif_refill_body", { days, unit: L(days === 1 ? "stat_streak_days_one" : "stat_streak_days_other"), date }), tag: key }); } catch (e) {}
       }
     });
-  }, [needsRefill, notifPerm, todayISO, L]);
+  }, [needsRefill, notifPerm, todayISO, L, language]);
 
   useEffect(() => {
     if (!loadedRef.current || !householdCode) return;
@@ -3074,8 +3095,8 @@ export default function App() {
           streak,
           todayISO,
           doses: todaysDoses.map((d) => ({ name: d.med.name, moment: momentLabel(d.t, L), status: d.status, color: d.med.color, dose: doseLabel(d.med, d.t, L) })),
-          lowStock: lowStock.map((m) => ({ name: m.name, stock: m.stock, daysLeft: m.daysLeft })),
-          needsRefill: needsRefill.map((m) => ({ name: m.name, daysLeft: m.daysLeft })),
+          lowStock: lowStock.map((m) => ({ name: m.name, stock: m.stock, daysLeft: m.daysLeft, runOutDate: m.runOutDate ? isoDate(m.runOutDate) : null })),
+          needsRefill: needsRefill.map((m) => ({ name: m.name, daysLeft: m.daysLeft, runOutDate: m.runOutDate ? isoDate(m.runOutDate) : null })),
         };
         await window.storage.set(`medbox_share_${householdCode}`, JSON.stringify(snapshot), true);
       } catch (e) { console.error("Delen mislukt", e); }
@@ -3277,7 +3298,7 @@ export default function App() {
               <div style={{ background: T.goldSoft, border: `1.5px solid ${T.gold}55`, borderRadius: 16, padding: "14px 16px", marginBottom: 20 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#8A6420", fontWeight: 700, fontSize: 14, marginBottom: 8 }}><Package size={16} /> {L("refill_title")}</div>
                 {needsRefill.map((m) => (
-                  <div key={m.id} style={{ fontSize: 13.5, padding: "4px 0" }}><span style={{ fontWeight: 600 }}>{m.name}</span> <span style={{ color: "#8A6420" }}>{L("refill_days_left", { days: m.daysLeft <= 0 ? "0" : m.daysLeft, unit: L(m.daysLeft === 1 ? "stat_streak_days_one" : "stat_streak_days_other") })}</span></div>
+                  <div key={m.id} style={{ fontSize: 13.5, padding: "4px 0" }}><span style={{ fontWeight: 600 }}>{m.name}</span> <span style={{ color: "#8A6420" }}>{L("refill_days_left", { days: m.daysLeft <= 0 ? "0" : m.daysLeft, unit: L(m.daysLeft === 1 ? "stat_streak_days_one" : "stat_streak_days_other"), date: m.runOutDate ? m.runOutDate.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) : "" })}</span></div>
                 ))}
               </div>
             )}
@@ -3601,8 +3622,6 @@ export default function App() {
 
       {showEmergencyCard && <EmergencyCardView medications={medications} info={emergencyInfo} onClose={() => setShowEmergencyCard(false)} />}
 
-      {!onboardingSeen && <OnboardingTour onClose={() => setOnboardingSeen(true)} />}
-
       <BottomNav active={activeNav} onNavigate={navigateTo} />
     </div>
     </LangContext.Provider>
@@ -3612,23 +3631,24 @@ export default function App() {
 
 function LeafletPanel({ med, loading, onRetry }) {
   const T = useThemeColors();
+  const L = useL();
   return (
     <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${T.border}` }}>
-      {loading && <div style={{ fontSize: 12.5, color: T.muted }}>Bijsluiterinformatie laden…</div>}
+      {loading && <div style={{ fontSize: 12.5, color: T.muted }}>{L("leaflet_loading")}</div>}
       {!loading && med.leafletError && (
-        <div style={{ fontSize: 12.5, color: T.warn, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>Kon geen informatie ophalen. <button className="wd-btn" onClick={onRetry} style={{ background: "none", border: "none", color: T.primary, fontWeight: 600, cursor: "pointer", padding: "6px 0" }}>Opnieuw proberen</button></div>
+        <div style={{ fontSize: 12.5, color: T.warn, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>{L("leaflet_fetch_failed")} <button className="wd-btn" onClick={onRetry} style={{ background: "none", border: "none", color: T.primary, fontWeight: 600, cursor: "pointer", padding: "6px 0" }}>{L("leaflet_retry")}</button></div>
       )}
       {!loading && med.leaflet && (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <LeafletRow label="Gebruik" text={med.leaflet.gebruik} />
-          <LeafletRow label="Gebruikelijke dosering" text={med.leaflet.dosering} />
-          <LeafletRow label="Veelvoorkomende bijwerkingen" text={med.leaflet.bijwerkingen} />
-          <LeafletRow label="Let op" text={med.leaflet.waarschuwing} />
-          <div style={{ fontSize: 11, color: T.mutedSoft, fontStyle: "italic", marginTop: 2 }}>Algemene informatie, geen vervanging voor de officiële bijsluiter of het advies van je arts of apotheker.</div>
-          <a href={`https://www.apotheek.nl/zoeken?query=${encodeURIComponent(med.name)}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: T.primary, fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 4, textDecoration: "none", padding: "6px 0" }}>Officiële bijsluiter bekijken <ExternalLink size={12} /></a>
+          <LeafletRow label={L("leaflet_use")} text={med.leaflet.gebruik} />
+          <LeafletRow label={L("leaflet_dosage")} text={med.leaflet.dosering} />
+          <LeafletRow label={L("leaflet_side_effects")} text={med.leaflet.bijwerkingen} />
+          <LeafletRow label={L("leaflet_warning")} text={med.leaflet.waarschuwing} />
+          <div style={{ fontSize: 11, color: T.mutedSoft, fontStyle: "italic", marginTop: 2 }}>{L("leaflet_disclaimer")}</div>
+          <a href={`https://www.apotheek.nl/zoeken?query=${encodeURIComponent(med.name)}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: T.primary, fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 4, textDecoration: "none", padding: "6px 0" }}>{L("leaflet_official_link")} <ExternalLink size={12} /></a>
         </div>
       )}
-      {!loading && !med.leaflet && !med.leafletError && <button className="wd-btn" onClick={onRetry} style={{ background: T.primarySoft, color: T.primary, border: "none", borderRadius: 10, padding: "9px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>Bijsluiter ophalen</button>}
+      {!loading && !med.leaflet && !med.leafletError && <button className="wd-btn" onClick={onRetry} style={{ background: T.primarySoft, color: T.primary, border: "none", borderRadius: 10, padding: "9px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>{L("leaflet_fetch_button")}</button>}
     </div>
   );
 }
@@ -3743,6 +3763,8 @@ function StatTile({ icon, label, value, color, bg, onClick }) {
 
 function CaregiverView({ codeInput, setCodeInput, data, loading, error, onFetch, onBack }) {
   const T = useThemeColors();
+  const L = useL();
+  const language = React.useContext(LangContext);
   return (
     <div style={{ background: T.bg, minHeight: "100%", fontFamily: "'Nunito', sans-serif", color: T.ink, padding: "18px 14px 40px" }}>
       <style>{`
@@ -3752,26 +3774,26 @@ function CaregiverView({ codeInput, setCodeInput, data, loading, error, onFetch,
         input::placeholder { color: ${T.mutedSoft}; opacity: 1; }
       `}</style>
       <div style={{ maxWidth: 480, margin: "0 auto" }}>
-        <button onClick={onBack} style={{ background: "none", border: "none", color: T.muted, fontSize: 14, cursor: "pointer", marginBottom: 14, padding: "8px 0" }}>← Terug naar MedBox</button>
-        <div className="wd-display" style={{ fontSize: 23, fontWeight: 700, marginBottom: 4 }}>Mantelzorger-weergave</div>
-        <div style={{ fontSize: 13, color: T.muted, marginBottom: 18 }}>Vul de code in die je van de gebruiker hebt gekregen om mee te kijken.</div>
+        <button onClick={onBack} style={{ background: "none", border: "none", color: T.muted, fontSize: 14, cursor: "pointer", marginBottom: 14, padding: "8px 0" }}>{L("caregiver_back")}</button>
+        <div className="wd-display" style={{ fontSize: 23, fontWeight: 700, marginBottom: 4 }}>{L("caregiver_title")}</div>
+        <div style={{ fontSize: 13, color: T.muted, marginBottom: 18 }}>{L("caregiver_intro")}</div>
         <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-          <input value={codeInput} onChange={(e) => setCodeInput(e.target.value.toUpperCase())} placeholder="Bijv. AB12CD" className="wd-mono" style={{ ...getInputStyle(T), flex: 1, letterSpacing: 2, fontWeight: 700 }} maxLength={8} />
-          <button className="wd-btn" onClick={onFetch} disabled={!codeInput.trim()} style={{ background: T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "0 18px", fontWeight: 600, cursor: codeInput.trim() ? "pointer" : "not-allowed" }}>Bekijken</button>
+          <input value={codeInput} onChange={(e) => setCodeInput(e.target.value.toUpperCase())} placeholder={L("caregiver_code_placeholder")} className="wd-mono" style={{ ...getInputStyle(T), flex: 1, letterSpacing: 2, fontWeight: 700 }} maxLength={8} />
+          <button className="wd-btn" onClick={onFetch} disabled={!codeInput.trim()} style={{ background: T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "0 18px", fontWeight: 600, cursor: codeInput.trim() ? "pointer" : "not-allowed" }}>{L("caregiver_view_button")}</button>
         </div>
-        {loading && <div style={{ color: T.muted, fontSize: 13.5 }}>Laden…</div>}
+        {loading && <div style={{ color: T.muted, fontSize: 13.5 }}>{L("caregiver_loading")}</div>}
         {error && <div style={{ background: T.warnSoft, color: T.warn, borderRadius: 12, padding: "10px 14px", fontSize: 13, fontWeight: 600 }}>{error}</div>}
         {data && (
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
-              <div style={{ fontSize: 12, color: T.muted }}>Laatst bijgewerkt: {new Date(data.updatedAt).toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" })}</div>
-              <button className="wd-btn" onClick={onFetch} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: T.primary, fontSize: 12.5, fontWeight: 600, cursor: "pointer", padding: "6px 0" }}><RefreshCw size={14} /> Ververs</button>
+              <div style={{ fontSize: 12, color: T.muted }}>{L("caregiver_last_updated", { time: new Date(data.updatedAt).toLocaleTimeString(LOCALE_MAP[language], { hour: "2-digit", minute: "2-digit" }) })}</div>
+              <button className="wd-btn" onClick={onFetch} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: T.primary, fontSize: 12.5, fontWeight: 600, cursor: "pointer", padding: "6px 0" }}><RefreshCw size={14} /> {L("caregiver_refresh")}</button>
             </div>
             <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
-              <StatPill icon={<Check size={14} />} label="Vandaag genomen" value={`${data.doses.filter((d) => d.status === "taken").length}/${data.doses.length}`} color={T.primary} bg={T.primarySoft} />
-              <StatPill icon={data.streak >= 3 ? <Flame size={14} /> : <Clock size={14} />} label="Reeks" value={`${data.streak} ${data.streak === 1 ? "dag" : "dagen"}`} color={data.streak >= 3 ? T.gold : T.success} bg={data.streak >= 3 ? T.goldSoft : T.successSoft} />
+              <StatPill icon={<Check size={14} />} label={L("caregiver_taken_today")} value={`${data.doses.filter((d) => d.status === "taken").length}/${data.doses.length}`} color={T.primary} bg={T.primarySoft} />
+              <StatPill icon={data.streak >= 3 ? <Flame size={14} /> : <Clock size={14} />} label={L("stat_streak")} value={`${data.streak} ${L(data.streak === 1 ? "stat_streak_days_one" : "stat_streak_days_other")}`} color={data.streak >= 3 ? T.gold : T.success} bg={data.streak >= 3 ? T.goldSoft : T.successSoft} />
             </div>
-            <SectionTitle>Vandaag</SectionTitle>
+            <SectionTitle>{L("nav_today")}</SectionTitle>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
               {data.doses.map((d, i) => (
                 <div key={i} className="wd-card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 12, padding: "12px 14px", gap: 8 }}>
@@ -3779,12 +3801,12 @@ function CaregiverView({ codeInput, setCodeInput, data, loading, error, onFetch,
                   <StatusBadge status={d.status} />
                 </div>
               ))}
-              {data.doses.length === 0 && <div style={{ color: T.muted, fontSize: 13 }}>Geen doses vandaag.</div>}
+              {data.doses.length === 0 && <div style={{ color: T.muted, fontSize: 13 }}>{L("caregiver_no_doses")}</div>}
             </div>
             {(data.lowStock?.length > 0 || data.needsRefill?.length > 0) && (
               <>
-                <SectionTitle>Voorraad</SectionTitle>
-                {data.needsRefill.map((m, i) => <div key={i} style={{ fontSize: 13, color: "#8A6420", background: T.goldSoft, borderRadius: 10, padding: "10px 14px", marginBottom: 6 }}>{m.name} — nog ongeveer {m.daysLeft <= 0 ? 0 : m.daysLeft} {m.daysLeft === 1 ? "dag" : "dagen"} voorraad</div>)}
+                <SectionTitle>{L("caregiver_stock_title")}</SectionTitle>
+                {data.needsRefill.map((m, i) => <div key={i} style={{ fontSize: 13, color: "#8A6420", background: T.goldSoft, borderRadius: 10, padding: "10px 14px", marginBottom: 6 }}>{m.name} {L("refill_days_left", { days: m.daysLeft <= 0 ? 0 : m.daysLeft, unit: L(m.daysLeft === 1 ? "stat_streak_days_one" : "stat_streak_days_other"), date: m.runOutDate ? new Date(`${m.runOutDate}T00:00:00`).toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) : "" })}</div>)}
               </>
             )}
           </div>
@@ -3795,13 +3817,16 @@ function CaregiverView({ codeInput, setCodeInput, data, loading, error, onFetch,
 }
 function StatusBadge({ status }) {
   const T = useThemeColors();
-  const map = { taken: { text: "Genomen", color: T.success, bg: T.successSoft }, missed: { text: "Gemist", color: T.warn, bg: T.warnSoft }, upcoming: { text: "Nog te nemen", color: T.muted, bg: T.surfaceSoft } };
+  const L = useL();
+  const map = { taken: { text: L("status_taken"), color: T.success, bg: T.successSoft }, missed: { text: L("status_missed"), color: T.warn, bg: T.warnSoft }, upcoming: { text: L("status_upcoming"), color: T.muted, bg: T.surfaceSoft } };
   const s = map[status] || map.upcoming;
   return <span style={{ fontSize: 11.5, fontWeight: 700, color: s.color, background: s.bg, borderRadius: 8, padding: "4px 9px", flexShrink: 0 }}>{s.text}</span>;
 }
 
 function ReportView({ medications, log, now, periodBounds, onClose }) {
   const T = useThemeColors();
+  const L = useL();
+  const language = React.useContext(LangContext);
   const todayISO = isoDate(now);
   const currentMonth = todayISO.slice(0, 7);
   const [month, setMonth] = useState(currentMonth);
@@ -3820,7 +3845,7 @@ function ReportView({ medications, log, now, periodBounds, onClose }) {
           const prefix = `${med.id}_${dISO}_prn:`;
           Object.keys(log).filter((k) => k.startsWith(prefix) && log[k]?.taken).forEach((k) => {
             const takenDt = new Date(log[k].takenAt);
-            list.push({ date: dISO, moment: "Indien nodig", sortKey: takenDt.getHours() * 60 + takenDt.getMinutes(), med: med.name, dose: doseLabel(med, { count: med.prnDoseCount }), status: "Ingenomen", takenAt: takenDt.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" }) });
+            list.push({ date: dISO, moment: L("report_prn_moment"), sortKey: takenDt.getHours() * 60 + takenDt.getMinutes(), med: med.name, dose: doseLabel(med, { count: med.prnDoseCount }, L), status: "taken", takenAt: takenDt.toLocaleTimeString(LOCALE_MAP[language], { hour: "2-digit", minute: "2-digit" }) });
           });
           return;
         }
@@ -3838,7 +3863,7 @@ function ReportView({ medications, log, now, periodBounds, onClose }) {
           } else {
             if (scheduledDateTime(dISO, t.time) > now) return;
           }
-          list.push({ date: dISO, moment: momentLabel(t), sortKey: momentSortValue(t), med: med.name, dose: doseLabel(med, t), status: entry?.taken ? "Ingenomen" : "Gemist", takenAt: entry?.takenAt ? new Date(entry.takenAt).toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" }) : "" });
+          list.push({ date: dISO, moment: momentLabel(t, L), sortKey: momentSortValue(t), med: med.name, dose: doseLabel(med, t, L), status: entry?.taken ? "taken" : "missed", takenAt: entry?.takenAt ? new Date(entry.takenAt).toLocaleTimeString(LOCALE_MAP[language], { hour: "2-digit", minute: "2-digit" }) : "" });
         });
       });
     }
@@ -3850,32 +3875,32 @@ function ReportView({ medications, log, now, periodBounds, onClose }) {
 
   const monthLabel = (() => {
     const [y, m] = month.split("-").map(Number);
-    return new Date(y, m - 1, 1).toLocaleDateString("nl-NL", { month: "long", year: "numeric" });
+    return new Date(y, m - 1, 1).toLocaleDateString(LOCALE_MAP[language], { month: "long", year: "numeric" });
   })();
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "flex-start", justifyContent: "center", padding: 12, zIndex: 60, overflowY: "auto" }}>
       <div style={{ background: "#fff", borderRadius: 16, padding: 20, width: "100%", maxWidth: 640, margin: "20px 0", fontFamily: "Arial, Helvetica, sans-serif", color: "#111" }}>
         <div className="no-print" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 10 }}>
-          <div style={{ fontWeight: 700, fontSize: 16.5 }}>Maandrapport</div>
+          <div style={{ fontWeight: 700, fontSize: 16.5 }}>{L("report_title")}</div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: "#3F3F3F" }}><X size={20} /></button>
         </div>
         <div className="no-print" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
           <input type="month" value={month} max={currentMonth} onChange={(e) => setMonth(e.target.value)} style={{ border: "1.5px solid #ddd", borderRadius: 10, padding: "10px 12px", fontSize: 15, color: "#111", minHeight: 44 }} />
-          <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "10px 15px", fontWeight: 600, fontSize: 13, cursor: "pointer" }}><Printer size={14} /> Afdrukken / Opslaan als PDF</button>
+          <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "10px 15px", fontWeight: 600, fontSize: 13, cursor: "pointer" }}><Printer size={14} /> {L("report_print")}</button>
         </div>
         <div style={{ marginBottom: 14 }}>
-          <div style={{ fontWeight: 700, fontSize: 18 }}>MedBox — Innamegeschiedenis {monthLabel}</div>
-          <div style={{ fontSize: 12, color: "#3F3F3F" }}>Gegenereerd op {now.toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })}</div>
+          <div style={{ fontWeight: 700, fontSize: 18 }}>{L("report_header", { month: monthLabel })}</div>
+          <div style={{ fontSize: 12, color: "#3F3F3F" }}>{L("report_generated", { date: now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long", year: "numeric" }) })}</div>
         </div>
         <div style={{ overflowX: "auto" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5, minWidth: 520 }}>
-          <thead><tr style={{ borderBottom: "2px solid #ddd", textAlign: "left" }}><th style={{ padding: "6px 4px" }}>Datum</th><th style={{ padding: "6px 4px" }}>Moment</th><th style={{ padding: "6px 4px" }}>Medicijn</th><th style={{ padding: "6px 4px" }}>Dosering</th><th style={{ padding: "6px 4px" }}>Status</th><th style={{ padding: "6px 4px" }}>Genomen om</th></tr></thead>
+          <thead><tr style={{ borderBottom: "2px solid #ddd", textAlign: "left" }}><th style={{ padding: "6px 4px" }}>{L("report_col_date")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_moment")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_med")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_dose")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_status")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_taken_at")}</th></tr></thead>
           <tbody>
             {rows.map((r, i) => (
-              <tr key={i} style={{ borderBottom: "1px solid #eee", color: r.status === "Gemist" ? "#B4502C" : "#111" }}><td style={{ padding: "5px 4px" }}>{r.date}</td><td style={{ padding: "5px 4px" }}>{r.moment}</td><td style={{ padding: "5px 4px", fontWeight: 600 }}>{r.med}</td><td style={{ padding: "5px 4px" }}>{r.dose}</td><td style={{ padding: "5px 4px", fontWeight: 600 }}>{r.status}</td><td style={{ padding: "5px 4px" }}>{r.takenAt}</td></tr>
+              <tr key={i} style={{ borderBottom: "1px solid #eee", color: r.status === "missed" ? "#B4502C" : "#111" }}><td style={{ padding: "5px 4px" }}>{r.date}</td><td style={{ padding: "5px 4px" }}>{r.moment}</td><td style={{ padding: "5px 4px", fontWeight: 600 }}>{r.med}</td><td style={{ padding: "5px 4px" }}>{r.dose}</td><td style={{ padding: "5px 4px", fontWeight: 600 }}>{L(r.status === "missed" ? "report_status_missed" : "report_status_taken")}</td><td style={{ padding: "5px 4px" }}>{r.takenAt}</td></tr>
             ))}
-            {rows.length === 0 && <tr><td colSpan={6} style={{ padding: "12px 4px", color: "#3F3F3F" }}>Nog geen geschiedenis beschikbaar voor deze maand.</td></tr>}
+            {rows.length === 0 && <tr><td colSpan={6} style={{ padding: "12px 4px", color: "#3F3F3F" }}>{L("report_empty")}</td></tr>}
           </tbody>
         </table>
         </div>
@@ -3890,6 +3915,7 @@ function ReportView({ medications, log, now, periodBounds, onClose }) {
 // the countdown that "afvinken" already keeps in sync.
 function RestockModal({ med, onClose, onConfirm }) {
   const T = useThemeColors();
+  const L = useL();
   const [amount, setAmount] = useState("");
   const current = typeof med.stock === "number" ? med.stock : 0;
   const addNum = Number(amount);
@@ -3899,23 +3925,23 @@ function RestockModal({ med, onClose, onConfirm }) {
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 55 }} onClick={onClose}>
       <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 340, fontFamily: "'Nunito', sans-serif" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-          <div className="wd-display" style={{ fontSize: 18, fontWeight: 700 }}>Voorraad aanvullen</div>
+          <div className="wd-display" style={{ fontSize: 18, fontWeight: 700 }}>{L("restock_title")}</div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: T.muted }}><X size={20} /></button>
         </div>
 
-        <div style={{ fontSize: 13.5, color: T.muted, marginBottom: 14 }}>{med.name} — huidige voorraad: <span style={{ fontWeight: 700, color: T.ink }}>{current} {unitWordFor(med, current)}</span></div>
+        <div style={{ fontSize: 13.5, color: T.muted, marginBottom: 14 }}>{med.name} — {L("restock_current")} <span style={{ fontWeight: 700, color: T.ink }}>{current} {unitWordFor(med, current, L)}</span></div>
 
-        <Field label={`Nieuwe voorraad die erbij komt (${unitWordFor(med, 2)})`}>
-          <input type="number" inputMode="numeric" min="1" autoFocus value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="bijv. 300" style={getInputStyle(T)} />
+        <Field label={L("restock_field_label", { unit: unitWordFor(med, 2, L) })}>
+          <input type="number" inputMode="numeric" min="1" autoFocus value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={L("restock_placeholder")} style={getInputStyle(T)} />
         </Field>
 
         <div style={{ fontSize: 13, fontWeight: 600, color: valid ? T.success : T.mutedSoft, marginBottom: 18, minHeight: 18 }}>
-          {valid ? `Nieuw totaal wordt: ${newTotal} ${unitWordFor(med, newTotal)}` : "Vul aan hoeveel je erbij hebt gekregen."}
+          {valid ? L("restock_new_total", { n: newTotal, unit: unitWordFor(med, newTotal, L) }) : L("restock_prompt")}
         </div>
 
         <div style={{ display: "flex", gap: 10 }}>
-          <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "13px", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>Annuleren</button>
-          <button className="wd-btn" disabled={!valid} onClick={() => valid && onConfirm(addNum)} style={{ flex: 1, background: valid ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: 14, cursor: valid ? "pointer" : "not-allowed" }}>Toevoegen</button>
+          <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "13px", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>{L("common_cancel")}</button>
+          <button className="wd-btn" disabled={!valid} onClick={() => valid && onConfirm(addNum)} style={{ flex: 1, background: valid ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: 14, cursor: valid ? "pointer" : "not-allowed" }}>{L("restock_add")}</button>
         </div>
       </div>
     </div>
@@ -3927,6 +3953,7 @@ function RestockModal({ med, onClose, onConfirm }) {
 // one place instead of scattered across Beheer and Instellingen.
 function EmergencyCardView({ medications, info, onClose }) {
   const T = useThemeColors();
+  const L = useL();
   const hasContact = info.contactName || info.contactPhone || info.doctorName || info.doctorPhone || info.pharmacyName || info.pharmacyPhone;
   return (
     <div className="no-print" style={{ position: "fixed", inset: 0, background: T.bg, zIndex: 65, overflowY: "auto", fontFamily: "'Nunito', sans-serif", color: T.ink }}>
@@ -3934,42 +3961,42 @@ function EmergencyCardView({ medications, info, onClose }) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <AlertTriangle size={22} color={T.warn} />
-            <div className="wd-display" style={{ fontSize: 21, fontWeight: 700 }}>Noodkaart</div>
+            <div className="wd-display" style={{ fontSize: 21, fontWeight: 700 }}>{L("emergency_title")}</div>
           </div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: T.surfaceSoft, border: "none", cursor: "pointer", color: T.ink, borderRadius: 10 }}><X size={20} /></button>
         </div>
 
         {info.allergies && (
           <div style={{ background: T.warnSoft, border: `1.5px solid ${T.warn}55`, borderRadius: 14, padding: "14px 16px", marginBottom: 18 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 700, color: T.warn, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Allergieën</div>
+            <div style={{ fontSize: 11.5, fontWeight: 700, color: T.warn, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("field_allergies")}</div>
             <div style={{ fontSize: 15.5, fontWeight: 700 }}>{info.allergies}</div>
           </div>
         )}
 
-        <SectionTitle>Huidige medicatie</SectionTitle>
+        <SectionTitle>{L("emergency_meds_title")}</SectionTitle>
         {medications.length === 0 ? (
-          <div style={{ fontSize: 13, color: T.muted, marginBottom: 22 }}>Nog geen medicatie toegevoegd.</div>
+          <div style={{ fontSize: 13, color: T.muted, marginBottom: 22 }}>{L("emergency_no_meds")}</div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 22 }}>
             {medications.map((med) => (
               <div key={med.id} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 12, padding: "10px 14px" }}>
                 <div style={{ fontWeight: 700, fontSize: 14.5 }}>{med.name}{med.dosePerUnit ? ` — ${med.dosePerUnit}` : ""}</div>
                 <div style={{ fontSize: 12, color: T.muted }}>
-                  {med.frequency === "indien_nodig" ? <>Indien nodig · {doseLabel(med, { count: med.prnDoseCount })}</> : <>{med.totalPerDay} {unitWordFor(med, med.totalPerDay)}/dag · {med.times.map((t) => momentLabel(t)).join(", ")}</>}
+                  {med.frequency === "indien_nodig" ? <>{L("freq_prn")} · {doseLabel(med, { count: med.prnDoseCount }, L)}</> : <>{L("beheer_per_day", { n: med.totalPerDay, unit: unitWordFor(med, med.totalPerDay, L) })} · {med.times.map((t) => momentLabel(t, L)).join(", ")}</>}
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        <SectionTitle>Contacten</SectionTitle>
+        <SectionTitle>{L("emergency_contacts_title")}</SectionTitle>
         {!hasContact ? (
-          <div style={{ fontSize: 13, color: T.muted }}>Nog geen contactgegevens ingevuld — dat kan bij Instellingen → Noodinformatie.</div>
+          <div style={{ fontSize: 13, color: T.muted }}>{L("emergency_no_contacts")}</div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {(info.contactName || info.contactPhone) && <EmergencyContactRow label="Noodcontact" name={info.contactName} phone={info.contactPhone} T={T} />}
-            {(info.doctorName || info.doctorPhone) && <EmergencyContactRow label="Huisarts" name={info.doctorName} phone={info.doctorPhone} T={T} />}
-            {(info.pharmacyName || info.pharmacyPhone) && <EmergencyContactRow label="Apotheek" name={info.pharmacyName} phone={info.pharmacyPhone} T={T} />}
+            {(info.contactName || info.contactPhone) && <EmergencyContactRow label={L("emergency_contact_label")} name={info.contactName} phone={info.contactPhone} T={T} />}
+            {(info.doctorName || info.doctorPhone) && <EmergencyContactRow label={L("emergency_doctor_label")} name={info.doctorName} phone={info.doctorPhone} T={T} />}
+            {(info.pharmacyName || info.pharmacyPhone) && <EmergencyContactRow label={L("emergency_pharmacy_label")} name={info.pharmacyName} phone={info.pharmacyPhone} T={T} />}
           </div>
         )}
       </div>
@@ -3997,12 +4024,13 @@ function EmergencyContactRow({ label, name, phone, T }) {
 // redesign out themselves.
 function OnboardingTour({ onClose }) {
   const T = useThemeColors();
+  const L = useL();
   const [step, setStep] = useState(0);
   const steps = [
-    { icon: <Home size={26} />, title: "Vandaag", body: "Hier tik je je potjes aan zodra je je medicatie hebt genomen. Dit is je startpagina — hier open je de app negen van de tien keer voor." },
-    { icon: <Calendar size={26} />, title: "Week", body: "Bekijk per dag wat je hebt genomen en wat je hebt gemist, en blader terug naar vorige weken." },
-    { icon: <ClipboardList size={26} />, title: "Beheer", body: "Voeg medicatie toe, pas doses aan, of vul je voorraad bij zodra er een nieuwe verpakking bij komt." },
-    { icon: <Settings2 size={26} />, title: "Instellingen", body: "Meldingen, een back-up maken, delen met een mantelzorger en je noodkaart met belangrijke gegevens." },
+    { icon: <Home size={26} />, title: L("onboarding_step1_title"), body: L("onboarding_step1_body") },
+    { icon: <Calendar size={26} />, title: L("onboarding_step2_title"), body: L("onboarding_step2_body") },
+    { icon: <ClipboardList size={26} />, title: L("onboarding_step3_title"), body: L("onboarding_step3_body") },
+    { icon: <Settings2 size={26} />, title: L("onboarding_step4_title"), body: L("onboarding_step4_body") },
   ];
   const last = step === steps.length - 1;
   const s = steps[step];
@@ -4018,8 +4046,8 @@ function OnboardingTour({ onClose }) {
           ))}
         </div>
         <div style={{ display: "flex", gap: 10 }}>
-          {!last && <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: "none", border: "none", color: T.muted, fontWeight: 600, fontSize: 13.5, cursor: "pointer", padding: "13px" }}>Overslaan</button>}
-          <button className="wd-btn" onClick={() => (last ? onClose() : setStep((v) => v + 1))} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>{last ? "Aan de slag" : <>Volgende <ArrowRight size={15} /></>}</button>
+          {!last && <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: "none", border: "none", color: T.muted, fontWeight: 600, fontSize: 13.5, cursor: "pointer", padding: "13px" }}>{L("onboarding_skip")}</button>}
+          <button className="wd-btn" onClick={() => (last ? onClose() : setStep((v) => v + 1))} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>{last ? L("onboarding_done") : <>{L("onboarding_next")} <ArrowRight size={15} /></>}</button>
         </div>
       </div>
     </div>
@@ -4028,6 +4056,8 @@ function OnboardingTour({ onClose }) {
 
 function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
   const T = useThemeColors();
+  const L = useL();
+  const language = React.useContext(LangContext);
   const [name, setName] = useState(initial?.name || "");
   const [frequency, setFrequency] = useState(initial?.frequency || "dagelijks");
   const [weekdays, setWeekdays] = useState(initial?.weekdays || []);
@@ -4099,9 +4129,9 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
           if (m) { setStrengthType("mg"); setStrengthMg(m[1]); }
           else { setStrengthType("overig"); setStrengthOther(result.dosering); }
         }
-        setRecognizedNote("Herkend uit foto — controleer of dit klopt voordat je opslaat.");
-      } else setRecognizeError("Kon de naam niet met zekerheid lezen. Vul 'm handmatig in.");
-    } catch (err) { setRecognizeError("Herkenning is niet gelukt. Probeer een duidelijkere foto of vul de naam handmatig in."); }
+        setRecognizedNote(L("photo_recognized_note"));
+      } else setRecognizeError(L("photo_recognize_unclear"));
+    } catch (err) { setRecognizeError(L("photo_recognize_failed")); }
     finally { setRecognizing(false); }
   };
 
@@ -4121,113 +4151,114 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 50 }} onClick={onClose}>
       <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 400, maxHeight: "92vh", overflowY: "auto", fontFamily: "'Nunito', sans-serif" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-          <div className="wd-display" style={{ fontSize: 19, fontWeight: 700 }}>{initial ? "Medicijn bewerken" : "Medicijn toevoegen"}</div>
+          <div className="wd-display" style={{ fontSize: 19, fontWeight: 700 }}>{initial ? L("medmodal_edit_title") : L("medmodal_add_title")}</div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: T.muted }}><X size={20} /></button>
         </div>
 
-        <Field label="Naam">
-          <input list="medbox-med-names" value={name} onChange={(e) => setName(e.target.value)} placeholder="Bijv. Metoprolol" style={getInputStyle(T)} />
+        <Field label={L("field_name")}>
+          <input list="medbox-med-names" value={name} onChange={(e) => { const v = e.target.value; setName(v ? v.charAt(0).toUpperCase() + v.slice(1) : v); }} placeholder={L("field_name_placeholder2")} style={getInputStyle(T)} />
           <datalist id="medbox-med-names">{(medNameOptions || []).map((n) => <option key={n} value={n} />)}</datalist>
         </Field>
 
-        <Field label="Hoe vaak neem je dit in?">
+        <Field label={L("field_frequency")}>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: frequency === "weekdagen" ? 10 : 0 }}>
-            <button type="button" onClick={() => setFrequency("dagelijks")} style={getToggleBtnStyle(T, frequency === "dagelijks")}>Dagelijks</button>
-            <button type="button" onClick={() => setFrequency("weekdagen")} style={getToggleBtnStyle(T, frequency === "weekdagen")}>Vaste dagen</button>
-            <button type="button" onClick={() => setFrequency("indien_nodig")} style={getToggleBtnStyle(T, frequency === "indien_nodig")}>Indien nodig</button>
+            <button type="button" onClick={() => setFrequency("dagelijks")} style={getToggleBtnStyle(T, frequency === "dagelijks")}>{L("freq_daily")}</button>
+            <button type="button" onClick={() => setFrequency("weekdagen")} style={getToggleBtnStyle(T, frequency === "weekdagen")}>{L("freq_fixed_days")}</button>
+            <button type="button" onClick={() => setFrequency("indien_nodig")} style={getToggleBtnStyle(T, frequency === "indien_nodig")}>{L("freq_prn")}</button>
           </div>
           {frequency === "weekdagen" && (
             <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-              {DAY_SHORT.map((d, i) => (
+              {DAY_SHORT_BY_LANG[language].map((d, i) => (
                 <button key={i} type="button" onClick={() => toggleWeekday(i)} style={{ width: 42, height: 42, borderRadius: 10, background: weekdays.includes(i) ? T.primary : T.surfaceSoft, color: weekdays.includes(i) ? "#fff" : T.muted, border: `1.5px solid ${weekdays.includes(i) ? T.primary : T.border}`, fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>{d}</button>
               ))}
             </div>
           )}
-          {frequency === "weekdagen" && weekdays.length === 0 && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: T.warn }}>Kies minstens één dag.</div>}
-          {frequency === "indien_nodig" && <div style={{ fontSize: 11.5, color: T.mutedSoft, marginTop: 8, lineHeight: 1.4 }}>Geen vast schema — je vinkt dit af via de knop "Nu genomen" op het hoofdscherm, wanneer je het nodig hebt.</div>}
+          {frequency === "weekdagen" && weekdays.length === 0 && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: T.warn }}>{L("weekdays_choose_one")}</div>}
+          {frequency === "indien_nodig" && <div style={{ fontSize: 11.5, color: T.mutedSoft, marginTop: 8, lineHeight: 1.4 }}>{L("prn_explain")}</div>}
         </Field>
 
-        <Field label="Herkenbare afbeelding">
+        <Field label={L("field_photo")}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
             <AvatarBadge name={name} color={color} photo={photo} size={46} />
-            <div style={{ fontSize: 11.5, color: T.mutedSoft, flex: 1 }}>Er wordt automatisch een herkenbaar rondje met de initialen gemaakt. Wil je liever een echte foto? Dat kan hieronder.</div>
+            <div style={{ fontSize: 11.5, color: T.mutedSoft, flex: 1 }}>{L("photo_auto_explain")}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <label style={{ fontSize: 12.5, fontWeight: 600, color: T.primary, cursor: "pointer", background: T.primarySoft, borderRadius: 10, padding: "10px 14px" }}>
-              {photoBusy ? "Bezig…" : photo ? "Foto wijzigen" : "Eigen foto toevoegen"}
+              {photoBusy ? L("photo_busy") : photo ? L("photo_change") : L("photo_add")}
               <input type="file" accept="image/*" onChange={handlePhoto} style={{ display: "none" }} />
             </label>
             {photo && <button className="wd-iconbtn" onClick={() => { setPhoto(null); setPhotoFile(null); }} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer" }}><X size={18} /></button>}
           </div>
           {photo && (
             <button type="button" className="wd-btn" onClick={handleRecognize} disabled={recognizing} style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 6, background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.primary, borderRadius: 10, padding: "10px 14px", fontSize: 12.5, fontWeight: 600, cursor: recognizing ? "default" : "pointer" }}>
-              <ScanLine size={15} /> {recognizing ? "Bezig met herkennen…" : "Naam herkennen uit foto"}
+              <ScanLine size={15} /> {recognizing ? L("photo_recognize_busy") : L("photo_recognize")}
             </button>
           )}
           {recognizedNote && <div style={{ fontSize: 11.5, color: T.success, marginTop: 6 }}>{recognizedNote}</div>}
           {recognizeError && <div style={{ fontSize: 11.5, color: T.warn, marginTop: 6 }}>{recognizeError}</div>}
         </Field>
 
-        <Field label="Kleur">
+        <Field label={L("field_color")}>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>{MED_COLORS.map((c) => <button key={c} onClick={() => setColor(c)} style={{ width: 32, height: 32, borderRadius: "50%", background: c, border: color === c ? `3px solid ${T.ink}` : "3px solid transparent", cursor: "pointer" }} />)}</div>
         </Field>
 
-        <Field label="Vorm">
+        <Field label={L("field_shape")}>
           <div style={{ display: "flex", gap: 8, marginBottom: unitType === "overig" ? 8 : 0 }}>
-            <button type="button" onClick={() => setUnitType("tabletten")} style={getToggleBtnStyle(T, unitType === "tabletten")}>Tabletten</button>
-            <button type="button" onClick={() => setUnitType("overig")} style={getToggleBtnStyle(T, unitType === "overig")}>Overig</button>
+            <button type="button" onClick={() => setUnitType("tabletten")} style={getToggleBtnStyle(T, unitType === "tabletten")}>{L("shape_tablets")}</button>
+            <button type="button" onClick={() => setUnitType("overig")} style={getToggleBtnStyle(T, unitType === "overig")}>{L("shape_other")}</button>
           </div>
-          {unitType === "overig" && <input value={customUnitLabel} onChange={(e) => setCustomUnitLabel(e.target.value)} placeholder="eenheid, bijv. druppels" style={getInputStyle(T)} />}
+          {unitType === "overig" && <input value={customUnitLabel} onChange={(e) => setCustomUnitLabel(e.target.value)} placeholder={L("shape_other_placeholder")} style={getInputStyle(T)} />}
         </Field>
 
         {!isPRN && (
-        <Field label="Dagdosering">
+        <Field label={L("field_daily_dose")}>
           <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
-            <input type="number" inputMode="numeric" min="1" value={totalPerDay} onChange={(e) => setTotalPerDay(e.target.value)} placeholder="totaal per dag" style={{ ...getInputStyle(T), flex: 1, minWidth: 120 }} />
+            <input type="number" inputMode="numeric" min="1" value={totalPerDay} onChange={(e) => setTotalPerDay(e.target.value)} placeholder={L("daily_dose_placeholder")} style={{ ...getInputStyle(T), flex: 1, minWidth: 120 }} />
           </div>
-          {!totalValid && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: T.warn }}>Vul in hoeveel {unitType === "overig" ? (customUnitLabel || "eenheden") : "tabletten"} er totaal per dag horen — zo weet de app hoeveel er verdeeld moet worden.</div>}
-          {totalValid && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: distributed === Number(totalPerDay) ? T.success : T.warn }}>Verdeeld over de dagdelen: {distributed} van {totalPerDay} {unitWordFor({ unitType, customUnitLabel }, Number(totalPerDay))}</div>}
+          {!totalValid && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: T.warn }}>{L("daily_dose_missing", { unit: unitWordFor({ unitType, customUnitLabel }, 2, L) })}</div>}
+          {totalValid && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: distributed === Number(totalPerDay) ? T.success : T.warn }}>{L("daily_dose_distributed", { a: distributed, b: totalPerDay, unit: unitWordFor({ unitType, customUnitLabel }, Number(totalPerDay), L) })}</div>}
         </Field>
         )}
 
-        <Field label={`Sterkte per ${unitType === "overig" ? (customUnitLabel || "eenheid") : "tablet"}`}>
+        <Field label={L("field_strength", { unit: unitType === "overig" ? (customUnitLabel || L("unit_generic_singular")) : L("unit_tablet_singular") })}>
           <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
             <button type="button" onClick={() => setStrengthType("mg")} style={getToggleBtnStyle(T, strengthType === "mg")}>mg</button>
-            <button type="button" onClick={() => setStrengthType("overig")} style={getToggleBtnStyle(T, strengthType === "overig")}>Overig</button>
+            <button type="button" onClick={() => setStrengthType("overig")} style={getToggleBtnStyle(T, strengthType === "overig")}>{L("shape_other")}</button>
           </div>
           {strengthType === "mg" ? (
             <div style={{ position: "relative" }}>
-              <input type="number" inputMode="decimal" min="0" step="any" value={strengthMg} onChange={(e) => setStrengthMg(e.target.value)} placeholder="bijv. 500" style={{ ...getInputStyle(T), paddingRight: 44 }} />
+              <input type="number" inputMode="decimal" min="0" step="any" value={strengthMg} onChange={(e) => setStrengthMg(e.target.value)} placeholder={L("strength_mg_placeholder")} style={{ ...getInputStyle(T), paddingRight: 44 }} />
               <span style={{ position: "absolute", right: 13, top: "50%", transform: "translateY(-50%)", fontSize: 13.5, color: T.mutedSoft, fontWeight: 600, pointerEvents: "none" }}>mg</span>
             </div>
           ) : (
-            <input value={strengthOther} onChange={(e) => setStrengthOther(e.target.value)} placeholder="bijv. 10ml, 1 druppel, 2,5%, 1 puf" style={getInputStyle(T)} />
+            <input value={strengthOther} onChange={(e) => setStrengthOther(e.target.value)} placeholder={L("strength_other_placeholder")} style={getInputStyle(T)} />
           )}
-          {!strengthValid && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: T.warn }}>Vul de sterkte in — medicatie heeft altijd een dosering, dus dit veld mag niet leeg blijven.</div>}
+          {!strengthValid && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: T.warn }}>{L("strength_missing")}</div>}
         </Field>
 
         {!isPRN && (
-        <Field label="Innamemomenten — vaste tijd, of na een maaltijd">
+        <Field label={L("field_moments")}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 10 }}>
             {times.filter((t) => (newMode === "meal" ? isMeal(t) : !isMeal(t))).map((t) => (
               <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                 {isMeal(t) ? (
-                  <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.goldSoft, color: "#8A6420", borderRadius: 9, padding: "8px 9px", fontSize: 11.5, fontWeight: 700, minWidth: 92 }}><Utensils size={12} /> {mealInfo(t.meal).label}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.goldSoft, color: "#8A6420", borderRadius: 9, padding: "8px 9px", fontSize: 11.5, fontWeight: 700, minWidth: 92 }}><Utensils size={12} /> {L(MEAL_KEY_MAP[t.meal] || t.meal)}</div>
                 ) : (
                   <div className="wd-mono" style={{ background: T.primarySoft, color: T.primary, borderRadius: 9, padding: "8px 9px", fontSize: 12.5, fontWeight: 700, minWidth: 56, textAlign: "center" }}>{t.time}</div>
                 )}
-                <div className="wd-mono" style={{ fontSize: 9.5, color: T.mutedSoft, minWidth: 42 }}>{momentPeriod(t, periodBounds)}</div>
-                <input type="number" inputMode="numeric" min="1" value={t.count} onChange={(e) => updateTime(t.id, "count", Math.max(1, Number(e.target.value) || 1))} title="aantal" style={{ ...getInputStyle(T), width: 60, padding: "8px 4px", textAlign: "center", fontSize: 13 }} />
-                <input value={t.note} onChange={(e) => updateTime(t.id, "note", e.target.value)} placeholder="notitie (optioneel)" style={{ ...getInputStyle(T), flex: 1, minWidth: 100, padding: "8px 10px", fontSize: 13 }} />
+                <div className="wd-mono" style={{ fontSize: 9.5, color: T.mutedSoft, minWidth: 42 }}>{L(PERIOD_KEY_MAP[momentPeriod(t, periodBounds)] || momentPeriod(t, periodBounds))}</div>
+                <input type="number" inputMode="numeric" min="1" value={t.count} onChange={(e) => updateTime(t.id, "count", Math.max(1, Number(e.target.value) || 1))} title={L("field_count_short")} style={{ ...getInputStyle(T), width: 60, padding: "8px 4px", textAlign: "center", fontSize: 13 }} />
+                <input value={t.note} onChange={(e) => updateTime(t.id, "note", e.target.value)} placeholder={L("moments_note_placeholder")} style={{ ...getInputStyle(T), flex: 1, minWidth: 100, padding: "8px 10px", fontSize: 13 }} />
                 <button className="wd-iconbtn" onClick={() => removeTime(t.id)} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer" }}><X size={16} /></button>
               </div>
             ))}
             {(() => {
               const hiddenCount = times.filter((t) => (newMode === "meal" ? !isMeal(t) : isMeal(t))).length;
               if (hiddenCount === 0) return null;
+              const labelKey = newMode === "meal" ? (hiddenCount === 1 ? "moments_hidden_time_one" : "moments_hidden_time_other") : (hiddenCount === 1 ? "moments_hidden_meal_one" : "moments_hidden_meal_other");
               return (
                 <button type="button" onClick={() => setNewMode(newMode === "meal" ? "time" : "meal")} style={{ background: "none", border: "none", color: T.mutedSoft, fontSize: 11.5, textAlign: "left", cursor: "pointer", padding: "6px 0" }}>
-                  + {hiddenCount} {newMode === "meal" ? "vaste tijd" : "na-maaltijd-moment"}{hiddenCount === 1 ? "" : "en"} verborgen — tik op "{newMode === "meal" ? "Vaste tijd" : "Na maaltijd"}" om te tonen
+                  {L("moments_hidden_prefix", { n: hiddenCount, label: L(labelKey), tabLabel: newMode === "meal" ? L("moment_fixed_time") : L("moment_after_meal") })}
                 </button>
               );
             })()}
@@ -4235,45 +4266,45 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
 
           {atMax ? (
             <div style={{ fontSize: 12, color: "#8A6420", background: T.goldSoft, borderRadius: 10, padding: "10px 12px", lineHeight: 1.4 }}>
-              Je hebt je volledige dagdosering van {totalPerDay} {unitWordFor({ unitType, customUnitLabel }, Number(totalPerDay))} al verdeeld over de momenten hierboven. Verwijder eerst een moment, of verhoog het totaal bij "Dagdosering", om er nog een toe te voegen.
+              {L("moments_at_max", { n: totalPerDay, unit: unitWordFor({ unitType, customUnitLabel }, Number(totalPerDay), L) })}
             </div>
           ) : (
             <>
               <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
-                <button type="button" onClick={() => setNewMode("time")} style={getToggleBtnStyle(T, newMode === "time")}>Vaste tijd</button>
-                <button type="button" onClick={() => setNewMode("meal")} style={getToggleBtnStyle(T, newMode === "meal")}>Na maaltijd</button>
+                <button type="button" onClick={() => setNewMode("time")} style={getToggleBtnStyle(T, newMode === "time")}>{L("moment_fixed_time")}</button>
+                <button type="button" onClick={() => setNewMode("meal")} style={getToggleBtnStyle(T, newMode === "meal")}>{L("moment_after_meal")}</button>
               </div>
 
               {newMode === "meal" && availableMeals.length === 0 ? (
-                <div style={{ fontSize: 12, color: T.mutedSoft, background: T.surfaceSoft, borderRadius: 10, padding: "10px 12px" }}>Ontbijt, lunch en diner zijn al ingesteld — je kunt elk maaltijdmoment maar één keer toevoegen. Pas het aantal aan als er meer van dit medicijn bij hoort.</div>
+                <div style={{ fontSize: 12, color: T.mutedSoft, background: T.surfaceSoft, borderRadius: 10, padding: "10px 12px" }}>{L("moments_all_meals_set")}</div>
               ) : (
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {newMode === "time" ? (
                     <input type="time" value={newTime} onChange={(e) => setNewTime(e.target.value)} style={{ ...getInputStyle(T), flex: 1, minWidth: 100 }} />
                   ) : (
                     <select value={safeNewMeal} onChange={(e) => setNewMeal(e.target.value)} style={{ ...getInputStyle(T), flex: 1, minWidth: 100 }}>
-                      {availableMeals.map((m) => <option key={m.key} value={m.key}>{m.label}</option>)}
+                      {availableMeals.map((m) => <option key={m.key} value={m.key}>{L(MEAL_KEY_MAP[m.key] || m.key)}</option>)}
                     </select>
                   )}
-                  <input type="number" inputMode="numeric" min="1" value={newCount} onChange={(e) => setNewCount(e.target.value)} placeholder="aantal" title="aantal" style={{ ...getInputStyle(T), width: 68, textAlign: "center" }} />
+                  <input type="number" inputMode="numeric" min="1" value={newCount} onChange={(e) => setNewCount(e.target.value)} placeholder={L("field_count_short")} title={L("field_count_short")} style={{ ...getInputStyle(T), width: 68, textAlign: "center" }} />
                   <button onClick={addMoment} disabled={!newCount || !(Number(newCount) > 0)} style={{ background: (!newCount || !(Number(newCount) > 0)) ? T.mutedSoft : T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "0 16px", fontWeight: 700, fontSize: 16, cursor: (!newCount || !(Number(newCount) > 0)) ? "not-allowed" : "pointer", minHeight: 44 }}>+</button>
                 </div>
               )}
-              {newMode === "meal" && availableMeals.length > 0 && <div style={{ fontSize: 11, color: T.mutedSoft, marginTop: 6, lineHeight: 1.4 }}>Handig als het innamemoment per dag verschilt. Je krijgt automatisch een melding zodra het dagdeel voorbij is als dit nog niet is afgevinkt.</div>}
+              {newMode === "meal" && availableMeals.length > 0 && <div style={{ fontSize: 11, color: T.mutedSoft, marginTop: 6, lineHeight: 1.4 }}>{L("moments_meal_hint")}</div>}
             </>
           )}
         </Field>
         )}
 
         {isPRN && (
-        <Field label="Hoeveel neem je per keer?">
-          <input type="number" inputMode="numeric" min="1" value={prnDoseCount} onChange={(e) => setPrnDoseCount(e.target.value)} placeholder="bijv. 1" style={getInputStyle(T)} />
+        <Field label={L("field_prn_amount")}>
+          <input type="number" inputMode="numeric" min="1" value={prnDoseCount} onChange={(e) => setPrnDoseCount(e.target.value)} placeholder={L("prn_amount_placeholder")} style={getInputStyle(T)} />
         </Field>
         )}
 
-        <Field label="Voorraad (aantal, optioneel)">
-          <input type="number" inputMode="numeric" min="0" value={stock} onChange={(e) => setStock(e.target.value)} placeholder="bijv. 90" style={getInputStyle(T)} />
-          <div style={{ fontSize: 11.5, color: T.mutedSoft, marginTop: 6, lineHeight: 1.4 }}>{isPRN ? "Bij \"indien nodig\" kan de app niet voorspellen hoeveel dagen de voorraad meegaat — je ziet alleen het aantal in stuks." : `Waarschuwing gaat automatisch aan bij ${(totalValid ? Number(totalPerDay) : distributed) * REFILL_LEAD_DAYS} ${unitWordFor({ unitType, customUnitLabel }, 2)} — dat is ${REFILL_LEAD_DAYS} dagen × ${totalValid ? totalPerDay : distributed}/dag.`}</div>
+        <Field label={L("field_stock")}>
+          <input type="number" inputMode="numeric" min="0" value={stock} onChange={(e) => setStock(e.target.value)} placeholder={L("stock_placeholder")} style={getInputStyle(T)} />
+          <div style={{ fontSize: 11.5, color: T.mutedSoft, marginTop: 6, lineHeight: 1.4 }}>{isPRN ? L("stock_prn_note") : L("stock_auto_warn", { n: (totalValid ? Number(totalPerDay) : distributed) * REFILL_LEAD_DAYS, unit: unitWordFor({ unitType, customUnitLabel }, 2, L), days: REFILL_LEAD_DAYS, perday: totalValid ? totalPerDay : distributed })}</div>
         </Field>
 
         <button
@@ -4281,7 +4312,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
           onClick={() => onSave({ id: initial?.id || uid(), createdAt: initial?.createdAt || new Date().toISOString(), name: name.trim(), frequency, weekdays: isWeekdays ? weekdays : [], prnDoseCount: Math.max(1, Number(prnDoseCount) || 1), unitType, customUnitLabel: customUnitLabel.trim(), totalPerDay: isPRN ? null : Number(totalPerDay), strengthType, strengthMg, strengthOther: strengthOther.trim(), dosePerUnit: computedDosePerUnit, color, times: isPRN ? [] : times, photo, leaflet: initial?.leaflet, stock: stock === "" ? null : Number(stock) })}
           style={{ width: "100%", marginTop: 8, background: canSave ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 14, padding: "16px", fontWeight: 700, fontSize: 15, cursor: canSave ? "pointer" : "not-allowed" }}
         >
-          {initial ? "Wijzigingen opslaan" : "Toevoegen aan MedBox"}
+          {initial ? L("medmodal_save_edit") : L("medmodal_save_add")}
         </button>
       </div>
     </div>
