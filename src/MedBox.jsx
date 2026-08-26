@@ -3404,7 +3404,7 @@ export default function App() {
   return (
     <ThemeContext.Provider value={T}>
     <LangContext.Provider value={language}>
-    <div dir={RTL_LANGS.has(language) ? "rtl" : "ltr"} style={{ background: T.bg, minHeight: "100%", fontFamily: "'Nunito', sans-serif", color: T.ink, padding: "18px 14px 96px" }}>
+    <div dir={RTL_LANGS.has(language) ? "rtl" : "ltr"} style={{ background: T.bg, minHeight: "100%", fontFamily: "'Nunito', sans-serif", color: T.ink, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 96 }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
         .wd-mono { font-family: 'IBM Plex Mono', monospace; }
@@ -4055,7 +4055,7 @@ function CaregiverView({ codeInput, setCodeInput, data, loading, error, onFetch,
   const L = useL();
   const language = React.useContext(LangContext);
   return (
-    <div style={{ background: T.bg, minHeight: "100%", fontFamily: "'Nunito', sans-serif", color: T.ink, padding: "18px 14px 40px" }}>
+    <div style={{ background: T.bg, minHeight: "100%", fontFamily: "'Nunito', sans-serif", color: T.ink, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 40 }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
         .wd-display { font-family: 'Quicksand', 'Nunito', sans-serif; } .wd-mono { font-family: 'IBM Plex Mono', monospace; }
@@ -4324,7 +4324,7 @@ function EmergencyCardView({ medications, info, onClose }) {
   const hasContact = info.contactName || info.contactPhone || info.doctorName || info.doctorPhone || info.pharmacyName || info.pharmacyPhone;
   return (
     <div className="no-print" style={{ position: "fixed", inset: 0, background: T.bg, zIndex: 65, overflowY: "auto", fontFamily: "'Nunito', sans-serif", color: T.ink }}>
-      <div style={{ maxWidth: 480, margin: "0 auto", padding: "18px 16px 40px" }}>
+      <div style={{ maxWidth: 480, margin: "0 auto", paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 16, paddingRight: 16, paddingBottom: 40 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <AlertTriangle size={22} color={T.warn} />
