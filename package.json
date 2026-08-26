@@ -1,0 +1,19 @@
+{
+  "name": "medbox",
+  "version": "1.0.0",
+  "description": "MedBox - medicatie-tracker PWA (React, meertalig)",
+  "main": "src/entry.jsx",
+  "scripts": {
+    "build": "esbuild src/entry.jsx --bundle --minify --format=iife --define:process.env.NODE_ENV='\"production\"' --loader:.jsx=jsx --outfile=dist/bundle.js && node build-html.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "esbuild": "^0.28.2",
+    "lucide-react": "^0.400.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
