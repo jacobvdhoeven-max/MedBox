@@ -341,6 +341,24 @@ const TRANSLATIONS = {
   "tr": "Bugünkü ilerleme",
   "ar": "تقدّم اليوم"
  },
+ "progress_today_combined_meds_one": {
+  "nl": "Van {n} medicijn samen",
+  "en": "From {n} medication combined",
+  "de": "Von {n} Medikament zusammen",
+  "fr": "Pour {n} médicament au total",
+  "es": "De {n} medicamento en total",
+  "tr": "{n} ilaçtan toplam",
+  "ar": "من دواء واحد مجتمعين"
+ },
+ "progress_today_combined_meds_other": {
+  "nl": "Van {n} medicijnen samen",
+  "en": "From {n} medications combined",
+  "de": "Von {n} Medikamenten zusammen",
+  "fr": "Pour {n} médicaments au total",
+  "es": "De {n} medicamentos en total",
+  "tr": "{n} ilaçtan toplam",
+  "ar": "من {n} أدوية مجتمعة"
+ },
  "prn_title": {
   "nl": "Indien nodig",
   "en": "As needed",
@@ -3331,10 +3349,17 @@ export default function App() {
     return map;
   }, [medsScheduledToday, todaysDoses]);
 
-  // "Voortgang vandaag" only adds information for a medicine with more than
-  // one dose today — with a single dose it's a duplicate of the tappable
-  // potje below, so those are left out here.
-  const multiDoseMeds = useMemo(() => medsScheduledToday.filter((med) => (progressByMed[med.id]?.total || 1) > 1), [medsScheduledToday, progressByMed]);
+  // "Voortgang vandaag" is één gecombineerde pot voor alle medicatie samen
+  // — bijv. 6 innames van medicijn X + 6 van medicijn Y wordt hier 12/12 —
+  // in plaats van een aparte potje per medicijn. Alleen verborgen als er in
+  // totaal maar 1 inname vandaag is, want dan is het gewoon een duplicaat
+  // van het ene tappable potje hieronder.
+  const combinedProgress = useMemo(() => medsScheduledToday.reduce((acc, med) => {
+    const p = progressByMed[med.id] || { taken: 0, total: 1 };
+    acc.taken += p.taken;
+    acc.total += p.total;
+    return acc;
+  }, { taken: 0, total: 0 }), [medsScheduledToday, progressByMed]);
 
   const missedToday = todaysDoses.filter((d) => d.status === "missed");
   // A snoozed dose stays out of the "gemist" banner until its 15 minuten om zijn.
@@ -3667,20 +3692,15 @@ export default function App() {
 
             {medications.length > 0 && (
               <>
-                {multiDoseMeds.length > 0 && (
+                {medsScheduledToday.length > 0 && combinedProgress.total > 1 && (
                   <>
                     <SectionTitle>{L("progress_today_title")}</SectionTitle>
-                    <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 24 }}>
-                      {multiDoseMeds.map((med) => {
-                        const p = progressByMed[med.id] || { taken: 0, total: 1 };
-                        return (
-                          <div key={med.id} className="wd-card" style={{ background: T.surface, borderRadius: 16, padding: "12px 10px", display: "flex", flexDirection: "column", alignItems: "center", gap: 7, flex: "1 1 96px", minWidth: 92, border: `1.5px solid ${T.border}` }}>
-                            <ProgressJar color={med.color} taken={p.taken} total={p.total} size={44} />
-                            <div style={{ fontSize: 12.5, fontWeight: 600, textAlign: "center" }}>{med.name}</div>
-                            <div className="wd-mono" style={{ fontSize: 11, color: p.taken >= p.total ? T.success : T.muted, fontWeight: p.taken >= p.total ? 700 : 500 }}>{p.taken}/{p.total} {unitWordFor(med, p.total, L)}</div>
-                          </div>
-                        );
-                      })}
+                    <div className="wd-card" style={{ background: T.surface, borderRadius: 16, padding: "14px 16px", display: "flex", alignItems: "center", gap: 16, marginBottom: 24, border: `1.5px solid ${T.border}` }}>
+                      <ProgressJar color={T.primary} taken={combinedProgress.taken} total={combinedProgress.total} size={58} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div className="wd-mono" style={{ fontSize: 19, fontWeight: 700, color: combinedProgress.taken >= combinedProgress.total ? T.success : T.ink }}>{combinedProgress.taken}/{combinedProgress.total}</div>
+                        <div style={{ fontSize: 12.5, color: T.muted, marginTop: 2 }}>{L(medsScheduledToday.length === 1 ? "progress_today_combined_meds_one" : "progress_today_combined_meds_other", { n: medsScheduledToday.length })}</div>
+                      </div>
                     </div>
                   </>
                 )}
