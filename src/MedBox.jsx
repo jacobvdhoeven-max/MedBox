@@ -1529,6 +1529,24 @@ const TRANSLATIONS = {
   "tr": "Tabletler",
   "ar": "أقراص"
  },
+ "shape_ointment": {
+  "nl": "Zalf/crème",
+  "en": "Ointment/cream",
+  "de": "Salbe/Creme",
+  "fr": "Pommade/crème",
+  "es": "Pomada/crema",
+  "tr": "Merhem/krem",
+  "ar": "مرهم/كريم"
+ },
+ "shape_drops": {
+  "nl": "Druppels",
+  "en": "Drops",
+  "de": "Tropfen",
+  "fr": "Gouttes",
+  "es": "Gotas",
+  "tr": "Damla",
+  "ar": "قطرات"
+ },
  "shape_other": {
   "nl": "Overig",
   "en": "Other",
@@ -2222,6 +2240,42 @@ const TRANSLATIONS = {
   "tr": "adet",
   "ar": "وحدات"
  },
+ "unit_ointment_singular": {
+  "nl": "toepassing",
+  "en": "application",
+  "de": "Anwendung",
+  "fr": "application",
+  "es": "aplicación",
+  "tr": "uygulama",
+  "ar": "استخدام"
+ },
+ "unit_ointment_plural": {
+  "nl": "toepassingen",
+  "en": "applications",
+  "de": "Anwendungen",
+  "fr": "applications",
+  "es": "aplicaciones",
+  "tr": "uygulama",
+  "ar": "استخدامات"
+ },
+ "unit_drop_singular": {
+  "nl": "druppel",
+  "en": "drop",
+  "de": "Tropfen",
+  "fr": "goutte",
+  "es": "gota",
+  "tr": "damla",
+  "ar": "قطرة"
+ },
+ "unit_drop_plural": {
+  "nl": "druppels",
+  "en": "drops",
+  "de": "Tropfen",
+  "fr": "gouttes",
+  "es": "gotas",
+  "tr": "damla",
+  "ar": "قطرات"
+ },
  "notif_dose_title": {
   "nl": "Tijd voor {name}",
   "en": "Time for {name}",
@@ -2594,6 +2648,8 @@ function nextDoseTiming(t, now, todayISO, L) {
 }
 function unitWordFor(med, count = 2, L) {
   if (med.unitType === "overig") return med.customUnitLabel || (L ? L("unit_other_default") : "stuks");
+  if (med.unitType === "zalf") return L ? L(count === 1 ? "unit_ointment_singular" : "unit_ointment_plural") : (count === 1 ? "toepassing" : "toepassingen");
+  if (med.unitType === "druppels") return L ? L(count === 1 ? "unit_drop_singular" : "unit_drop_plural") : (count === 1 ? "druppel" : "druppels");
   return L ? L(count === 1 ? "unit_tablet_singular" : "unit_tablet_plural") : (count === 1 ? "tablet" : "tabletten");
 }
 function doseLabel(med, t, L) {
@@ -2633,7 +2689,11 @@ function normalizeMed(med) {
     prnDoseCount: typeof med.prnDoseCount === "number" && med.prnDoseCount > 0 ? med.prnDoseCount : 1,
     totalPerDay: frequency === "indien_nodig" ? null : (typeof med.totalPerDay === "number" && med.totalPerDay > 0 ? med.totalPerDay : fallbackTotal),
     dosePerUnit: med.dosePerUnit || "",
-    unitType: med.unitType === "overig" ? "overig" : "tabletten",
+    // "zalf" en "druppels" zijn, net als "tabletten", vaste voorkeuzes met een
+    // eigen vertaald eenheidswoord (zie unitWordFor) — alleen "overig" heeft
+    // nog een vrij invulbaar customUnitLabel. Alles wat geen van deze drie is
+    // (of ontbreekt, bij oudere opgeslagen data) valt terug op "tabletten".
+    unitType: ["overig", "zalf", "druppels"].includes(med.unitType) ? med.unitType : "tabletten",
     customUnitLabel: med.customUnitLabel || "",
   };
 }
@@ -4510,9 +4570,11 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
         </Field>
 
         <Field label={L("field_shape")}>
-          <div style={{ display: "flex", gap: 8, marginBottom: unitType === "overig" ? 8 : 0 }}>
-            <button type="button" onClick={() => setUnitType("tabletten")} style={getToggleBtnStyle(T, unitType === "tabletten")}>{L("shape_tablets")}</button>
-            <button type="button" onClick={() => setUnitType("overig")} style={getToggleBtnStyle(T, unitType === "overig")}>{L("shape_other")}</button>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: unitType === "overig" ? 8 : 0 }}>
+            <button type="button" onClick={() => setUnitType("tabletten")} style={{ ...getToggleBtnStyle(T, unitType === "tabletten"), flex: "1 1 40%" }}>{L("shape_tablets")}</button>
+            <button type="button" onClick={() => setUnitType("zalf")} style={{ ...getToggleBtnStyle(T, unitType === "zalf"), flex: "1 1 40%" }}>{L("shape_ointment")}</button>
+            <button type="button" onClick={() => setUnitType("druppels")} style={{ ...getToggleBtnStyle(T, unitType === "druppels"), flex: "1 1 40%" }}>{L("shape_drops")}</button>
+            <button type="button" onClick={() => setUnitType("overig")} style={{ ...getToggleBtnStyle(T, unitType === "overig"), flex: "1 1 40%" }}>{L("shape_other")}</button>
           </div>
           {unitType === "overig" && <input value={customUnitLabel} onChange={(e) => setCustomUnitLabel(e.target.value)} placeholder={L("shape_other_placeholder")} style={getInputStyle(T)} />}
         </Field>
@@ -4527,7 +4589,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
         </Field>
         )}
 
-        <Field label={L("field_strength", { unit: unitType === "overig" ? (customUnitLabel || L("unit_generic_singular")) : L("unit_tablet_singular") })}>
+        <Field label={L("field_strength", { unit: unitWordFor({ unitType, customUnitLabel }, 1, L) })}>
           <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
             <button type="button" onClick={() => setStrengthType("mg")} style={getToggleBtnStyle(T, strengthType === "mg")}>mg</button>
             <button type="button" onClick={() => setStrengthType("overig")} style={getToggleBtnStyle(T, strengthType === "overig")}>{L("shape_other")}</button>
