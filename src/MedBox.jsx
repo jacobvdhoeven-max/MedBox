@@ -2915,6 +2915,19 @@ export default function App() {
   // on one long page — jump to the top whenever the page changes.
   useEffect(() => { window.scrollTo(0, 0); }, [activeNav]);
 
+  // The page's own <html>/<body> background is set once in the static HTML
+  // shell (needed for the very first paint, before React/dark mode even
+  // loads) and can't react to the in-app dark-mode toggle on its own. Keep
+  // it in sync here too — otherwise short pages (like the empty state) or
+  // iOS's elastic overscroll bounce briefly expose that original light
+  // background as a pale flash/patch around the dark app content.
+  useEffect(() => {
+    try {
+      document.documentElement.style.background = T.bg;
+      document.body.style.background = T.bg;
+    } catch (e) {}
+  }, [T.bg]);
+
   // Installable-app detection: whether we're already running standalone
   // (installed), and whether the browser is offering a native install
   // prompt right now (only Chromium-based browsers fire this).
@@ -3404,7 +3417,7 @@ export default function App() {
   return (
     <ThemeContext.Provider value={T}>
     <LangContext.Provider value={language}>
-    <div dir={RTL_LANGS.has(language) ? "rtl" : "ltr"} style={{ background: T.bg, minHeight: "100%", fontFamily: "'Nunito', sans-serif", color: T.ink, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 96 }}>
+    <div dir={RTL_LANGS.has(language) ? "rtl" : "ltr"} style={{ background: T.bg, minHeight: "100vh", fontFamily: "'Nunito', sans-serif", color: T.ink, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 96 }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
         .wd-mono { font-family: 'IBM Plex Mono', monospace; }
@@ -4055,7 +4068,7 @@ function CaregiverView({ codeInput, setCodeInput, data, loading, error, onFetch,
   const L = useL();
   const language = React.useContext(LangContext);
   return (
-    <div style={{ background: T.bg, minHeight: "100%", fontFamily: "'Nunito', sans-serif", color: T.ink, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 40 }}>
+    <div style={{ background: T.bg, minHeight: "100vh", fontFamily: "'Nunito', sans-serif", color: T.ink, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 40 }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
         .wd-display { font-family: 'Quicksand', 'Nunito', sans-serif; } .wd-mono { font-family: 'IBM Plex Mono', monospace; }
