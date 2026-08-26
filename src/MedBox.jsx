@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback, useId } from "react";
 import {
   Bell, BellOff, Plus, X, Check, AlertTriangle, Package, PackagePlus, Trash2, Clock,
   Pencil, ChevronDown, ChevronUp, Users, RefreshCw, Printer, Copy,
@@ -2746,30 +2746,81 @@ async function fetchLeafletInfo(name) {
 }
 
 // ---------- Pillbox compartment (signature visual) ----------
+// Redesigned from scratch around three unambiguous states instead of a lid
+// that tilts to different angles: "upcoming" keeps the lid closed with the
+// pill visible at an angle inside; "taken" removes the lid entirely (it
+// lifts off and fades away in one smooth animation) and shows a checkmark
+// badge; "missed" keeps the lid closed too, just re-colored, with an
+// exclamation badge in the same style as the checkmark. Nothing rotates to
+// an ambiguous in-between angle, so nothing can be mistaken for a pill.
+function CompartmentBadge({ kind, T, cx, cy }) {
+  const fill = kind === "check" ? T.success : T.warn;
+  return (
+    <g transform={`translate(${cx},${cy})`}>
+      <circle r="9" fill={fill} stroke={T.surface} strokeWidth="2.2" />
+      {kind === "check" ? (
+        <path d="M-6,0.2 L-3.2,3.2 L2.5,-3.8" stroke="#fff" strokeWidth="2.3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      ) : (
+        <>
+          <rect x="-1.1" y="-4.6" width="2.2" height="5.4" rx="1.1" fill="#fff" />
+          <circle cy="3.6" r="1.25" fill="#fff" />
+        </>
+      )}
+    </g>
+  );
+}
+// Open-top outline: traces the left wall, rounded bottom corners and bottom
+// edge, and the right wall — but deliberately never closes back across the
+// top. Used only for "taken", so the border itself reads as an open mouth
+// instead of a sealed container once the lid is gone.
+function openBodyPath(x, y, w, h, rx) {
+  return `M ${x},${y} L ${x},${y + h - rx} Q ${x},${y + h} ${x + rx},${y + h} L ${x + w - rx},${y + h} Q ${x + w},${y + h} ${x + w},${y + h - rx} L ${x + w},${y}`;
+}
 function Compartment({ status, color, size = 44, onClick, label, pop }) {
   const T = useThemeColors();
-  const lidOpen = status === "taken";
-  const tilt = status === "missed";
-  const lidFill = status === "missed" ? T.warn : status === "taken" ? T.mutedSoft : T.raised;
-  const lidStroke = status === "missed" ? T.warn : T.border;
+  const isTaken = status === "taken";
+  const isMissed = status === "missed";
+  const bodyFill = isTaken ? T.successSoft : isMissed ? T.warnSoft : T.surface;
+  // A clearly-visible neutral outline (instead of the near-invisible pale
+  // gray "border" token) for the closed states; taken/missed keep their own
+  // status color.
+  const bodyStroke = isTaken ? T.success : isMissed ? T.warn : T.mutedSoft;
+  const lidFill = isMissed ? T.warn : T.raised;
+  const lidStroke = isMissed ? T.warn : T.mutedSoft;
+  const grooveColor = "rgba(0,0,0,0.12)";
+  const lidTransform = isTaken ? "translate(9px,-15px) rotate(38deg) scale(0.55)" : "translate(0,0) rotate(0deg) scale(1)";
+  // Smaller lid (24 wide / 9 tall) than the full jar mouth, so it reads as a
+  // compact cap rather than dominating the icon.
+  const lidX = 10, lidY = 10, lidW = 24, lidH = 9, lidRx = 4.5;
   return (
-    <button onClick={onClick} aria-label={label} title={label} className={pop ? "wd-pop" : undefined} style={{ background: "none", border: "none", padding: 0, cursor: onClick ? "pointer" : "default", display: "inline-flex", width: size, height: size * 1.18 }}>
-      <svg viewBox="0 0 44 52" width={size} height={size * 1.18} style={{ overflow: "visible" }}>
-        <rect x="4" y="18" width="36" height="30" rx="7" fill={T.surface} stroke={T.border} strokeWidth="2" />
-        <rect x="7" y="21" width="30" height="7" rx="3.5" fill="#ffffff" opacity="0.05" />
-        {status !== "taken" && (
-          <g>
-            <rect x="12" y="27" width="20" height="12" rx="6" fill={status === "missed" ? "#E7C3B2" : color} opacity={status === "missed" ? 0.55 : 1} />
-            <rect x="12" y="27" width="10" height="12" rx="6" fill="#ffffff" opacity="0.35" />
+    <button onClick={onClick} aria-label={label} title={label} className={pop ? "wd-pop" : undefined} style={{ background: "none", border: "none", padding: 0, cursor: onClick ? "pointer" : "default", display: "inline-flex", width: size, height: size * 1.16 }}>
+      <svg viewBox="0 0 44 52" width={size} height={size * 1.16} style={{ overflow: "visible" }}>
+        {isTaken ? (
+          <>
+            <rect x="6" y="18" width="32" height="30" rx="11" fill={bodyFill} />
+            <path d={openBodyPath(6, 18, 32, 30, 11)} fill="none" stroke={bodyStroke} strokeWidth="2" strokeLinecap="round" />
+            {/* Rim at the mouth, spanning the full body width so its ends meet the open path's wall tops exactly — reads as one continuous open rim instead of a separate floating ring. */}
+            <ellipse cx="22" cy="18" rx="16" ry="3.2" fill="none" stroke={bodyStroke} strokeWidth="1.6" opacity="0.6" />
+          </>
+        ) : (
+          <rect x="6" y="18" width="32" height="30" rx="11" fill={bodyFill} stroke={bodyStroke} strokeWidth="2" />
+        )}
+        <rect x="9" y="21" width="8" height="24" rx="4" fill="#ffffff" opacity="0.07" />
+        {!isTaken && (
+          <g style={{ transformBox: "view-box", transformOrigin: "22px 34px", transform: "rotate(28deg)" }}>
+            <rect x="14.5" y="28.5" width="15" height="8.4" rx="4.2" fill={isMissed ? "#E7C3B2" : color} opacity={isMissed ? 0.55 : 1} />
+            <rect x="14.5" y="28.5" width="7" height="8.4" rx="4.2" fill="#ffffff" opacity="0.35" />
           </g>
         )}
-        {status === "missed" && (
-          <g transform="translate(30,14)"><circle r="8" fill={T.warn} /><rect x="-1.1" y="-4.2" width="2.2" height="5.2" rx="1.1" fill="#fff" /><circle cy="3.6" r="1.2" fill="#fff" /></g>
-        )}
-        <g style={{ transformBox: "fill-box", transformOrigin: "6px 18px", transform: lidOpen ? "rotate(-108deg)" : tilt ? "rotate(-14deg)" : "rotate(0deg)", transition: "transform 0.35s cubic-bezier(.4,1.4,.5,1)" }}>
-          <rect x="4" y="5" width="36" height="14" rx="7" fill={lidFill} stroke={lidStroke} strokeWidth="2" />
-          <rect x="7" y="7" width="30" height="4" rx="2" fill="#ffffff" opacity="0.12" />
+        <g style={{ transformBox: "view-box", transformOrigin: "22px 19px", transform: lidTransform, transition: "transform 0.45s cubic-bezier(.3,1.4,.4,1), opacity 0.4s ease", opacity: isTaken ? 0 : 1 }}>
+          <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={lidFill} stroke={lidStroke} strokeWidth="1.6" />
+          <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.18" />
+          <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+          <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+          <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
         </g>
+        {isTaken && <CompartmentBadge kind="check" T={T} cx={33} cy={14} />}
+        {isMissed && <CompartmentBadge kind="warn" T={T} cx={33} cy={14} />}
       </svg>
     </button>
   );
@@ -2781,18 +2832,28 @@ function ProgressJar({ color, taken, total, size = 58 }) {
   const remaining = Math.max(0, total - taken);
   const frac = total > 0 ? Math.min(1, remaining / total) : 0;
   const complete = remaining <= 0 && total > 0;
-  const bodyTop = 13, bodyBottom = 55, bodyHeight = bodyBottom - bodyTop;
+  // Same body + lid geometry as Compartment's "upcoming" jar (viewBox, body
+  // rect, lid position/size) so the two icon families form one visual whole.
+  const bodyTop = 18, bodyBottom = 48, bodyHeight = bodyBottom - bodyTop;
   const fillHeight = bodyHeight * frac;
   const fillY = bodyBottom - fillHeight;
+  const clipId = useId();
+  const lidX = 10, lidY = 10, lidW = 24, lidH = 9, lidRx = 4.5;
   return (
-    <svg viewBox="0 0 44 60" width={size} height={size * (60 / 44)} style={{ overflow: "visible" }}>
-      <rect x="16" y="4" width="12" height="8" rx="2.5" fill={T.raised} stroke={T.jarBorder} strokeWidth="1.5" />
-      <rect x="6" y="12" width="32" height="44" rx="11" fill={T.surface} stroke={T.jarBorder} strokeWidth="2.2" />
-      <rect x="9" y="15" width="9" height="35" rx="4.5" fill="#ffffff" opacity="0.05" />
-      {fillHeight > 0 && <rect x="9.5" y={fillY} width="25" height={fillHeight + 3} rx="8" fill={complete ? T.success : color} opacity="0.88" />}
-      {fillHeight > 6 && <rect x="12" y={fillY + 3} width="6" height={Math.max(0, fillHeight - 8)} rx="3" fill="#ffffff" opacity="0.15" />}
+    <svg viewBox="0 0 44 52" width={size} height={size * (52 / 44)} style={{ overflow: "visible" }}>
+      <rect x="6" y="18" width="32" height="30" rx="11" fill={T.surface} stroke={T.mutedSoft} strokeWidth="2" />
+      <rect x="9" y="21" width="8" height="24" rx="4" fill="#ffffff" opacity="0.07" />
+      <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={T.raised} stroke={T.mutedSoft} strokeWidth="1.6" />
+      <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.18" />
+      <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke="rgba(0,0,0,0.12)" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke="rgba(0,0,0,0.12)" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke="rgba(0,0,0,0.12)" strokeWidth="1.2" strokeLinecap="round" />
+      <clipPath id={clipId}><rect x="7" y="19" width="30" height="28" rx="10" /></clipPath>
+      <g clipPath={`url(#${clipId})`}>
+        {fillHeight > 0 && <rect x="7" y={fillY} width="30" height={fillHeight + 4} fill={complete ? T.success : color} opacity="0.85" />}
+      </g>
       {complete && (
-        <g transform="translate(22,34)">
+        <g transform="translate(22,33)">
           <path d="M-6,0 L-2,5 L7,-6" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
         </g>
       )}
@@ -3692,7 +3753,7 @@ export default function App() {
                               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                                 {dayByPeriod[period].map((it) => (
                                   <div key={it.med.id + it.t.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, width: 54 }}>
-                                    <Compartment status={it.status} color={it.med.color} size={34} onClick={() => toggleTaken(it.med, dISO, it.t)} pop={poppedKey === logKeyFor(it.med.id, dISO, it.t)} label={L("aria_dose_label", { name: it.med.name, moment: `${DAY_NAMES_BY_LANG[language][i]} ${momentLabel(it.t, L)}`, status: statusLabel(it.status, L) })} />
+                                    <Compartment status={it.status} color={it.med.color} size={38} onClick={() => toggleTaken(it.med, dISO, it.t)} pop={poppedKey === logKeyFor(it.med.id, dISO, it.t)} label={L("aria_dose_label", { name: it.med.name, moment: `${DAY_NAMES_BY_LANG[language][i]} ${momentLabel(it.t, L)}`, status: statusLabel(it.status, L) })} />
                                     <div style={{ fontSize: 9.5, fontWeight: 600, color: T.ink, textAlign: "center", lineHeight: 1.2, wordBreak: "break-word" }}>{it.med.name}</div>
                                   </div>
                                 ))}
