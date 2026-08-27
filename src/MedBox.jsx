@@ -3043,11 +3043,19 @@ export default function App() {
   // JSX takes over.
   const [minSplashTimeUp, setMinSplashTimeUp] = useState(false);
   const [splashPhase, setSplashPhase] = useState("visible");
-  // Privacy: the same logo + potje, shown instantly (no fade-in, so it's
-  // already opaque before the OS can grab an app-switcher thumbnail) the
-  // moment MedBox goes to the background, and faded away again once it's
-  // genuinely back in view.
-  const [backgrounded, setBackgrounded] = useState(false);
+  // Privacy / resume: the same logo + potje, shown instantly (no fade-in,
+  // so it's already opaque before the OS can grab an app-switcher
+  // thumbnail) the moment MedBox goes to the background — and, on the way
+  // back, held for that same brief moment and faded away again, so
+  // returning to an already-open MedBox feels just like opening it fresh
+  // rather than an instant reveal. Kept as its own small state machine
+  // (rather than reusing splashPhase) so it only ever covers the app with
+  // an overlay — it never re-triggers the boot splash's early return, which
+  // would remount everything underneath and lose things like an
+  // in-progress "medicijn toevoegen" form.
+  const [resumePhase, setResumePhase] = useState("hidden"); // hidden -> visible -> fading -> hidden
+  const [resumeHoldUp, setResumeHoldUp] = useState(false);
+  const [resumeHoldKey, setResumeHoldKey] = useState(0);
   const T = withHighContrast(darkMode ? DARK : LIGHT, highContrast, darkMode);
   const textScale = TEXT_SIZE_SCALE[textSize] || 1;
   const activeProfile = profiles.find((p) => p.id === activeProfileId) || null;
@@ -3137,14 +3145,37 @@ export default function App() {
     return () => clearTimeout(t);
   }, [loaded, minSplashTimeUp]);
 
-  // Privacy: cover the screen the instant MedBox goes to the background
-  // (tab/app switch, screen lock, ...), and lift it again once it's really
-  // back in view.
+  // Privacy / resume overlay: cover the screen the instant MedBox goes to
+  // the background (tab/app switch, screen lock, ...); once it's really
+  // back in view, start a fresh ~700ms hold (below) before fading it away
+  // again — so re-opening an already-running MedBox looks the same as
+  // opening it for the first time.
   useEffect(() => {
-    const onVisibilityChange = () => setBackgrounded(document.hidden);
+    const onVisibilityChange = () => {
+      if (document.hidden) setResumePhase("visible");
+      else setResumeHoldKey((k) => k + 1);
+    };
     document.addEventListener("visibilitychange", onVisibilityChange);
     return () => document.removeEventListener("visibilitychange", onVisibilityChange);
   }, []);
+  // (Re)start the minimum-hold window each time the app comes back into
+  // view (resumeHoldKey bumped above). key 0 = app has never been
+  // backgrounded yet this session, so there's nothing to hold for.
+  useEffect(() => {
+    if (resumeHoldKey === 0) return;
+    setResumeHoldUp(false);
+    const t = setTimeout(() => setResumeHoldUp(true), 700);
+    return () => clearTimeout(t);
+  }, [resumeHoldKey]);
+  // Fade the resume overlay away once its hold window is up. Deliberately
+  // not depending on resumePhase itself — see the equivalent boot-splash
+  // effect above for why that would cancel its own timeout.
+  useEffect(() => {
+    if (!resumeHoldUp) return;
+    setResumePhase("fading");
+    const t = setTimeout(() => setResumePhase("hidden"), 350);
+    return () => clearTimeout(t);
+  }, [resumeHoldUp]);
 
   const handleInstallClick = async () => {
     if (!installPromptEvent) return;
@@ -3740,15 +3771,15 @@ export default function App() {
 
       <div
         className="no-print"
-        aria-hidden={!backgrounded}
+        aria-hidden={resumePhase === "hidden"}
         style={{
           position: "fixed", inset: 0, zIndex: 200,
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 34,
           background: T.bg,
-          opacity: backgrounded ? 1 : 0,
-          visibility: backgrounded ? "visible" : "hidden",
-          transition: backgrounded ? "opacity 0ms linear" : "opacity 220ms ease, visibility 0s linear 220ms",
-          pointerEvents: backgrounded ? "auto" : "none",
+          opacity: resumePhase === "visible" ? 1 : 0,
+          visibility: resumePhase === "hidden" ? "hidden" : "visible",
+          transition: resumePhase === "visible" ? "opacity 0ms linear" : "opacity 350ms ease, visibility 0s linear 350ms",
+          pointerEvents: resumePhase === "hidden" ? "none" : "auto",
         }}
       >
         <Logo size={68} scaleText={false} />
