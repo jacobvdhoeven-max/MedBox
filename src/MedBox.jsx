@@ -3606,8 +3606,8 @@ export default function App() {
           <>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
               <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted }}>{DAY_NAMES_BY_LANG[language][(now.getDay() + 6) % 7]} · {now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
-              <button onClick={() => setShowEmergencyCard(true)} className="no-print" style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: T.warn, fontWeight: 700, fontSize: "calc(12px * var(--wd-text-scale, 1))", cursor: "pointer", padding: "4px 2px", flexShrink: 0 }}>
-                <AlertTriangle size={14} /> {L("home_emergency_link")}
+              <button onClick={() => setShowEmergencyCard(true)} className="no-print" title={L("home_emergency_link")} style={{ display: "flex", alignItems: "center", gap: 6, background: T.warnSoft, border: `1.5px solid ${T.warn}`, color: T.warn, borderRadius: 12, padding: "9px 13px", fontWeight: 700, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 40, flexShrink: 0 }}>
+                <AlertTriangle size={15} /> {L("home_emergency_link")}
               </button>
             </div>
 
