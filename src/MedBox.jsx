@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback, useId } from "react";
 import {
-  Bell, BellOff, Plus, X, Check, AlertTriangle, Package, PackagePlus, Trash2, Clock,
+  Bell, BellOff, Plus, X, Check, AlertTriangle, Cross, Package, PackagePlus, Trash2, Clock,
   Pencil, ChevronDown, ChevronUp, Users, Printer,
   Image as ImageIcon, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
@@ -566,6 +566,33 @@ const TRANSLATIONS = {
   "es": "Reponer",
   "tr": "Stok ekle",
   "ar": "تجديد المخزون"
+ },
+ "beheer_edit_title": {
+  "nl": "Bewerken",
+  "en": "Edit",
+  "de": "Bearbeiten",
+  "fr": "Modifier",
+  "es": "Editar",
+  "tr": "Düzenle",
+  "ar": "تعديل"
+ },
+ "beheer_delete_title": {
+  "nl": "Verwijderen",
+  "en": "Delete",
+  "de": "Löschen",
+  "fr": "Supprimer",
+  "es": "Eliminar",
+  "tr": "Sil",
+  "ar": "حذف"
+ },
+ "beheer_delete_confirm": {
+  "nl": "{name} verwijderen? Alle innamegeschiedenis van dit medicijn gaat hierbij verloren.",
+  "en": "Delete {name}? All dose history for this medication will be lost too.",
+  "de": "{name} löschen? Der gesamte Einnahmeverlauf dieses Medikaments geht dabei verloren.",
+  "fr": "Supprimer {name} ? Tout l'historique des prises de ce médicament sera perdu aussi.",
+  "es": "¿Eliminar {name}? También se perderá todo el historial de tomas de este medicamento.",
+  "tr": "{name} silinsin mi? Bu ilaca ait tüm alım geçmişi de kaybolacak.",
+  "ar": "حذف {name}؟ سيُفقد أيضًا كل سجلّ جرعات هذا الدواء."
  },
  "beheer_add_button": {
   "nl": "+ Medicijn toevoegen",
@@ -2403,6 +2430,15 @@ const TRANSLATIONS = {
   "tr": "Tedaviye uyum",
   "ar": "الالتزام بالعلاج"
  },
+ "settings_trend_export_hint": {
+  "nl": "Het maandrapport, de kalenderexport en de back-up vind je bij Instellingen.",
+  "en": "The monthly report, calendar export and backup can be found under Settings.",
+  "de": "Den Monatsbericht, den Kalenderexport und das Backup findest du unter Einstellungen.",
+  "fr": "Le rapport mensuel, l'export du calendrier et la sauvegarde se trouvent dans Paramètres.",
+  "es": "El informe mensual, la exportación del calendario y la copia de seguridad están en Ajustes.",
+  "tr": "Aylık rapor, takvim dışa aktarımı ve yedekleme, Ayarlar bölümünde bulunur.",
+  "ar": "يمكنك العثور على التقرير الشهري وتصدير التقويم والنسخة الاحتياطية ضمن الإعدادات."
+ },
  "settings_trend_explain": {
   "nl": "Percentage ingenomen doses per week, over de laatste 8 weken. Alleen medicatie met een vast schema telt mee.",
   "en": "Percentage of doses taken per week, over the last 8 weeks. Only medication with a fixed schedule counts.",
@@ -3538,6 +3574,15 @@ export default function App() {
     return upcoming.filter((d) => momentKeyPart(d.t) === key);
   }, [todaysDoses]);
   const nextUpcoming = nextUpcomingGroup[0] || null;
+  // De "Volgende"-kaart hierboven toont deze dosis al apart; zonder deze
+  // filtering zou hij nogmaals verschijnen in het rooster hieronder.
+  const gridByPeriod = useMemo(() => {
+    const map = { Ochtend: [], Middag: [], Avond: [], Nacht: [] };
+    PERIOD_ORDER.forEach((p) => {
+      map[p] = todaysByPeriod[p].filter((d) => !nextUpcomingGroup.some((n) => n.med.id === d.med.id && n.t.id === d.t.id));
+    });
+    return map;
+  }, [todaysByPeriod, nextUpcomingGroup]);
   const takenToday = todaysDoses.filter((d) => d.status === "taken");
   const allDoneToday = medications.length > 0 && todaysDoses.length > 0 && takenToday.length === todaysDoses.length;
   const prevAllDoneRef = useRef(false);
@@ -3666,7 +3711,7 @@ export default function App() {
             </button>
             <IconToggleButton onClick={() => setDarkMode((v) => !v)} active={darkMode} icon={darkMode ? <Sun size={16} /> : <Moon size={16} />} label={darkMode ? L("theme_light") : L("theme_dark")} />
             <button onClick={() => setShowEmergencyCard(true)} className="no-print" aria-label={L("home_emergency_link")} title={L("home_emergency_link")} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: 12, background: T.warnSoft, border: `1.5px solid ${T.warn}`, color: T.warn, cursor: "pointer", flexShrink: 0 }}>
-              <AlertTriangle size={17} />
+              <Cross size={17} />
             </button>
           </div>
         </div>
@@ -3709,12 +3754,13 @@ export default function App() {
               </div>
             )}
 
-            {medications.length > 0 && PERIOD_ORDER.some((p) => todaysByPeriod[p].length > 0) && (
+            {medications.length > 0 && PERIOD_ORDER.some((p) => todaysByPeriod[p].length > 0 && (gridByPeriod[p].length > 0 || todaysByPeriod[p].every((d) => d.status === "taken"))) && (
               <>
                 <SectionTitle>{L("home_section_today")}</SectionTitle>
-                {PERIOD_ORDER.filter((p) => todaysByPeriod[p].length > 0).map((period) => {
+                {PERIOD_ORDER.filter((p) => todaysByPeriod[p].length > 0 && (gridByPeriod[p].length > 0 || todaysByPeriod[p].every((d) => d.status === "taken"))).map((period) => {
                   const isCurrent = period === currentPeriod;
                   const items = todaysByPeriod[period];
+                  const visibleItems = gridByPeriod[period];
                   const allTaken = items.every((d) => d.status === "taken");
                   const isCollapsed = allTaken && !expandedPeriods[period];
                   const periodLabel = L(PERIOD_KEY_MAP[period] || period);
@@ -3739,7 +3785,7 @@ export default function App() {
                             {periodLabel}{allTaken && " ✓"}
                           </button>
                           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))", gap: 14 }}>
-                            {items.map((d) => (
+                            {visibleItems.map((d) => (
                               <div key={d.med.id + d.t.id} className="wd-card" style={{ background: T.surface, borderRadius: 18, padding: "16px 12px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, border: `1.5px solid ${isCurrent ? T.primary + "55" : T.border}` }}>
                                 <AvatarBadge name={d.med.name} color={d.med.color} photo={d.med.photo} unitType={d.med.unitType} size={26} />
                                 <Compartment status={d.status} color={d.med.color} size={isCurrent ? 56 : 46} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: statusLabel(d.status, L) })} />
@@ -3991,9 +4037,9 @@ export default function App() {
                       </div>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", flexShrink: 0, marginLeft: "auto" }}>
-                      <button className="wd-btn wd-iconbtn" onClick={() => setRestockMed(med)} title={L("beheer_restock_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><PackagePlus size={18} /></button>
-                      <button className="wd-btn wd-iconbtn" onClick={() => setEditingMed(med)} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><Pencil size={18} /></button>
-                      <button className="wd-btn wd-iconbtn" onClick={() => setMedications((prev) => prev.filter((m) => m.id !== med.id))} style={{ background: "none", border: "none", color: T.warn, cursor: "pointer", flexShrink: 0 }}><Trash2 size={18} /></button>
+                      <button className="wd-btn wd-iconbtn" onClick={() => setRestockMed(med)} aria-label={L("beheer_restock_title")} title={L("beheer_restock_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><PackagePlus size={18} /></button>
+                      <button className="wd-btn wd-iconbtn" onClick={() => setEditingMed(med)} aria-label={L("beheer_edit_title")} title={L("beheer_edit_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><Pencil size={18} /></button>
+                      <button className="wd-btn wd-iconbtn" onClick={() => { if (typeof window.confirm === "function" && !window.confirm(L("beheer_delete_confirm", { name: med.name }))) return; setMedications((prev) => prev.filter((m) => m.id !== med.id)); }} aria-label={L("beheer_delete_title")} title={L("beheer_delete_title")} style={{ background: "none", border: "none", color: T.warn, cursor: "pointer", flexShrink: 0 }}><Trash2 size={18} /></button>
                     </div>
                   </div>
                 </div>
@@ -4013,16 +4059,12 @@ export default function App() {
                 <AdherenceTrend medications={medications} log={log} now={now} periodBounds={periodBounds} />
               )}
             </div>
-
-            <SectionTitle>{L("settings_report_title")}</SectionTitle>
-            <button className="wd-btn" onClick={() => setShowReport(true)} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.surface, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "15px", fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer", marginBottom: 10 }}><Printer size={17} /> {L("settings_report_button")}</button>
+            <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4 }}>{L("settings_trend_export_hint")}</div>
           </>
         )}
 
         {activeNav === "instellingen" && (
           <>
-            <SectionTitle>{L("settings_title")}</SectionTitle>
-
             <SectionTitle>{L("settings_accessibility_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600, marginBottom: 10 }}>{L("settings_textsize_label")}</div>
@@ -4092,6 +4134,9 @@ export default function App() {
               )}
             </div>
 
+            <SectionTitle>{L("settings_report_title")}</SectionTitle>
+            <button className="wd-btn" onClick={() => setShowReport(true)} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.surface, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "15px", fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer", marginBottom: 24 }}><Printer size={17} /> {L("settings_report_button")}</button>
+
             <SectionTitle>{L("settings_backup_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16, lineHeight: 1.4 }}>{L("settings_backup_explain")}</div>
@@ -4157,7 +4202,7 @@ export default function App() {
                 <Field label={L("field_pharmacy_name")}><input value={emergencyInfo.pharmacyName} onChange={(e) => setEmergencyInfo((p) => ({ ...p, pharmacyName: e.target.value }))} placeholder={L("field_pharmacy_placeholder")} style={getInputStyle(T)} /></Field>
                 <Field label={L("field_pharmacy_phone")}><input type="tel" value={emergencyInfo.pharmacyPhone} onChange={(e) => setEmergencyInfo((p) => ({ ...p, pharmacyPhone: e.target.value }))} placeholder="0..." style={getInputStyle(T)} /></Field>
               </div>
-              <button className="wd-btn" onClick={() => setShowEmergencyCard(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.warnSoft, border: `1.5px solid ${T.warn}55`, color: T.warn, borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(13.5px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44, marginTop: 4 }}><AlertTriangle size={16} /> {L("settings_emergency_view_button")}</button>
+              <button className="wd-btn" onClick={() => setShowEmergencyCard(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.warnSoft, border: `1.5px solid ${T.warn}55`, color: T.warn, borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(13.5px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44, marginTop: 4 }}><Cross size={16} /> {L("settings_emergency_view_button")}</button>
             </div>
           </>
         )}
@@ -4639,7 +4684,7 @@ function EmergencyCardView({ medications, info, onClose }) {
       <div style={{ maxWidth: 480, margin: "0 auto", paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 16, paddingRight: 16, paddingBottom: 40 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <AlertTriangle size={22} color={T.warn} />
+            <Cross size={22} color={T.warn} />
             <div className="wd-display" style={{ fontSize: "calc(21px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{L("emergency_title")}</div>
           </div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: T.surfaceSoft, border: "none", cursor: "pointer", color: T.ink, borderRadius: 10 }}><X size={20} /></button>
