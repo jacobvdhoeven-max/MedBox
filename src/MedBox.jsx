@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, useId } from "react";
 import {
   Bell, BellOff, Plus, X, Check, AlertTriangle, Package, PackagePlus, Trash2, Clock,
-  Pencil, ChevronDown, ChevronUp, Users, RefreshCw, Printer, Copy,
+  Pencil, ChevronDown, ChevronUp, Users, Printer,
   Image as ImageIcon, ScanLine, BookOpen, ExternalLink, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
   Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight,
@@ -593,6 +593,69 @@ const TRANSLATIONS = {
   "tr": "Ayarlar",
   "ar": "الإعدادات"
  },
+ "settings_accessibility_title": {
+  "nl": "Toegankelijkheid",
+  "en": "Accessibility",
+  "de": "Barrierefreiheit",
+  "fr": "Accessibilité",
+  "es": "Accesibilidad",
+  "tr": "Erişilebilirlik",
+  "ar": "إمكانية الوصول"
+ },
+ "settings_textsize_label": {
+  "nl": "Tekstgrootte",
+  "en": "Text size",
+  "de": "Textgröße",
+  "fr": "Taille du texte",
+  "es": "Tamaño del texto",
+  "tr": "Metin boyutu",
+  "ar": "حجم النص"
+ },
+ "textsize_normaal": {
+  "nl": "Normaal",
+  "en": "Normal",
+  "de": "Normal",
+  "fr": "Normal",
+  "es": "Normal",
+  "tr": "Normal",
+  "ar": "عادي"
+ },
+ "textsize_groot": {
+  "nl": "Groot",
+  "en": "Large",
+  "de": "Groß",
+  "fr": "Grand",
+  "es": "Grande",
+  "tr": "Büyük",
+  "ar": "كبير"
+ },
+ "textsize_extra_groot": {
+  "nl": "Extra groot",
+  "en": "Extra large",
+  "de": "Extra groß",
+  "fr": "Très grand",
+  "es": "Extra grande",
+  "tr": "Ekstra büyük",
+  "ar": "كبير جدًا"
+ },
+ "settings_contrast_toggle": {
+  "nl": "Hoog contrast",
+  "en": "High contrast",
+  "de": "Hoher Kontrast",
+  "fr": "Contraste élevé",
+  "es": "Alto contraste",
+  "tr": "Yüksek kontrast",
+  "ar": "تباين عالٍ"
+ },
+ "settings_contrast_explain": {
+  "nl": "Maakt tekst en randen donkerder/lichter voor beter leesbaar contrast.",
+  "en": "Makes text and borders darker/lighter for better readable contrast.",
+  "de": "Macht Text und Ränder dunkler/heller für besser lesbaren Kontrast.",
+  "fr": "Assombrit/éclaircit le texte et les bordures pour un contraste plus lisible.",
+  "es": "Oscurece/aclara el texto y los bordes para un contraste más legible.",
+  "tr": "Daha okunaklı bir kontrast için metni ve kenarlıkları koyulaştırır/açar.",
+  "ar": "يجعل النص والحدود أغمق/أفتح لتباين أوضح للقراءة."
+ },
  "settings_notif_title": {
   "nl": "Meldingen",
   "en": "Notifications",
@@ -800,6 +863,51 @@ const TRANSLATIONS = {
   "tr": "Gün dilimlerini ayarla",
   "ar": "تعديل أوقات اليوم"
  },
+ "settings_calendar_title": {
+  "nl": "Agenda-export",
+  "en": "Calendar export",
+  "de": "Kalenderexport",
+  "fr": "Export vers l'agenda",
+  "es": "Exportar al calendario",
+  "tr": "Takvime aktarma",
+  "ar": "تصدير إلى التقويم"
+ },
+ "settings_calendar_toggle": {
+  "nl": "Agenda-export inschakelen",
+  "en": "Enable calendar export",
+  "de": "Kalenderexport aktivieren",
+  "fr": "Activer l'export vers l'agenda",
+  "es": "Activar la exportación al calendario",
+  "tr": "Takvime aktarmayı etkinleştir",
+  "ar": "تفعيل التصدير إلى التقويم"
+ },
+ "settings_calendar_explain": {
+  "nl": "Maakt een .ics-bestand met de innametijden van je medicatie, dat je kunt openen in Google Agenda, Apple Agenda of Outlook. Momenten \"na een maaltijd\" krijgen een geschat tijdstip.",
+  "en": "Creates an .ics file with your medication times, which you can open in Google Calendar, Apple Calendar or Outlook. \"After a meal\" moments get an estimated time.",
+  "de": "Erstellt eine .ics-Datei mit deinen Einnahmezeiten, die du in Google Kalender, Apple Kalender oder Outlook öffnen kannst. Momente \"nach einer Mahlzeit\" erhalten eine geschätzte Uhrzeit.",
+  "fr": "Crée un fichier .ics avec tes heures de prise, à ouvrir dans Google Agenda, Apple Agenda ou Outlook. Les moments \"après un repas\" reçoivent une heure estimée.",
+  "es": "Crea un archivo .ics con tus horarios de medicación, que puedes abrir en Google Calendar, Apple Calendario u Outlook. Los momentos \"después de una comida\" reciben una hora estimada.",
+  "tr": "İlaç saatlerinle bir .ics dosyası oluşturur; bunu Google Takvim, Apple Takvim veya Outlook'ta açabilirsin. \"Öğünden sonra\" anları tahmini bir saat alır.",
+  "ar": "ينشئ ملف .ics بأوقات دوائك، يمكنك فتحه في تقويم Google أو تقويم Apple أو Outlook. تحصل لحظات \"بعد وجبة\" على وقت تقديري."
+ },
+ "settings_calendar_export_button": {
+  "nl": "Exporteren naar agenda (.ics)",
+  "en": "Export to calendar (.ics)",
+  "de": "In Kalender exportieren (.ics)",
+  "fr": "Exporter vers l'agenda (.ics)",
+  "es": "Exportar al calendario (.ics)",
+  "tr": "Takvime aktar (.ics)",
+  "ar": "تصدير إلى التقويم (.ics)"
+ },
+ "ics_approx_note": {
+  "nl": "geschat tijdstip",
+  "en": "estimated time",
+  "de": "geschätzte Uhrzeit",
+  "fr": "heure estimée",
+  "es": "hora estimada",
+  "tr": "tahmini saat",
+  "ar": "وقت تقديري"
+ },
  "settings_periods_explain": {
   "nl": "Vanaf welk tijdstip begint elk dagdeel? \"Na maaltijd\"-momenten volgen altijd hun eigen dagdeel (ontbijt → ochtend, lunch → middag, diner → avond).",
   "en": "What time does each part of the day start? \"After meal\" moments always follow their own period (breakfast → morning, lunch → afternoon, dinner → evening).",
@@ -817,51 +925,6 @@ const TRANSLATIONS = {
   "es": "{period} desde",
   "tr": "{period} başlangıcı",
   "ar": "{period} من"
- },
- "settings_caregiver_title": {
-  "nl": "Mantelzorger",
-  "en": "Caregiver",
-  "de": "Pflegeperson",
-  "fr": "Aidant",
-  "es": "Cuidador",
-  "tr": "Bakıcı",
-  "ar": "مقدّم الرعاية"
- },
- "settings_caregiver_toggle": {
-  "nl": "Delen met mantelzorger of familie",
-  "en": "Share with a caregiver or family",
-  "de": "Mit Pflegeperson oder Familie teilen",
-  "fr": "Partager avec un aidant ou la famille",
-  "es": "Compartir con un cuidador o familiar",
-  "tr": "Bir bakıcı veya aileyle paylaş",
-  "ar": "المشاركة مع مقدّم رعاية أو أحد أفراد الأسرة"
- },
- "settings_caregiver_code_explain": {
-  "nl": "Geef deze code aan je mantelzorger. Iedereen die de code kent, kan het overzicht bekijken (niet wijzigen).",
-  "en": "Give this code to your caregiver. Anyone who knows the code can view the overview (not change it).",
-  "de": "Gib diesen Code an deine Pflegeperson weiter. Jeder, der den Code kennt, kann die Übersicht ansehen (nicht ändern).",
-  "fr": "Donne ce code à ton aidant. Toute personne qui connaît le code peut consulter l'aperçu (pas le modifier).",
-  "es": "Dale este código a tu cuidador. Cualquiera que conozca el código puede ver el resumen (no modificarlo).",
-  "tr": "Bu kodu bakıcına ver. Kodu bilen herkes genel görünümü görüntüleyebilir (değiştiremez).",
-  "ar": "أعطِ هذا الرمز لمقدّم الرعاية الخاص بك. يمكن لأي شخص يعرف الرمز عرض النظرة العامة (وليس تعديلها)."
- },
- "settings_caregiver_copy": {
-  "nl": "Kopiëren",
-  "en": "Copy",
-  "de": "Kopieren",
-  "fr": "Copier",
-  "es": "Copiar",
-  "tr": "Kopyala",
-  "ar": "نسخ"
- },
- "settings_caregiver_view": {
-  "nl": "Bekijken als mantelzorger",
-  "en": "View as caregiver",
-  "de": "Als Pflegeperson ansehen",
-  "fr": "Voir en tant qu'aidant",
-  "es": "Ver como cuidador",
-  "tr": "Bakıcı olarak görüntüle",
-  "ar": "عرض كمقدّم رعاية"
  },
  "settings_emergency_title": {
   "nl": "Noodinformatie",
@@ -1143,13 +1206,13 @@ const TRANSLATIONS = {
   "ar": "الإعدادات"
  },
  "onboarding_step4_body": {
-  "nl": "Meldingen, een back-up maken, delen met een mantelzorger en je noodkaart met belangrijke gegevens.",
-  "en": "Notifications, making a backup, sharing with a caregiver, and your emergency card with important details.",
-  "de": "Benachrichtigungen, ein Backup erstellen, mit einer Pflegeperson teilen und deine Notfallkarte mit wichtigen Daten.",
-  "fr": "Notifications, création d'une sauvegarde, partage avec un aidant, et ta carte d'urgence avec les détails importants.",
-  "es": "Notificaciones, hacer una copia de seguridad, compartir con un cuidador y tu tarjeta de emergencia con datos importantes.",
-  "tr": "Bildirimler, yedek alma, bir bakıcıyla paylaşma ve önemli bilgileri içeren acil durum kartın.",
-  "ar": "الإشعارات، إنشاء نسخة احتياطية، المشاركة مع مقدّم رعاية، وبطاقة الطوارئ الخاصة بك التي تحتوي على التفاصيل المهمة."
+  "nl": "Meldingen, een back-up maken, en je noodkaart met belangrijke gegevens.",
+  "en": "Notifications, making a backup, and your emergency card with important details.",
+  "de": "Benachrichtigungen, ein Backup erstellen, und deine Notfallkarte mit wichtigen Daten.",
+  "fr": "Notifications, création d'une sauvegarde, et ta carte d'urgence avec les détails importants.",
+  "es": "Notificaciones, hacer una copia de seguridad, y tu tarjeta de emergencia con datos importantes.",
+  "tr": "Bildirimler, yedek alma, ve önemli bilgileri içeren acil durum kartın.",
+  "ar": "الإشعارات، إنشاء نسخة احتياطية، وبطاقة الطوارئ الخاصة بك التي تحتوي على التفاصيل المهمة."
  },
  "onboarding_skip": {
   "nl": "Overslaan",
@@ -1240,6 +1303,105 @@ const TRANSLATIONS = {
   "es": "Cancelar",
   "tr": "İptal",
   "ar": "إلغاء"
+ },
+ "common_save": {
+  "nl": "Opslaan",
+  "en": "Save",
+  "de": "Speichern",
+  "fr": "Enregistrer",
+  "es": "Guardar",
+  "tr": "Kaydet",
+  "ar": "حفظ"
+ },
+ "profile_default_name": {
+  "nl": "Ik",
+  "en": "Me",
+  "de": "Ich",
+  "fr": "Moi",
+  "es": "Yo",
+  "tr": "Ben",
+  "ar": "أنا"
+ },
+ "profiles_title": {
+  "nl": "Profielen",
+  "en": "Profiles",
+  "de": "Profile",
+  "fr": "Profils",
+  "es": "Perfiles",
+  "tr": "Profiller",
+  "ar": "الملفات الشخصية"
+ },
+ "profiles_manage_explain": {
+  "nl": "Beheer meerdere mensen in dezelfde MedBox — elk profiel heeft zijn eigen medicatie en geschiedenis.",
+  "en": "Manage several people in the same MedBox — each profile has its own medication and history.",
+  "de": "Verwalte mehrere Personen in derselben MedBox — jedes Profil hat seine eigene Medikation und Historie.",
+  "fr": "Gère plusieurs personnes dans la même MedBox — chaque profil a ses propres médicaments et son propre historique.",
+  "es": "Gestiona a varias personas en la misma MedBox — cada perfil tiene su propia medicación e historial.",
+  "tr": "Aynı MedBox içinde birden fazla kişiyi yönet — her profilin kendi ilaçları ve geçmişi vardır.",
+  "ar": "أدر عدّة أشخاص في نفس الـ MedBox — لكل ملف شخصي أدويته وسجلّه الخاص."
+ },
+ "profiles_active_badge": {
+  "nl": "Actief",
+  "en": "Active",
+  "de": "Aktiv",
+  "fr": "Actif",
+  "es": "Activo",
+  "tr": "Aktif",
+  "ar": "نشِط"
+ },
+ "profiles_add_button": {
+  "nl": "+ Nieuw profiel",
+  "en": "+ New profile",
+  "de": "+ Neues Profil",
+  "fr": "+ Nouveau profil",
+  "es": "+ Nuevo perfil",
+  "tr": "+ Yeni profil",
+  "ar": "+ ملف شخصي جديد"
+ },
+ "profiles_name_placeholder": {
+  "nl": "Bijv. Mama",
+  "en": "E.g. Mom",
+  "de": "Z. B. Mama",
+  "fr": "Ex. Maman",
+  "es": "P. ej. Mamá",
+  "tr": "Örn. Anne",
+  "ar": "مثال: أمي"
+ },
+ "profiles_rename_title": {
+  "nl": "Profiel hernoemen",
+  "en": "Rename profile",
+  "de": "Profil umbenennen",
+  "fr": "Renommer le profil",
+  "es": "Renombrar perfil",
+  "tr": "Profili yeniden adlandır",
+  "ar": "إعادة تسمية الملف الشخصي"
+ },
+ "profiles_delete_confirm": {
+  "nl": "Dit profiel verwijderen? Alle medicatie en geschiedenis van dit profiel gaan mee verloren.",
+  "en": "Delete this profile? All medication and history for this profile will be lost too.",
+  "de": "Dieses Profil löschen? Alle Medikation und Historie dieses Profils gehen ebenfalls verloren.",
+  "fr": "Supprimer ce profil ? Tous les médicaments et l'historique de ce profil seront perdus aussi.",
+  "es": "¿Eliminar este perfil? También se perderán toda la medicación y el historial de este perfil.",
+  "tr": "Bu profil silinsin mi? Bu profile ait tüm ilaçlar ve geçmiş de kaybolacak.",
+  "ar": "حذف هذا الملف الشخصي؟ ستُفقد أيضًا كل الأدوية والسجلّ الخاصّان بهذا الملف."
+ },
+ "profiles_delete_last_blocked": {
+  "nl": "Je kunt het laatste profiel niet verwijderen.",
+  "en": "You can't delete the last profile.",
+  "de": "Du kannst das letzte Profil nicht löschen.",
+  "fr": "Tu ne peux pas supprimer le dernier profil.",
+  "es": "No puedes eliminar el último perfil.",
+  "tr": "Son profili silemezsin.",
+  "ar": "لا يمكنك حذف آخر ملف شخصي."
+ },
+ "settings_profiles_manage_button": {
+  "nl": "Profielen beheren",
+  "en": "Manage profiles",
+  "de": "Profile verwalten",
+  "fr": "Gérer les profils",
+  "es": "Gestionar perfiles",
+  "tr": "Profilleri yönet",
+  "ar": "إدارة الملفات الشخصية"
  },
  "restock_add": {
   "nl": "Toevoegen",
@@ -1853,132 +2015,6 @@ const TRANSLATIONS = {
   "tr": "MedBox'a ekle",
   "ar": "إضافة إلى MedBox"
  },
- "caregiver_back": {
-  "nl": "← Terug naar MedBox",
-  "en": "← Back to MedBox",
-  "de": "← Zurück zu MedBox",
-  "fr": "← Retour à MedBox",
-  "es": "← Volver a MedBox",
-  "tr": "← MedBox'a dön",
-  "ar": "← العودة إلى MedBox"
- },
- "caregiver_title": {
-  "nl": "Mantelzorger-weergave",
-  "en": "Caregiver view",
-  "de": "Pflegeperson-Ansicht",
-  "fr": "Vue aidant",
-  "es": "Vista de cuidador",
-  "tr": "Bakıcı görünümü",
-  "ar": "عرض مقدّم الرعاية"
- },
- "caregiver_intro": {
-  "nl": "Vul de code in die je van de gebruiker hebt gekregen om mee te kijken.",
-  "en": "Enter the code you received from the user to view along.",
-  "de": "Gib den Code ein, den du vom Nutzer erhalten hast, um mitzulesen.",
-  "fr": "Saisis le code que tu as reçu de l'utilisateur pour suivre en même temps.",
-  "es": "Introduce el código que has recibido del usuario para poder consultarlo.",
-  "tr": "Birlikte görüntülemek için kullanıcıdan aldığın kodu gir.",
-  "ar": "أدخل الرمز الذي حصلت عليه من المستخدم للاطّلاع."
- },
- "caregiver_code_placeholder": {
-  "nl": "Bijv. AB12CD",
-  "en": "E.g. AB12CD",
-  "de": "Z. B. AB12CD",
-  "fr": "Ex. AB12CD",
-  "es": "P. ej. AB12CD",
-  "tr": "Örn. AB12CD",
-  "ar": "مثال: AB12CD"
- },
- "caregiver_view_button": {
-  "nl": "Bekijken",
-  "en": "View",
-  "de": "Ansehen",
-  "fr": "Voir",
-  "es": "Ver",
-  "tr": "Görüntüle",
-  "ar": "عرض"
- },
- "caregiver_loading": {
-  "nl": "Laden…",
-  "en": "Loading…",
-  "de": "Wird geladen…",
-  "fr": "Chargement…",
-  "es": "Cargando…",
-  "tr": "Yükleniyor…",
-  "ar": "جارٍ التحميل…"
- },
- "caregiver_error_not_found": {
-  "nl": "Geen MedBox gevonden met deze code.",
-  "en": "No MedBox found with this code.",
-  "de": "Keine MedBox mit diesem Code gefunden.",
-  "fr": "Aucune MedBox trouvée avec ce code.",
-  "es": "No se encontró ninguna MedBox con este código.",
-  "tr": "Bu kodla eşleşen bir MedBox bulunamadı.",
-  "ar": "لم يتم العثور على MedBox بهذا الرمز."
- },
- "caregiver_error_sharing_off": {
-  "nl": "Delen staat momenteel uit voor deze MedBox.",
-  "en": "Sharing is currently off for this MedBox.",
-  "de": "Das Teilen ist für diese MedBox derzeit ausgeschaltet.",
-  "fr": "Le partage est actuellement désactivé pour cette MedBox.",
-  "es": "El uso compartido está actualmente desactivado para esta MedBox.",
-  "tr": "Bu MedBox için paylaşım şu anda kapalı.",
-  "ar": "المشاركة معطّلة حاليًا لهذا الـ MedBox."
- },
- "caregiver_error_connection": {
-  "nl": "Kon geen verbinding maken. Probeer het opnieuw.",
-  "en": "Couldn't connect. Please try again.",
-  "de": "Verbindung fehlgeschlagen. Bitte versuche es erneut.",
-  "fr": "Impossible de se connecter. Merci de réessayer.",
-  "es": "No se pudo conectar. Inténtalo de nuevo.",
-  "tr": "Bağlantı kurulamadı. Lütfen tekrar dene.",
-  "ar": "تعذّر الاتصال. يُرجى المحاولة مرة أخرى."
- },
- "caregiver_last_updated": {
-  "nl": "Laatst bijgewerkt: {time}",
-  "en": "Last updated: {time}",
-  "de": "Zuletzt aktualisiert: {time}",
-  "fr": "Dernière mise à jour : {time}",
-  "es": "Última actualización: {time}",
-  "tr": "Son güncelleme: {time}",
-  "ar": "آخر تحديث: {time}"
- },
- "caregiver_refresh": {
-  "nl": "Ververs",
-  "en": "Refresh",
-  "de": "Aktualisieren",
-  "fr": "Actualiser",
-  "es": "Actualizar",
-  "tr": "Yenile",
-  "ar": "تحديث"
- },
- "caregiver_taken_today": {
-  "nl": "Vandaag genomen",
-  "en": "Taken today",
-  "de": "Heute genommen",
-  "fr": "Pris aujourd'hui",
-  "es": "Tomado hoy",
-  "tr": "Bugün alınan",
-  "ar": "تم تناوله اليوم"
- },
- "caregiver_no_doses": {
-  "nl": "Geen doses vandaag.",
-  "en": "No doses today.",
-  "de": "Heute keine Dosen.",
-  "fr": "Aucune dose aujourd'hui.",
-  "es": "No hay dosis hoy.",
-  "tr": "Bugün doz yok.",
-  "ar": "لا توجد جرعات اليوم."
- },
- "caregiver_stock_title": {
-  "nl": "Voorraad",
-  "en": "Stock",
-  "de": "Vorrat",
-  "fr": "Stock",
-  "es": "Existencias",
-  "tr": "Stok",
-  "ar": "المخزون"
- },
  "status_taken": {
   "nl": "Genomen",
   "en": "Taken",
@@ -2506,6 +2542,17 @@ const DARK = {
   gold: "#E8C567",
   goldSoft: "#382C16",
 };
+// Hoog contrast overlay: strengthens only the tokens responsible for text
+// and outlines (never the brand/status colors, which already carry their
+// own deliberately-tuned contrast) so borders and body text read clearly
+// without changing the app's overall look and feel.
+const LIGHT_HC_OVERRIDES = { ink: "#000000", muted: "#16281F", mutedSoft: "#0E1F19", border: "#16281F", jarBorder: "#16281F" };
+const DARK_HC_OVERRIDES = { ink: "#FFFFFF", muted: "#F2FAF6", mutedSoft: "#FFFFFF", border: "#F2FAF6", jarBorder: "#F2FAF6" };
+function withHighContrast(theme, highContrast, isDark) {
+  if (!highContrast) return theme;
+  return { ...theme, ...(isDark ? DARK_HC_OVERRIDES : LIGHT_HC_OVERRIDES) };
+}
+const TEXT_SIZE_SCALE = { normaal: 1, groot: 1.15, "extra-groot": 1.3 };
 const ThemeContext = React.createContext(LIGHT);
 function useThemeColors() { return React.useContext(ThemeContext); }
 
@@ -2567,6 +2614,7 @@ function usePlural() {
 }
 
 const MED_COLORS = ["#2F6B5E", "#B4502C", "#D8A339", "#3E6FA6", "#6E5A9C", "#C2555C", "#5C8A63"];
+const EMPTY_EMERGENCY_INFO = { allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "" };
 const DAY_NAMES = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"];
 const DAY_SHORT = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
 const REFILL_LEAD_DAYS = 30;
@@ -2626,11 +2674,62 @@ function scheduledDateTime(dateISO, time) {
   return new Date(y, mo - 1, da, h, m, 0, 0);
 }
 function uid() { return Math.random().toString(36).slice(2, 10); }
-function genCode() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let s = "";
-  for (let i = 0; i < 6; i++) s += chars[Math.floor(Math.random() * chars.length)];
-  return s;
+
+// ---------- Calendar (.ics) export ----------
+// One recurring VEVENT per scheduled moment. Fixed clock times map straight
+// to a DTSTART + RRULE; "after a meal" moments have no clock time, so they're
+// approximated using the same dagdeel start the app already shows for that
+// meal — the event text says so plainly rather than pretending precision.
+const ICS_BYDAY = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
+function icsDateTimeLocal(date) {
+  return `${date.getFullYear()}${pad2(date.getMonth() + 1)}${pad2(date.getDate())}T${pad2(date.getHours())}${pad2(date.getMinutes())}00`;
+}
+function icsEscape(text) {
+  return String(text || "").replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
+}
+function icsFoldLine(line) {
+  // RFC 5545: lines should be folded at 75 octets, continuation starts with a space.
+  if (line.length <= 75) return line;
+  let out = line.slice(0, 75);
+  let rest = line.slice(75);
+  while (rest.length > 0) {
+    out += "\r\n " + rest.slice(0, 74);
+    rest = rest.slice(74);
+  }
+  return out;
+}
+function buildIcsCalendar(medications, periodBounds, todayISO, L) {
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//MedBox//NL", "CALSCALE:GREGORIAN"];
+  const stamp = todayISO.replace(/-/g, "") + "T000000";
+  medications.forEach((med) => {
+    if (med.frequency === "indien_nodig") return;
+    (med.times || []).forEach((t) => {
+      const approx = isMeal(t);
+      const time = approx ? (periodBounds[mealInfo(t.meal).period] || DEFAULT_PERIOD_BOUNDS[mealInfo(t.meal).period]) : t.time;
+      const start = scheduledDateTime(todayISO, time);
+      const end = new Date(start.getTime() + 15 * 60000);
+      const rrule = med.frequency === "weekdagen"
+        ? `RRULE:FREQ=WEEKLY;BYDAY=${(med.weekdays || []).map((d) => ICS_BYDAY[d]).join(",")}`
+        : "RRULE:FREQ=DAILY";
+      const dose = doseLabel(med, t, L);
+      const summary = approx ? `${med.name} (${L(MEAL_KEY_MAP[t.meal] || t.meal)})` : `${med.name}`;
+      const descParts = [dose];
+      if (approx) descParts.push(L("ics_approx_note"));
+      lines.push(
+        "BEGIN:VEVENT",
+        `UID:${med.id}-${momentKeyPart(t)}@medbox`,
+        `DTSTAMP:${stamp}`,
+        `DTSTART:${icsDateTimeLocal(start)}`,
+        `DTEND:${icsDateTimeLocal(end)}`,
+        rrule,
+        icsFoldLine(`SUMMARY:${icsEscape(summary)}`),
+        icsFoldLine(`DESCRIPTION:${icsEscape(descParts.join(" — "))}`),
+        "END:VEVENT"
+      );
+    });
+  });
+  lines.push("END:VCALENDAR");
+  return lines.join("\r\n");
 }
 
 // ---------- Moment helpers: a moment is either a fixed clock time, or "after a meal" ----------
@@ -2885,7 +2984,7 @@ function AvatarBadge({ name, color, photo, size = 32 }) {
   if (photo) return <img src={photo} alt="" style={{ width: size, height: size, borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: `2px solid ${T.border}` }} />;
   const initials = (name || "?").trim().slice(0, 2).toUpperCase();
   return (
-    <div className="wd-display" style={{ width: size, height: size, borderRadius: "50%", background: color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: size * 0.4, flexShrink: 0 }}>
+    <div className="wd-display" style={{ width: size, height: size, borderRadius: "50%", background: color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: `calc(${size * 0.4}px * var(--wd-text-scale, 1))`, flexShrink: 0 }}>
       {initials}
     </div>
   );
@@ -2906,7 +3005,7 @@ function BottomNav({ active, onNavigate }) {
       {items.map((it) => (
         <button key={it.key} onClick={() => onNavigate(it.key)} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, background: "none", border: "none", color: active === it.key ? T.primary : T.mutedSoft, cursor: "pointer", minWidth: 68, minHeight: 52, padding: "4px 6px" }}>
           {it.icon}
-          <span style={{ fontSize: 10.5, fontWeight: 700 }}>{it.label}</span>
+          <span style={{ fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{it.label}</span>
         </button>
       ))}
     </div>
@@ -2917,12 +3016,24 @@ function BottomNav({ active, onNavigate }) {
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [storageIssue, setStorageIssue] = useState(false);
+  // Multiple people can share one MedBox install (a family, or several
+  // household members). `medications`/`log`/`emergencyInfo` always hold the
+  // ACTIVE profile's data — every existing piece of app logic keeps reading
+  // and writing those three exactly as before. The other profiles' data
+  // lives in profilesDataRef (see switchProfile / the save effect below),
+  // only touched when switching profiles or persisting to storage, so nothing
+  // else in the app needs to know profiles exist at all.
+  const [profiles, setProfiles] = useState([]);
+  const [activeProfileId, setActiveProfileId] = useState(null);
+  const [showProfiles, setShowProfiles] = useState(false);
+  const profilesDataRef = useRef({});
   const [medications, setMedications] = useState([]);
   const [log, setLog] = useState({});
-  const [householdCode, setHouseholdCode] = useState("");
-  const [sharingEnabled, setSharingEnabled] = useState(false);
   const [periodBounds, setPeriodBounds] = useState(DEFAULT_PERIOD_BOUNDS);
   const [darkMode, setDarkMode] = useState(false);
+  const [textSize, setTextSize] = useState("normaal");
+  const [highContrast, setHighContrast] = useState(false);
+  const [icsExportEnabled, setIcsExportEnabled] = useState(false);
   const [language, setLanguage] = useState("nl");
   const [homeTipDismissed, setHomeTipDismissed] = useState(false);
   const [customMedNames, setCustomMedNames] = useState([]);
@@ -2949,7 +3060,9 @@ export default function App() {
   // compartment again (which may have already collapsed out of view once
   // its whole dagdeel is done).
   const [undoToast, setUndoToast] = useState(null);
-  const T = darkMode ? DARK : LIGHT;
+  const T = withHighContrast(darkMode ? DARK : LIGHT, highContrast, darkMode);
+  const textScale = TEXT_SIZE_SCALE[textSize] || 1;
+  const activeProfile = profiles.find((p) => p.id === activeProfileId) || null;
   // App() renders LangContext.Provider for its own children — it isn't a
   // descendant of that provider itself, so useL()/useContext(LangContext)
   // wouldn't see `language` here. Build L directly off the state instead.
@@ -2977,11 +3090,6 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [activeNav, setActiveNav] = useState("vandaag");
-  const [role, setRole] = useState("patient");
-  const [caregiverCodeInput, setCaregiverCodeInput] = useState("");
-  const [caregiverData, setCaregiverData] = useState(null);
-  const [caregiverError, setCaregiverError] = useState("");
-  const [caregiverLoading, setCaregiverLoading] = useState(false);
   const [expandedLeaflet, setExpandedLeaflet] = useState(null);
   const [leafletLoadingIds, setLeafletLoadingIds] = useState(new Set());
   const firedRef = useRef(new Set());
@@ -3006,6 +3114,7 @@ export default function App() {
       document.body.style.background = T.bg;
     } catch (e) {}
   }, [T.bg]);
+
 
   // Installable-app detection: whether we're already running standalone
   // (installed), and whether the browser is offering a native install
@@ -3048,22 +3157,48 @@ export default function App() {
         } catch (e) { readFailed = true; }
       }
       if (data) {
-        setMedications((data.medications || []).map(normalizeMed));
-        setLog(data.log || {});
-        setHouseholdCode(data.householdCode || genCode());
-        setSharingEnabled(!!data.sharingEnabled);
+        // Profiles were introduced after this app already shipped, so a
+        // saved file can be in either shape. New shape carries its own
+        // `profiles` array (each profile's medications/log/emergencyInfo
+        // tucked away in `profilesData`); anything saved before that has
+        // `medications`/`log`/`emergencyInfo` sitting flat at the top level
+        // instead — that's migrated into a single starter profile so
+        // nobody's existing data disappears the first time this update runs.
+        if (Array.isArray(data.profiles) && data.profiles.length > 0) {
+          const pd = data.profilesData && typeof data.profilesData === "object" ? data.profilesData : {};
+          const activeId = data.profiles.some((p) => p.id === data.activeProfileId) ? data.activeProfileId : data.profiles[0].id;
+          profilesDataRef.current = pd;
+          setProfiles(data.profiles);
+          setActiveProfileId(activeId);
+          const active = pd[activeId] || {};
+          setMedications((active.medications || []).map(normalizeMed));
+          setLog(active.log || {});
+          setEmergencyInfo({ allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "", ...(active.emergencyInfo || {}) });
+        } else {
+          const migratedId = uid();
+          setProfiles([{ id: migratedId, name: L("profile_default_name"), color: MED_COLORS[0] }]);
+          setActiveProfileId(migratedId);
+          setMedications((data.medications || []).map(normalizeMed));
+          setLog(data.log || {});
+          setEmergencyInfo({ allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "", ...(data.emergencyInfo || {}) });
+        }
         setPeriodBounds(data.periodBounds || DEFAULT_PERIOD_BOUNDS);
         setDarkMode(!!data.darkMode);
+        setTextSize(TEXT_SIZE_SCALE[data.textSize] ? data.textSize : "normaal");
+        setHighContrast(!!data.highContrast);
+        setIcsExportEnabled(!!data.icsExportEnabled);
         setLanguage(data.language || "nl");
         setHomeTipDismissed(!!data.homeTipDismissed);
         setCustomMedNames(Array.isArray(data.customMedNames) ? data.customMedNames : []);
-        setEmergencyInfo({ allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "", ...(data.emergencyInfo || {}) });
         setLastBackupAt(data.lastBackupAt || null);
         setOnboardingSeen(!!data.onboardingSeen);
         setNotifDisabledByUser(!!data.notifDisabledByUser);
       } else if (!readFailed) {
-        // Genuinely nothing saved yet — safe to start fresh.
-        setHouseholdCode(genCode());
+        // Brand new install — nothing to migrate, just start with one
+        // default profile so the rest of the app always has an active one.
+        const freshId = uid();
+        setProfiles([{ id: freshId, name: L("profile_default_name"), color: MED_COLORS[0] }]);
+        setActiveProfileId(freshId);
       }
       if (readFailed) {
         // We couldn't confirm whether saved data exists or not. Treating this
@@ -3079,13 +3214,18 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!loadedRef.current || storageIssue) return;
+    if (!loadedRef.current || storageIssue || !activeProfileId) return;
+    // Keep the active profile's slice of profilesDataRef current before every
+    // save — medications/log/emergencyInfo only live as top-level state for
+    // whichever profile is active right now, so this is where that gets
+    // folded back in alongside the other (currently inactive) profiles.
+    profilesDataRef.current = { ...profilesDataRef.current, [activeProfileId]: { medications, log, emergencyInfo } };
     (async () => {
       try {
-        await window.storage.set("medbox_v1", JSON.stringify({ medications, log, householdCode, sharingEnabled, periodBounds, darkMode, language, homeTipDismissed, customMedNames, emergencyInfo, lastBackupAt, onboardingSeen, notifDisabledByUser }), false);
+        await window.storage.set("medbox_v1", JSON.stringify({ profiles, activeProfileId, profilesData: profilesDataRef.current, periodBounds, darkMode, textSize, highContrast, icsExportEnabled, language, homeTipDismissed, customMedNames, lastBackupAt, onboardingSeen, notifDisabledByUser }), false);
       } catch (e) { console.error("Opslaan mislukt", e); }
     })();
-  }, [medications, log, householdCode, sharingEnabled, periodBounds, darkMode, language, homeTipDismissed, customMedNames, emergencyInfo, lastBackupAt, onboardingSeen, notifDisabledByUser, storageIssue]);
+  }, [medications, log, periodBounds, darkMode, textSize, highContrast, icsExportEnabled, language, homeTipDismissed, customMedNames, emergencyInfo, lastBackupAt, onboardingSeen, notifDisabledByUser, storageIssue, profiles, activeProfileId]);
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 30000);
@@ -3263,6 +3403,69 @@ export default function App() {
     }
   };
 
+  // ---- Profiles: several people (a family, a household) sharing one MedBox
+  // install, each with their own medications/log/emergencyInfo. Only the
+  // active profile's data ever lives in the medications/log/emergencyInfo
+  // state above — switching profiles snapshots the outgoing one into
+  // profilesDataRef and hydrates state from the incoming one's snapshot.
+  const switchProfile = (newId) => {
+    if (newId === activeProfileId) { setShowProfiles(false); return; }
+    profilesDataRef.current = { ...profilesDataRef.current, [activeProfileId]: { medications, log, emergencyInfo } };
+    const next = profilesDataRef.current[newId] || {};
+    setMedications((next.medications || []).map(normalizeMed));
+    setLog(next.log || {});
+    setEmergencyInfo({ ...EMPTY_EMERGENCY_INFO, ...(next.emergencyInfo || {}) });
+    setActiveProfileId(newId);
+    // Close anything mid-edit so it can never end up pointed at the profile
+    // that was just left.
+    setShowAdd(false);
+    setEditingMed(null);
+    setRestockMed(null);
+    setShowReport(false);
+    setShowEmergencyCard(false);
+    setShowProfiles(false);
+  };
+
+  const addProfile = (name) => {
+    const trimmed = (name || "").trim();
+    if (!trimmed) return;
+    const usedColors = new Set(profiles.map((p) => p.color));
+    const color = MED_COLORS.find((c) => !usedColors.has(c)) || MED_COLORS[profiles.length % MED_COLORS.length];
+    const newId = uid();
+    profilesDataRef.current = { ...profilesDataRef.current, [activeProfileId]: { medications, log, emergencyInfo }, [newId]: { medications: [], log: {}, emergencyInfo: EMPTY_EMERGENCY_INFO } };
+    setProfiles((prev) => [...prev, { id: newId, name: trimmed, color }]);
+    setMedications([]);
+    setLog({});
+    setEmergencyInfo(EMPTY_EMERGENCY_INFO);
+    setActiveProfileId(newId);
+    setShowAdd(false);
+    setEditingMed(null);
+    setRestockMed(null);
+  };
+
+  const renameProfile = (id, name) => {
+    const trimmed = (name || "").trim();
+    if (!trimmed) return;
+    setProfiles((prev) => prev.map((p) => (p.id === id ? { ...p, name: trimmed } : p)));
+  };
+
+  const deleteProfile = (id) => {
+    if (profiles.length <= 1) return;
+    const remaining = profiles.filter((p) => p.id !== id);
+    const nextData = { ...profilesDataRef.current };
+    delete nextData[id];
+    profilesDataRef.current = nextData;
+    setProfiles(remaining);
+    if (id === activeProfileId) {
+      const fallback = remaining[0];
+      const fdata = nextData[fallback.id] || {};
+      setMedications((fdata.medications || []).map(normalizeMed));
+      setLog(fdata.log || {});
+      setEmergencyInfo({ ...EMPTY_EMERGENCY_INFO, ...(fdata.emergencyInfo || {}) });
+      setActiveProfileId(fallback.id);
+    }
+  };
+
   const handleExport = () => {
     const payload = { exportedAt: new Date().toISOString(), medications, log, periodBounds };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
@@ -3275,6 +3478,20 @@ export default function App() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     setLastBackupAt(new Date().toISOString());
+  };
+
+  const handleIcsExport = () => {
+    const todayISO = isoDate(new Date());
+    const ics = buildIcsCalendar(medications, periodBounds, todayISO, L);
+    const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `medbox-agenda-${todayISO}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const handleImportFile = async (e) => {
@@ -3449,45 +3666,6 @@ export default function App() {
     });
   }, [needsRefill, notifActive, todayISO, L, language]);
 
-  useEffect(() => {
-    if (!loadedRef.current || !householdCode) return;
-    (async () => {
-      try {
-        const snapshot = {
-          enabled: sharingEnabled,
-          updatedAt: new Date().toISOString(),
-          streak,
-          todayISO,
-          doses: todaysDoses.map((d) => ({ name: d.med.name, moment: momentLabel(d.t, L), status: d.status, color: d.med.color, dose: doseLabel(d.med, d.t, L) })),
-          lowStock: lowStock.map((m) => ({ name: m.name, stock: m.stock, daysLeft: m.daysLeft, runOutDate: m.runOutDate ? isoDate(m.runOutDate) : null })),
-          needsRefill: needsRefill.map((m) => ({ name: m.name, daysLeft: m.daysLeft, runOutDate: m.runOutDate ? isoDate(m.runOutDate) : null })),
-        };
-        await window.storage.set(`medbox_share_${householdCode}`, JSON.stringify(snapshot), true);
-      } catch (e) { console.error("Delen mislukt", e); }
-    })();
-  }, [sharingEnabled, householdCode, streak, todayISO, todaysDoses, lowStock, needsRefill, L]);
-
-  const fetchCaregiverData = useCallback(async (code) => {
-    setCaregiverLoading(true);
-    setCaregiverError("");
-    try {
-      const res = await window.storage.get(`medbox_share_${code.trim().toUpperCase()}`, true);
-      if (!res?.value) { setCaregiverError(L("caregiver_error_not_found")); setCaregiverData(null); }
-      else {
-        const parsed = JSON.parse(res.value);
-        if (!parsed.enabled) { setCaregiverError(L("caregiver_error_sharing_off")); setCaregiverData(null); }
-        else setCaregiverData(parsed);
-      }
-    } catch (e) { setCaregiverError(L("caregiver_error_connection")); }
-    finally { setCaregiverLoading(false); }
-  }, [L]);
-
-  useEffect(() => {
-    if (role !== "caregiver" || !caregiverData) return;
-    const t = setInterval(() => fetchCaregiverData(caregiverCodeInput), 20000);
-    return () => clearInterval(t);
-  }, [role, caregiverData, caregiverCodeInput, fetchCaregiverData]);
-
   const navigateTo = (key) => {
     setActiveNav(key);
     // Always land on the current week when switching into the week page.
@@ -3496,20 +3674,10 @@ export default function App() {
 
   if (!loaded) return <div style={{ minHeight: 400, display: "flex", alignItems: "center", justifyContent: "center", color: T.muted, fontFamily: "Inter, sans-serif" }}>{L("loading")}</div>;
 
-  if (role === "caregiver") {
-    return (
-      <ThemeContext.Provider value={T}>
-        <LangContext.Provider value={language}>
-          <CaregiverView codeInput={caregiverCodeInput} setCodeInput={setCaregiverCodeInput} data={caregiverData} loading={caregiverLoading} error={caregiverError} onFetch={() => fetchCaregiverData(caregiverCodeInput)} onBack={() => { setRole("patient"); setCaregiverData(null); setCaregiverError(""); }} />
-        </LangContext.Provider>
-      </ThemeContext.Provider>
-    );
-  }
-
   return (
     <ThemeContext.Provider value={T}>
     <LangContext.Provider value={language}>
-    <div dir={RTL_LANGS.has(language) ? "rtl" : "ltr"} style={{ background: T.bg, minHeight: "100vh", fontFamily: "'Nunito', sans-serif", color: T.ink, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 96 }}>
+    <div dir={RTL_LANGS.has(language) ? "rtl" : "ltr"} style={{ "--wd-text-scale": textScale, background: T.bg, minHeight: "100vh", fontFamily: "'Nunito', sans-serif", color: T.ink, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 96 }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
         .wd-mono { font-family: 'IBM Plex Mono', monospace; }
@@ -3535,6 +3703,11 @@ export default function App() {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, gap: 10 }}>
           <Logo />
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {profiles.length > 1 && (
+              <button onClick={() => setShowProfiles(true)} aria-label={L("profiles_title")} title={L("profiles_title")} style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}>
+                <AvatarBadge name={activeProfile?.name} color={activeProfile?.color || T.primary} size={36} />
+              </button>
+            )}
             <LanguagePicker language={language} onChange={setLanguage} />
             <IconToggleButton onClick={() => setDarkMode((v) => !v)} active={darkMode} icon={darkMode ? <Sun size={16} /> : <Moon size={16} />} label={darkMode ? L("theme_light") : L("theme_dark")} />
           </div>
@@ -3543,35 +3716,35 @@ export default function App() {
         {storageIssue && (
           <div style={{ background: T.warnSoft, border: `1.5px solid ${T.warn}55`, borderRadius: 16, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
             <AlertTriangle size={16} color={T.warn} style={{ flexShrink: 0 }} />
-            <div style={{ fontSize: 12.5, color: T.warn, lineHeight: 1.4, flex: 1, minWidth: 200 }}>{L("storage_issue_text")}</div>
-            <button className="wd-btn" onClick={() => window.location.reload()} style={{ background: T.warn, color: "#fff", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>{L("storage_issue_retry")}</button>
+            <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.warn, lineHeight: 1.4, flex: 1, minWidth: 200 }}>{L("storage_issue_text")}</div>
+            <button className="wd-btn" onClick={() => window.location.reload()} style={{ background: T.warn, color: "#fff", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>{L("storage_issue_retry")}</button>
           </div>
         )}
 
         {activeNav === "vandaag" && (
           <>
-            <div style={{ fontSize: 13, color: T.muted, marginBottom: 18 }}>{DAY_NAMES_BY_LANG[language][(now.getDay() + 6) % 7]} · {now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
+            <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 18 }}>{DAY_NAMES_BY_LANG[language][(now.getDay() + 6) % 7]} · {now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
 
             {nextUpcomingGroup.length === 1 && (
               <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 14 }}>
                 <Compartment status={nextUpcoming.status} color={nextUpcoming.med.color} size={44} onClick={() => toggleTaken(nextUpcoming.med, todayISO, nextUpcoming.t)} pop={poppedKey === logKeyFor(nextUpcoming.med.id, todayISO, nextUpcoming.t)} label={L("aria_dose_label", { name: nextUpcoming.med.name, moment: momentLabel(nextUpcoming.t, L), status: L("aria_dose_upcoming") })} />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>{L("home_next")}</div>
-                  <div style={{ fontSize: 15.5, fontWeight: 700 }}>{nextUpcoming.med.name}</div>
-                  <div className="wd-mono" style={{ fontSize: 12, color: T.muted }}>{nextDoseTiming(nextUpcoming.t, now, todayISO, L)}</div>
+                  <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>{L("home_next")}</div>
+                  <div style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{nextUpcoming.med.name}</div>
+                  <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>{nextDoseTiming(nextUpcoming.t, now, todayISO, L)}</div>
                 </div>
               </div>
             )}
 
             {nextUpcomingGroup.length > 1 && (
               <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("home_next")}</div>
-                <div className="wd-mono" style={{ fontSize: 12, color: T.muted, marginBottom: 10 }}>{nextDoseTiming(nextUpcoming.t, now, todayISO, L)}</div>
+                <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("home_next")}</div>
+                <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 10 }}>{nextDoseTiming(nextUpcoming.t, now, todayISO, L)}</div>
                 {nextUpcomingGroup.map((d, i) => (
                   <div key={logKeyFor(d.med.id, todayISO, d.t)} style={{ display: "flex", alignItems: "center", gap: 14, marginTop: i > 0 ? 10 : 0 }}>
                     <Compartment status={d.status} color={d.med.color} size={44} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: L("aria_dose_upcoming") })} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 15.5, fontWeight: 700 }}>{d.med.name}</div>
+                      <div style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{d.med.name}</div>
                     </div>
                   </div>
                 ))}
@@ -3595,15 +3768,15 @@ export default function App() {
                           onClick={() => setExpandedPeriods((prev) => ({ ...prev, [period]: true }))}
                           style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: T.successSoft, border: `1.5px solid ${T.success}40`, borderRadius: 12, padding: "10px 14px", cursor: "pointer", fontFamily: "inherit" }}
                         >
-                          <span style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12.5, fontWeight: 700, color: T.success }}><Check size={14} /> {L("home_period_all_taken", { period: periodLabel })}</span>
-                          <span style={{ fontSize: 11, color: T.muted }}>{items.length} {L(items.length === 1 ? "home_period_potjes_one" : "home_period_potjes_other")}</span>
+                          <span style={{ display: "flex", alignItems: "center", gap: 7, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.success }}><Check size={14} /> {L("home_period_all_taken", { period: periodLabel })}</span>
+                          <span style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", color: T.muted }}>{items.length} {L(items.length === 1 ? "home_period_potjes_one" : "home_period_potjes_other")}</span>
                         </button>
                       ) : (
                         <>
                           <button
                             className={`wd-mono${allTaken ? " wd-btn" : ""}`}
                             onClick={allTaken ? () => setExpandedPeriods((prev) => ({ ...prev, [period]: false })) : undefined}
-                            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 11.5, fontWeight: 700, color: isCurrent ? "#fff" : T.primary, textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 10, background: isCurrent ? T.primary : "transparent", borderRadius: 8, padding: isCurrent ? "4px 10px" : 0, border: "none", cursor: allTaken ? "pointer" : "default", fontFamily: "inherit" }}
+                            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: isCurrent ? "#fff" : T.primary, textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 10, background: isCurrent ? T.primary : "transparent", borderRadius: 8, padding: isCurrent ? "4px 10px" : 0, border: "none", cursor: allTaken ? "pointer" : "default", fontFamily: "inherit" }}
                           >
                             {periodLabel}{allTaken && " ✓"}
                           </button>
@@ -3612,9 +3785,9 @@ export default function App() {
                               <div key={d.med.id + d.t.id} className="wd-card" style={{ background: T.surface, borderRadius: 18, padding: "16px 12px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, border: `1.5px solid ${isCurrent ? T.primary + "55" : T.border}` }}>
                                 <AvatarBadge name={d.med.name} color={d.med.color} photo={d.med.photo} size={26} />
                                 <Compartment status={d.status} color={d.med.color} size={isCurrent ? 56 : 46} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: statusLabel(d.status, L) })} />
-                                <div style={{ fontSize: 12.5, fontWeight: 600, textAlign: "center" }}>{d.med.name}</div>
-                                <div className={isMeal(d.t) ? "" : "wd-mono"} style={{ fontSize: isMeal(d.t) ? 11 : 11.5, color: T.muted, textAlign: "center" }}>{momentLabel(d.t, L)}</div>
-                                {doseLabel(d.med, d.t, L) && <div style={{ fontSize: 10.5, fontWeight: 600, color: T.muted, textAlign: "center" }}>{doseLabel(d.med, d.t, L)}</div>}
+                                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, textAlign: "center" }}>{d.med.name}</div>
+                                <div className={isMeal(d.t) ? "" : "wd-mono"} style={{ fontSize: isMeal(d.t) ? "calc(11px * var(--wd-text-scale, 1))" : "calc(11.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center" }}>{momentLabel(d.t, L)}</div>
+                                {doseLabel(d.med, d.t, L) && <div style={{ fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, textAlign: "center" }}>{doseLabel(d.med, d.t, L)}</div>}
                               </div>
                             ))}
                           </div>
@@ -3635,7 +3808,7 @@ export default function App() {
             {milestoneHit && (
               <div style={{ position: "relative", overflow: "hidden", background: T.goldSoft, border: `1.5px solid ${T.gold}66`, borderRadius: 16, padding: "15px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
                 <Flame size={20} color={T.gold} style={{ flexShrink: 0 }} />
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#8A6420" }}>{L("milestone_text", { n: milestoneHit })}</div>
+                <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 700, color: "#8A6420" }}>{L("milestone_text", { n: milestoneHit })}</div>
                 <div className="wd-confetti" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
                   {Array.from({ length: 16 }).map((_, i) => (
                     <span key={i} style={{ left: `${(i * 6.3 + 2) % 100}%`, background: [T.gold, T.primary, T.success, T.warn][i % 4], animationDelay: `${(i % 6) * 0.06}s` }} />
@@ -3647,7 +3820,7 @@ export default function App() {
             {allDoneToday && (
               <div style={{ position: "relative", overflow: "hidden", background: T.successSoft, border: `1.5px solid ${T.success}55`, borderRadius: 16, padding: "15px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
                 <PartyPopper size={20} color={T.success} style={{ flexShrink: 0 }} />
-                <div style={{ fontSize: 14, fontWeight: 700, color: T.success }}>{L("alldone_text")}</div>
+                <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.success }}>{L("alldone_text")}</div>
                 {celebrated && (
                   <div className="wd-confetti" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
                     {Array.from({ length: 16 }).map((_, i) => (
@@ -3660,13 +3833,13 @@ export default function App() {
 
             {visibleMissed.length > 0 && (
               <div style={{ background: T.warnSoft, border: `1.5px solid ${T.warn}33`, borderRadius: 16, padding: "14px 16px", marginBottom: 16 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.warn, fontWeight: 700, fontSize: 14, marginBottom: 8 }}><AlertTriangle size={16} /> {L(visibleMissed.length === 1 ? "missed_count_one" : "missed_count_other", { n: visibleMissed.length })}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.warn, fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", marginBottom: 8 }}><AlertTriangle size={16} /> {L(visibleMissed.length === 1 ? "missed_count_one" : "missed_count_other", { n: visibleMissed.length })}</div>
                 {visibleMissed.map((d) => (
                   <div key={d.med.id + d.t.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 0", gap: 8, flexWrap: "wrap" }}>
-                    <div style={{ fontSize: 13.5 }}><span style={{ fontWeight: 600 }}>{d.med.name}</span> <span style={{ color: T.muted }} className={isMeal(d.t) ? "" : "wd-mono"}>{momentLabel(d.t, L)}</span></div>
+                    <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))"}}><span style={{ fontWeight: 600 }}>{d.med.name}</span> <span style={{ color: T.muted }} className={isMeal(d.t) ? "" : "wd-mono"}>{momentLabel(d.t, L)}</span></div>
                     <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-                      <button className="wd-btn" onClick={() => snoozeDose(d.med, d.t)} style={{ background: "none", color: T.warn, border: `1.5px solid ${T.warn}55`, borderRadius: 10, padding: "9px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>{L("missed_snooze")}</button>
-                      <button className="wd-btn" onClick={() => toggleTaken(d.med, todayISO, d.t)} style={{ background: T.warn, color: "#fff", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>{L("missed_taken_anyway")}</button>
+                      <button className="wd-btn" onClick={() => snoozeDose(d.med, d.t)} style={{ background: "none", color: T.warn, border: `1.5px solid ${T.warn}55`, borderRadius: 10, padding: "9px 12px", fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer" }}>{L("missed_snooze")}</button>
+                      <button className="wd-btn" onClick={() => toggleTaken(d.med, todayISO, d.t)} style={{ background: T.warn, color: "#fff", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer" }}>{L("missed_taken_anyway")}</button>
                     </div>
                   </div>
                 ))}
@@ -3675,18 +3848,18 @@ export default function App() {
 
             {needsRefill.length > 0 && (
               <div style={{ background: T.goldSoft, border: `1.5px solid ${T.gold}55`, borderRadius: 16, padding: "14px 16px", marginBottom: 20 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#8A6420", fontWeight: 700, fontSize: 14, marginBottom: 8 }}><Package size={16} /> {L("refill_title")}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#8A6420", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", marginBottom: 8 }}><Package size={16} /> {L("refill_title")}</div>
                 {needsRefill.map((m) => (
-                  <div key={m.id} style={{ fontSize: 13.5, padding: "4px 0" }}><span style={{ fontWeight: 600 }}>{m.name}</span> <span style={{ color: "#8A6420" }}>{L("refill_days_left", { days: m.daysLeft <= 0 ? "0" : m.daysLeft, unit: L(m.daysLeft === 1 ? "stat_streak_days_one" : "stat_streak_days_other"), date: m.runOutDate ? m.runOutDate.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) : "" })}</span></div>
+                  <div key={m.id} style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", padding: "4px 0" }}><span style={{ fontWeight: 600 }}>{m.name}</span> <span style={{ color: "#8A6420" }}>{L("refill_days_left", { days: m.daysLeft <= 0 ? "0" : m.daysLeft, unit: L(m.daysLeft === 1 ? "stat_streak_days_one" : "stat_streak_days_other"), date: m.runOutDate ? m.runOutDate.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) : "" })}</span></div>
                 ))}
               </div>
             )}
 
             {medications.length === 0 && (
               <div className="wd-card" style={{ background: T.surface, border: `1.5px dashed ${T.border}`, borderRadius: 20, padding: "36px 20px", textAlign: "center", marginBottom: 20 }}>
-                <div className="wd-display" style={{ fontSize: 18, fontWeight: 600, marginBottom: 6 }}>{L("empty_no_meds_title")}</div>
-                <div style={{ fontSize: 13.5, color: T.muted, marginBottom: 16 }}>{L("empty_no_meds_body")}</div>
-                <button className="wd-btn" onClick={() => setShowAdd(true)} style={{ background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "14px 22px", fontWeight: 700, fontSize: 15, cursor: "pointer" }}>{L("empty_add_med_button")}</button>
+                <div className="wd-display" style={{ fontSize: "calc(18px * var(--wd-text-scale, 1))", fontWeight: 600, marginBottom: 6 }}>{L("empty_no_meds_title")}</div>
+                <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16 }}>{L("empty_no_meds_body")}</div>
+                <button className="wd-btn" onClick={() => setShowAdd(true)} style={{ background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "14px 22px", fontWeight: 700, fontSize: "calc(15px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("empty_add_med_button")}</button>
               </div>
             )}
 
@@ -3698,8 +3871,8 @@ export default function App() {
                     <div className="wd-card" style={{ background: T.surface, borderRadius: 16, padding: "14px 16px", display: "flex", alignItems: "center", gap: 16, marginBottom: 24, border: `1.5px solid ${T.border}` }}>
                       <ProgressJar color={T.primary} taken={combinedProgress.taken} total={combinedProgress.total} size={58} />
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div className="wd-mono" style={{ fontSize: 19, fontWeight: 700, color: combinedProgress.taken >= combinedProgress.total ? T.success : T.ink }}>{combinedProgress.taken}/{combinedProgress.total}</div>
-                        <div style={{ fontSize: 12.5, color: T.muted, marginTop: 2 }}>{L(medsScheduledToday.length === 1 ? "progress_today_combined_meds_one" : "progress_today_combined_meds_other", { n: medsScheduledToday.length })}</div>
+                        <div className="wd-mono" style={{ fontSize: "calc(19px * var(--wd-text-scale, 1))", fontWeight: 700, color: combinedProgress.taken >= combinedProgress.total ? T.success : T.ink }}>{combinedProgress.taken}/{combinedProgress.total}</div>
+                        <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginTop: 2 }}>{L(medsScheduledToday.length === 1 ? "progress_today_combined_meds_one" : "progress_today_combined_meds_other", { n: medsScheduledToday.length })}</div>
                       </div>
                     </div>
                   </>
@@ -3715,11 +3888,11 @@ export default function App() {
                           <div key={med.id} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "14px 16px", display: "flex", alignItems: "center", gap: 12 }}>
                             <AvatarBadge name={med.name} color={med.color} photo={med.photo} size={36} />
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ fontWeight: 600, fontSize: 14 }}>{med.name}</div>
-                              <div style={{ fontSize: 12, color: T.muted }}>{doseLabel(med, { count: med.prnDoseCount }, L)}{info.count > 0 ? ` ${L("prn_today_count", { n: info.count })}` : ` ${L("prn_not_taken_today")}`}</div>
-                              {info.count > 0 && <button onClick={() => undoLastPRN(med)} style={{ background: "none", border: "none", color: T.mutedSoft, fontSize: 11, padding: "4px 0", cursor: "pointer" }}>{L("prn_undo")}</button>}
+                              <div style={{ fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))"}}>{med.name}</div>
+                              <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>{doseLabel(med, { count: med.prnDoseCount }, L)}{info.count > 0 ? ` ${L("prn_today_count", { n: info.count })}` : ` ${L("prn_not_taken_today")}`}</div>
+                              {info.count > 0 && <button onClick={() => undoLastPRN(med)} style={{ background: "none", border: "none", color: T.mutedSoft, fontSize: "calc(11px * var(--wd-text-scale, 1))", padding: "4px 0", cursor: "pointer" }}>{L("prn_undo")}</button>}
                             </div>
-                            <button className="wd-btn" onClick={() => logPRN(med)} style={{ background: T.primary, color: "#fff", border: "none", borderRadius: 12, padding: "12px 16px", fontWeight: 700, fontSize: 13, cursor: "pointer", flexShrink: 0, minHeight: 44 }}>{L("prn_take_now")}</button>
+                            <button className="wd-btn" onClick={() => logPRN(med)} style={{ background: T.primary, color: "#fff", border: "none", borderRadius: 12, padding: "12px 16px", fontWeight: 700, fontSize: "calc(13px * var(--wd-text-scale, 1))", cursor: "pointer", flexShrink: 0, minHeight: 44 }}>{L("prn_take_now")}</button>
                           </div>
                         );
                       })}
@@ -3736,18 +3909,18 @@ export default function App() {
             <SectionTitle>{L("week_title")}</SectionTitle>
             {medications.length === 0 ? (
               <div className="wd-card" style={{ background: T.surface, border: `1.5px dashed ${T.border}`, borderRadius: 20, padding: "36px 20px", textAlign: "center" }}>
-                <div style={{ fontSize: 13.5, color: T.muted }}>{L("week_empty")}</div>
+                <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.muted }}>{L("week_empty")}</div>
               </div>
             ) : (
               <>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, gap: 8 }}>
-                  <button className="wd-btn" onClick={() => setWeekOffset((o) => Math.max(-12, o - 1))} disabled={weekOffset <= -12} style={{ background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: weekOffset <= -12 ? T.mutedSoft : T.ink, borderRadius: 10, padding: "9px 14px", fontSize: 13, fontWeight: 600, cursor: weekOffset <= -12 ? "not-allowed" : "pointer", minHeight: 40 }}>{L("week_prev")}</button>
-                  <div style={{ fontSize: 12.5, fontWeight: 700, color: T.muted }}>{weekOffset === 0 ? L("week_this") : weekOffset === -1 ? L("week_last") : L("week_weeks_ago", { n: Math.abs(weekOffset) })}</div>
-                  <button className="wd-btn" onClick={() => setWeekOffset((o) => Math.min(0, o + 1))} disabled={weekOffset >= 0} style={{ background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: weekOffset >= 0 ? T.mutedSoft : T.ink, borderRadius: 10, padding: "9px 14px", fontSize: 13, fontWeight: 600, cursor: weekOffset >= 0 ? "not-allowed" : "pointer", minHeight: 40 }}>{L("week_next")}</button>
+                  <button className="wd-btn" onClick={() => setWeekOffset((o) => Math.max(-12, o - 1))} disabled={weekOffset <= -12} style={{ background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: weekOffset <= -12 ? T.mutedSoft : T.ink, borderRadius: 10, padding: "9px 14px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: weekOffset <= -12 ? "not-allowed" : "pointer", minHeight: 40 }}>{L("week_prev")}</button>
+                  <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.muted }}>{weekOffset === 0 ? L("week_this") : weekOffset === -1 ? L("week_last") : L("week_weeks_ago", { n: Math.abs(weekOffset) })}</div>
+                  <button className="wd-btn" onClick={() => setWeekOffset((o) => Math.min(0, o + 1))} disabled={weekOffset >= 0} style={{ background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: weekOffset >= 0 ? T.mutedSoft : T.ink, borderRadius: 10, padding: "9px 14px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: weekOffset >= 0 ? "not-allowed" : "pointer", minHeight: 40 }}>{L("week_next")}</button>
                 </div>
 
                 <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "14px 12px", marginBottom: 16 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>{L("week_trend_title")}</div>
+                  <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>{L("week_trend_title")}</div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 6 }}>
                     {weekDates.map((d, i) => {
                       const dISO = isoDate(d);
@@ -3764,7 +3937,7 @@ export default function App() {
                           <div style={{ width: "100%", maxWidth: 26, height: 52, background: T.surfaceSoft, borderRadius: 6, display: "flex", alignItems: "flex-end", overflow: "hidden" }}>
                             {showBar && <div style={{ width: "100%", height: `${Math.max(pct, 6)}%`, background: barColor, borderRadius: "6px 6px 0 0" }} />}
                           </div>
-                          <div className="wd-mono" style={{ fontSize: 9.5, fontWeight: isToday ? 700 : 600, color: isToday ? T.primary : T.muted }}>{DAY_SHORT_BY_LANG[language][i]}</div>
+                          <div className="wd-mono" style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", fontWeight: isToday ? 700 : 600, color: isToday ? T.primary : T.muted }}>{DAY_SHORT_BY_LANG[language][i]}</div>
                         </div>
                       );
                     })}
@@ -3781,21 +3954,21 @@ export default function App() {
                     return (
                       <div key={i} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${isToday ? T.primary : T.border}`, borderRadius: 16, padding: "13px 15px" }}>
                         <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: dayDoses.length > 0 ? 10 : 0 }}>
-                          <div style={{ fontWeight: 700, fontSize: 14, color: isToday ? T.primary : T.ink }}>{DAY_NAMES_BY_LANG[language][i]}</div>
-                          <div className="wd-mono" style={{ fontSize: 12, color: T.muted }}>{d.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "short" })}</div>
-                          {isToday && <span style={{ marginLeft: "auto", fontSize: 10.5, fontWeight: 700, color: T.primary, background: T.primarySoft, borderRadius: 8, padding: "3px 9px", flexShrink: 0 }}>{L("week_today_badge")}</span>}
+                          <div style={{ fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", color: isToday ? T.primary : T.ink }}>{DAY_NAMES_BY_LANG[language][i]}</div>
+                          <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>{d.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "short" })}</div>
+                          {isToday && <span style={{ marginLeft: "auto", fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, background: T.primarySoft, borderRadius: 8, padding: "3px 9px", flexShrink: 0 }}>{L("week_today_badge")}</span>}
                         </div>
                         {dayDoses.length === 0 ? (
-                          <div style={{ fontSize: 12.5, color: T.muted }}>{L("week_no_meds_day")}</div>
+                          <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted }}>{L("week_no_meds_day")}</div>
                         ) : (
                           PERIOD_ORDER.filter((p) => dayByPeriod[p].length > 0).map((period) => (
                             <div key={period} style={{ marginBottom: 10 }}>
-                              <div className="wd-mono" style={{ fontSize: 10, fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>{L(PERIOD_KEY_MAP[period] || period)}</div>
+                              <div className="wd-mono" style={{ fontSize: "calc(10px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>{L(PERIOD_KEY_MAP[period] || period)}</div>
                               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                                 {dayByPeriod[period].map((it) => (
                                   <div key={it.med.id + it.t.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, width: 54 }}>
                                     <Compartment status={it.status} color={it.med.color} size={38} onClick={() => toggleTaken(it.med, dISO, it.t)} pop={poppedKey === logKeyFor(it.med.id, dISO, it.t)} label={L("aria_dose_label", { name: it.med.name, moment: `${DAY_NAMES_BY_LANG[language][i]} ${momentLabel(it.t, L)}`, status: statusLabel(it.status, L) })} />
-                                    <div style={{ fontSize: 9.5, fontWeight: 600, color: T.ink, textAlign: "center", lineHeight: 1.2, wordBreak: "break-word" }}>{it.med.name}</div>
+                                    <div style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, textAlign: "center", lineHeight: 1.2, wordBreak: "break-word" }}>{it.med.name}</div>
                                   </div>
                                 ))}
                               </div>
@@ -3822,15 +3995,15 @@ export default function App() {
             )}
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {medications.filter((med) => med.name.toLowerCase().includes(beheerSearch.trim().toLowerCase())).length === 0 && beheerSearch.trim() && (
-                <div className="wd-card" style={{ background: T.surface, border: `1.5px dashed ${T.border}`, borderRadius: 16, padding: "24px 16px", textAlign: "center", fontSize: 13, color: T.muted }}>{L("beheer_search_empty", { q: beheerSearch.trim() })}</div>
+                <div className="wd-card" style={{ background: T.surface, border: `1.5px dashed ${T.border}`, borderRadius: 16, padding: "24px 16px", textAlign: "center", fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted }}>{L("beheer_search_empty", { q: beheerSearch.trim() })}</div>
               )}
               {medications.filter((med) => med.name.toLowerCase().includes(beheerSearch.trim().toLowerCase())).map((med) => (
                 <div key={med.id} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 14, padding: "12px 12px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", rowGap: 8, gap: 12 }}>
                     <AvatarBadge name={med.name} color={med.color} photo={med.photo} size={34} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontWeight: 600, fontSize: 14.5 }}>{med.name}</div>
-                      <div style={{ fontSize: 12, color: T.muted }}>
+                    <div style={{ flex: "1 1 140px", minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: "calc(14.5px * var(--wd-text-scale, 1))"}}>{med.name}</div>
+                      <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>
                         {med.frequency === "indien_nodig" ? (
                           <>{L("beheer_prn_summary")} · {doseLabel(med, { count: med.prnDoseCount }, L)}</>
                         ) : med.frequency === "weekdagen" ? (
@@ -3847,15 +4020,17 @@ export default function App() {
                         )}
                       </div>
                     </div>
-                    <button className="wd-btn wd-iconbtn" onClick={() => setExpandedLeaflet(expandedLeaflet === med.id ? null : med.id)} title={L("beheer_leaflet_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer" }}><BookOpen size={18} /></button>
-                    <button className="wd-btn wd-iconbtn" onClick={() => setRestockMed(med)} title={L("beheer_restock_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer" }}><PackagePlus size={18} /></button>
-                    <button className="wd-btn wd-iconbtn" onClick={() => setEditingMed(med)} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer" }}><Pencil size={18} /></button>
-                    <button className="wd-btn wd-iconbtn" onClick={() => setMedications((prev) => prev.filter((m) => m.id !== med.id))} style={{ background: "none", border: "none", color: T.warn, cursor: "pointer" }}><Trash2 size={18} /></button>
+                    <div style={{ display: "flex", alignItems: "center", flexShrink: 0, marginLeft: "auto" }}>
+                      <button className="wd-btn wd-iconbtn" onClick={() => setExpandedLeaflet(expandedLeaflet === med.id ? null : med.id)} title={L("beheer_leaflet_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><BookOpen size={18} /></button>
+                      <button className="wd-btn wd-iconbtn" onClick={() => setRestockMed(med)} title={L("beheer_restock_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><PackagePlus size={18} /></button>
+                      <button className="wd-btn wd-iconbtn" onClick={() => setEditingMed(med)} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><Pencil size={18} /></button>
+                      <button className="wd-btn wd-iconbtn" onClick={() => setMedications((prev) => prev.filter((m) => m.id !== med.id))} style={{ background: "none", border: "none", color: T.warn, cursor: "pointer", flexShrink: 0 }}><Trash2 size={18} /></button>
+                    </div>
                   </div>
                   {expandedLeaflet === med.id && <LeafletPanel med={med} loading={leafletLoadingIds.has(med.id)} onRetry={() => fetchAndStoreLeaflet(med.id, med.name)} />}
                 </div>
               ))}
-              <button className="wd-btn" onClick={() => setShowAdd(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: T.primarySoft, color: T.primary, border: `1.5px dashed ${T.primary}66`, borderRadius: 14, padding: "14px", fontWeight: 700, fontSize: 14, cursor: "pointer" }}><Plus size={18} /> {L("beheer_add_button")}</button>
+              <button className="wd-btn" onClick={() => setShowAdd(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: T.primarySoft, color: T.primary, border: `1.5px dashed ${T.primary}66`, borderRadius: 14, padding: "14px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}><Plus size={18} /> {L("beheer_add_button")}</button>
             </div>
           </>
         )}
@@ -3864,36 +4039,66 @@ export default function App() {
           <>
             <SectionTitle>{L("settings_title")}</SectionTitle>
 
+            <SectionTitle>{L("settings_accessibility_title")}</SectionTitle>
+            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
+              <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600, marginBottom: 10 }}>{L("settings_textsize_label")}</div>
+              <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                {["normaal", "groot", "extra-groot"].map((size) => (
+                  <button key={size} type="button" onClick={() => setTextSize(size)} style={getToggleBtnStyle(T, textSize === size)}>
+                    {L(size === "normaal" ? "textsize_normaal" : size === "groot" ? "textsize_groot" : "textsize_extra_groot")}
+                  </button>
+                ))}
+              </div>
+              <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", minHeight: 24 }}>
+                <input type="checkbox" checked={highContrast} onChange={(e) => setHighContrast(e.target.checked)} style={{ width: 20, height: 20, accentColor: T.primary }} />
+                <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_contrast_toggle")}</span>
+              </label>
+              <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginTop: 8 }}>{L("settings_contrast_explain")}</div>
+            </div>
+
+            <SectionTitle>{L("profiles_title")}</SectionTitle>
+            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                <AvatarBadge name={activeProfile?.name} color={activeProfile?.color || T.primary} size={38} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{activeProfile?.name}</div>
+                  <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary }}>{L("profiles_active_badge")}</div>
+                </div>
+              </div>
+              <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: 14 }}>{L("profiles_manage_explain")}</div>
+              <button className="wd-btn" onClick={() => setShowProfiles(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", background: T.primarySoft, color: T.primary, border: `1.5px dashed ${T.primary}66`, borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}><Users size={18} /> {L("settings_profiles_manage_button")}</button>
+            </div>
+
             <SectionTitle>{L("settings_notif_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: !notifActive ? 8 : 0 }}>
-                <span style={{ fontSize: 13.5, fontWeight: 600 }}>{L("settings_notif_label")}</span>
+                <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_notif_label")}</span>
                 <IconToggleButton onClick={requestNotif} active={notifActive} icon={notifActive ? <Bell size={16} /> : <BellOff size={16} />} label={notifPerm === "denied" ? L("settings_notif_denied_label") : notifActive ? L("stat_notif_on") : notifPerm === "granted" ? L("stat_notif_off") : L("settings_notif_enable")} />
               </div>
               {notifPerm === "denied" ? (
-                <div style={{ fontSize: 12, color: T.warn, lineHeight: 1.4 }}>{L("settings_notif_denied")}</div>
+                <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.warn, lineHeight: 1.4 }}>{L("settings_notif_denied")}</div>
               ) : !notifActive && (
-                <div style={{ fontSize: 12, color: T.mutedSoft, lineHeight: 1.4 }}>{L("settings_notif_explain")}</div>
+                <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4 }}>{L("settings_notif_explain")}</div>
               )}
             </div>
 
             <SectionTitle>{L("settings_home_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               {isStandalone ? (
-                <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.success, fontWeight: 600, fontSize: 13 }}><Check size={16} /> {L("settings_install_already")}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.success, fontWeight: 600, fontSize: "calc(13px * var(--wd-text-scale, 1))"}}><Check size={16} /> {L("settings_install_already")}</div>
               ) : installPromptEvent ? (
                 <>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.primary, fontWeight: 700, fontSize: 14, marginBottom: 8 }}><Smartphone size={17} /> {L("settings_home_headline")}</div>
-                  <div style={{ fontSize: 12.5, color: T.ink, lineHeight: 1.5, marginBottom: 12 }}>{L("settings_install_explain")}</div>
-                  <button className="wd-btn" onClick={handleInstallClick} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.primary, color: "#fff", border: "none", borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: 14, cursor: "pointer", minHeight: 44 }}><Download size={17} /> {L("settings_install_button")}</button>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.primary, fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", marginBottom: 8 }}><Smartphone size={17} /> {L("settings_home_headline")}</div>
+                  <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.ink, lineHeight: 1.5, marginBottom: 12 }}>{L("settings_install_explain")}</div>
+                  <button className="wd-btn" onClick={handleInstallClick} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.primary, color: "#fff", border: "none", borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44 }}><Download size={17} /> {L("settings_install_button")}</button>
                 </>
               ) : !homeTipDismissed ? (
                 <>
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8, marginBottom: 8 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.primary, fontWeight: 700, fontSize: 14 }}><Smartphone size={17} /> {L("settings_home_headline")}</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.primary, fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))"}}><Smartphone size={17} /> {L("settings_home_headline")}</div>
                     <button className="wd-iconbtn" onClick={() => setHomeTipDismissed(true)} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><X size={16} /></button>
                   </div>
-                  <div style={{ fontSize: 12.5, color: T.ink, lineHeight: 1.5 }}>
+                  <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.ink, lineHeight: 1.5 }}>
                     <strong>iPhone:</strong> {L("settings_home_iphone")}<br />
                     <strong>Android:</strong> {L("settings_home_android")}<br />
                     {L("settings_home_footer")}
@@ -3901,18 +4106,18 @@ export default function App() {
                 </>
               ) : (
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-                  <div style={{ fontSize: 12.5, color: T.muted }}>{L("settings_home_hidden")}</div>
-                  <button onClick={() => setHomeTipDismissed(false)} style={{ background: "none", border: "none", color: T.primary, fontWeight: 600, fontSize: 12.5, cursor: "pointer", flexShrink: 0 }}>{L("settings_home_show_again")}</button>
+                  <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted }}>{L("settings_home_hidden")}</div>
+                  <button onClick={() => setHomeTipDismissed(false)} style={{ background: "none", border: "none", color: T.primary, fontWeight: 600, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: "pointer", flexShrink: 0 }}>{L("settings_home_show_again")}</button>
                 </div>
               )}
             </div>
 
             <SectionTitle>{L("settings_backup_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <div style={{ fontSize: 12.5, color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_backup_explain")}</div>
+              <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_backup_explain")}</div>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <button className="wd-btn" onClick={handleExport} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", gap: 6, background: medications.length === 0 ? T.mutedSoft : T.primarySoft, color: medications.length === 0 ? "#fff" : T.primary, border: "none", borderRadius: 10, padding: "10px 14px", fontSize: 12.5, fontWeight: 600, cursor: medications.length === 0 ? "not-allowed" : "pointer" }}><Download size={15} /> {L("settings_backup_export")}</button>
-                <label style={{ display: "flex", alignItems: "center", gap: 6, background: T.surfaceSoft, color: T.muted, border: `1.5px solid ${T.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>
+                <button className="wd-btn" onClick={handleExport} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", gap: 6, background: medications.length === 0 ? T.mutedSoft : T.primarySoft, color: medications.length === 0 ? "#fff" : T.primary, border: "none", borderRadius: 10, padding: "10px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: medications.length === 0 ? "not-allowed" : "pointer" }}><Download size={15} /> {L("settings_backup_export")}</button>
+                <label style={{ display: "flex", alignItems: "center", gap: 6, background: T.surfaceSoft, color: T.muted, border: `1.5px solid ${T.border}`, borderRadius: 10, padding: "10px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer" }}>
                   <Upload size={15} /> {L("settings_backup_import")}
                   <input type="file" accept="application/json" onChange={handleImportFile} style={{ display: "none" }} />
                 </label>
@@ -3921,8 +4126,20 @@ export default function App() {
                 const daysSince = lastBackupAt ? Math.floor((now - new Date(lastBackupAt)) / 86400000) : null;
                 const needsNudge = daysSince === null || daysSince >= 30;
                 const text = daysSince === null ? L("settings_backup_never") : daysSince === 0 ? L("settings_backup_today") : daysSince === 1 ? L("settings_backup_yesterday") : L("settings_backup_days_ago", { n: daysSince });
-                return <div style={{ fontSize: 11.5, fontWeight: needsNudge ? 700 : 500, color: needsNudge ? T.warn : T.mutedSoft, marginTop: 10 }}>{text}{needsNudge ? L("settings_backup_nudge") : ""}</div>;
+                return <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: needsNudge ? 700 : 500, color: needsNudge ? T.warn : T.mutedSoft, marginTop: 10 }}>{text}{needsNudge ? L("settings_backup_nudge") : ""}</div>;
               })()}
+            </div>
+
+            <SectionTitle>{L("settings_calendar_title")}</SectionTitle>
+            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", minHeight: 24, marginBottom: 12 }}>
+                <input type="checkbox" checked={icsExportEnabled} onChange={(e) => setIcsExportEnabled(e.target.checked)} style={{ width: 20, height: 20, accentColor: T.primary }} />
+                <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_calendar_toggle")}</span>
+              </label>
+              <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: icsExportEnabled ? 14 : 0 }}>{L("settings_calendar_explain")}</div>
+              {icsExportEnabled && (
+                <button className="wd-btn" onClick={handleIcsExport} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.primarySoft, color: medications.length === 0 ? "#fff" : T.primary, border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer" }}><Calendar size={17} /> {L("settings_calendar_export_button")}</button>
+              )}
             </div>
 
             <div onClick={() => setSettingsOpen((v) => !v)} style={{ cursor: "pointer" }}>
@@ -3930,11 +4147,11 @@ export default function App() {
             </div>
             {settingsOpen && (
               <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: 16, marginBottom: 24 }}>
-                <div style={{ fontSize: 12.5, color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_periods_explain")}</div>
+                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_periods_explain")}</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                   {PERIOD_ORDER.map((p) => (
                     <div key={p}>
-                      <div style={{ fontSize: 11.5, fontWeight: 600, color: T.muted, marginBottom: 4 }}>{L("settings_periods_from", { period: L(PERIOD_KEY_MAP[p] || p) })}</div>
+                      <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 4 }}>{L("settings_periods_from", { period: L(PERIOD_KEY_MAP[p] || p) })}</div>
                       <input type="time" value={periodBounds[p]} onChange={(e) => setPeriodBounds((prev) => ({ ...prev, [p]: e.target.value }))} style={getInputStyle(T)} />
                     </div>
                   ))}
@@ -3942,29 +4159,9 @@ export default function App() {
               </div>
             )}
 
-            <SectionTitle>{L("settings_caregiver_title")}</SectionTitle>
-            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", marginBottom: sharingEnabled ? 14 : 0, minHeight: 24 }}>
-                <input type="checkbox" checked={sharingEnabled} onChange={(e) => setSharingEnabled(e.target.checked)} style={{ width: 20, height: 20, accentColor: T.primary }} />
-                <span style={{ fontSize: 13.5, fontWeight: 600 }}>{L("settings_caregiver_toggle")}</span>
-              </label>
-              {sharingEnabled && (
-                <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontSize: 12.5, color: T.muted, marginBottom: 10, lineHeight: 1.4 }}>{L("settings_caregiver_code_explain")}</div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                    <div className="wd-mono" style={{ background: T.surfaceSoft, border: `1.5px solid ${T.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 17, fontWeight: 700, letterSpacing: 2 }}>{householdCode}</div>
-                    <button className="wd-btn" onClick={() => navigator.clipboard?.writeText(householdCode)} style={{ display: "flex", alignItems: "center", gap: 6, background: T.primarySoft, color: T.primary, border: "none", borderRadius: 10, padding: "10px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}><Copy size={14} /> {L("settings_caregiver_copy")}</button>
-                  </div>
-                </div>
-              )}
-              <div style={{ paddingTop: sharingEnabled ? 14 : 0, borderTop: sharingEnabled ? `1px solid ${T.border}` : "none" }}>
-                <button className="wd-btn" onClick={() => setRole("caregiver")} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 12, padding: "12px 14px", fontWeight: 600, fontSize: 13, cursor: "pointer", minHeight: 44 }}><Users size={16} /> {L("settings_caregiver_view")}</button>
-              </div>
-            </div>
-
             <SectionTitle>{L("settings_emergency_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <div style={{ fontSize: 12.5, color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_emergency_explain")}</div>
+              <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_emergency_explain")}</div>
               <Field label={L("field_allergies")}><input value={emergencyInfo.allergies} onChange={(e) => setEmergencyInfo((p) => ({ ...p, allergies: e.target.value }))} placeholder={L("field_allergies_placeholder")} style={getInputStyle(T)} /></Field>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 <Field label={L("field_contact_name")}><input value={emergencyInfo.contactName} onChange={(e) => setEmergencyInfo((p) => ({ ...p, contactName: e.target.value }))} placeholder={L("field_name_placeholder")} style={getInputStyle(T)} /></Field>
@@ -3974,20 +4171,20 @@ export default function App() {
                 <Field label={L("field_pharmacy_name")}><input value={emergencyInfo.pharmacyName} onChange={(e) => setEmergencyInfo((p) => ({ ...p, pharmacyName: e.target.value }))} placeholder={L("field_pharmacy_placeholder")} style={getInputStyle(T)} /></Field>
                 <Field label={L("field_pharmacy_phone")}><input type="tel" value={emergencyInfo.pharmacyPhone} onChange={(e) => setEmergencyInfo((p) => ({ ...p, pharmacyPhone: e.target.value }))} placeholder="0..." style={getInputStyle(T)} /></Field>
               </div>
-              <button className="wd-btn" onClick={() => setShowEmergencyCard(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.warnSoft, border: `1.5px solid ${T.warn}55`, color: T.warn, borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: 13.5, cursor: "pointer", minHeight: 44, marginTop: 4 }}><AlertTriangle size={16} /> {L("settings_emergency_view_button")}</button>
+              <button className="wd-btn" onClick={() => setShowEmergencyCard(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.warnSoft, border: `1.5px solid ${T.warn}55`, color: T.warn, borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(13.5px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44, marginTop: 4 }}><AlertTriangle size={16} /> {L("settings_emergency_view_button")}</button>
             </div>
 
             <SectionTitle>{L("settings_trend_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               {medications.length === 0 ? (
-                <div style={{ fontSize: 12.5, color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>
+                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>
               ) : (
                 <AdherenceTrend medications={medications} log={log} now={now} periodBounds={periodBounds} />
               )}
             </div>
 
             <SectionTitle>{L("settings_report_title")}</SectionTitle>
-            <button className="wd-btn" onClick={() => setShowReport(true)} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.surface, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "15px", fontWeight: 600, fontSize: 14, cursor: medications.length === 0 ? "not-allowed" : "pointer", marginBottom: 10 }}><Printer size={17} /> {L("settings_report_button")}</button>
+            <button className="wd-btn" onClick={() => setShowReport(true)} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.surface, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "15px", fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer", marginBottom: 10 }}><Printer size={17} /> {L("settings_report_button")}</button>
           </>
         )}
       </div>
@@ -4017,11 +4214,13 @@ export default function App() {
 
       {showEmergencyCard && <EmergencyCardView medications={medications} info={emergencyInfo} onClose={() => setShowEmergencyCard(false)} />}
 
+      {showProfiles && <ProfileModal profiles={profiles} activeProfileId={activeProfileId} onSwitch={switchProfile} onAdd={addProfile} onRename={renameProfile} onDelete={deleteProfile} onClose={() => setShowProfiles(false)} />}
+
       {undoToast && (
         <div className="no-print" style={{ position: "fixed", left: "50%", transform: "translateX(-50%)", bottom: 86, zIndex: 55, background: T.ink, color: T.bg, borderRadius: 14, padding: "11px 8px 11px 14px", display: "flex", alignItems: "center", gap: 10, boxShadow: "0 8px 24px rgba(0,0,0,0.28)", maxWidth: "calc(100% - 28px)", width: 380 }}>
           <Check size={16} style={{ flexShrink: 0 }} />
-          <div style={{ fontSize: 12.5, fontWeight: 600, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{L("undo_toast_text", { name: undoToast.med.name })}</div>
-          <button className="wd-btn" onClick={() => { toggleTaken(undoToast.med, undoToast.dateISO, undoToast.t); hideUndoToast(); }} style={{ background: "none", border: "none", color: "inherit", fontWeight: 700, fontSize: 12.5, cursor: "pointer", flexShrink: 0, textDecoration: "underline", padding: "6px 4px" }}>{L("undo_toast_button")}</button>
+          <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{L("undo_toast_text", { name: undoToast.med.name })}</div>
+          <button className="wd-btn" onClick={() => { toggleTaken(undoToast.med, undoToast.dateISO, undoToast.t); hideUndoToast(); }} style={{ background: "none", border: "none", color: "inherit", fontWeight: 700, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: "pointer", flexShrink: 0, textDecoration: "underline", padding: "6px 4px" }}>{L("undo_toast_button")}</button>
           <button className="wd-iconbtn" onClick={hideUndoToast} aria-label={L("undo_toast_dismiss")} style={{ background: "none", border: "none", color: "inherit", opacity: 0.65, cursor: "pointer", flexShrink: 0, minWidth: 32, minHeight: 32 }}><X size={15} /></button>
         </div>
       )}
@@ -4038,9 +4237,9 @@ function LeafletPanel({ med, loading, onRetry }) {
   const L = useL();
   return (
     <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${T.border}` }}>
-      {loading && <div style={{ fontSize: 12.5, color: T.muted }}>{L("leaflet_loading")}</div>}
+      {loading && <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted }}>{L("leaflet_loading")}</div>}
       {!loading && med.leafletError && (
-        <div style={{ fontSize: 12.5, color: T.warn, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>{L("leaflet_fetch_failed")} <button className="wd-btn" onClick={onRetry} style={{ background: "none", border: "none", color: T.primary, fontWeight: 600, cursor: "pointer", padding: "6px 0" }}>{L("leaflet_retry")}</button></div>
+        <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.warn, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>{L("leaflet_fetch_failed")} <button className="wd-btn" onClick={onRetry} style={{ background: "none", border: "none", color: T.primary, fontWeight: 600, cursor: "pointer", padding: "6px 0" }}>{L("leaflet_retry")}</button></div>
       )}
       {!loading && med.leaflet && (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -4048,40 +4247,49 @@ function LeafletPanel({ med, loading, onRetry }) {
           <LeafletRow label={L("leaflet_dosage")} text={med.leaflet.dosering} />
           <LeafletRow label={L("leaflet_side_effects")} text={med.leaflet.bijwerkingen} />
           <LeafletRow label={L("leaflet_warning")} text={med.leaflet.waarschuwing} />
-          <div style={{ fontSize: 11, color: T.mutedSoft, fontStyle: "italic", marginTop: 2 }}>{L("leaflet_disclaimer")}</div>
-          <a href={`https://www.apotheek.nl/zoeken?query=${encodeURIComponent(med.name)}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: T.primary, fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 4, textDecoration: "none", padding: "6px 0" }}>{L("leaflet_official_link")} <ExternalLink size={12} /></a>
+          <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", color: T.mutedSoft, fontStyle: "italic", marginTop: 2 }}>{L("leaflet_disclaimer")}</div>
+          <a href={`https://www.apotheek.nl/zoeken?query=${encodeURIComponent(med.name)}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.primary, fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 4, textDecoration: "none", padding: "6px 0" }}>{L("leaflet_official_link")} <ExternalLink size={12} /></a>
         </div>
       )}
-      {!loading && !med.leaflet && !med.leafletError && <button className="wd-btn" onClick={onRetry} style={{ background: T.primarySoft, color: T.primary, border: "none", borderRadius: 10, padding: "9px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>{L("leaflet_fetch_button")}</button>}
+      {!loading && !med.leaflet && !med.leafletError && <button className="wd-btn" onClick={onRetry} style={{ background: T.primarySoft, color: T.primary, border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer" }}>{L("leaflet_fetch_button")}</button>}
     </div>
   );
 }
 function LeafletRow({ label, text }) {
   const T = useThemeColors();
   if (!text) return null;
-  return <div><div style={{ fontSize: 11, fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.4 }}>{label}</div><div style={{ fontSize: 12.5, color: T.ink }}>{text}</div></div>;
+  return <div><div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.4 }}>{label}</div><div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.ink }}>{text}</div></div>;
 }
 
-// ---------- Wordmark, drawn from the same lid+jar shapes as the compartments
-// (Compartment's own viewBox), so MedBox reads as an icon in its own right. ----------
+// ---------- Wordmark, drawn from the exact same jar+lid geometry as
+// Compartment/ProgressJar (same viewBox, body rect and lid constants) so the
+// logo reads as one family with the potjes used throughout the app — just
+// recolored in the brand's own green/goud two-tone instead of the neutral
+// surface colors the potjes use, which is what gave the old logo its
+// character in the first place. ----------
 function Logo() {
   const T = useThemeColors();
+  const lidX = 10, lidY = 10, lidW = 24, lidH = 9, lidRx = 4.5;
+  const groove = "rgba(0,0,0,0.16)";
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-      <svg viewBox="0 0 44 52" width={30} height={35.5} style={{ flexShrink: 0 }}>
-        <rect x="4" y="18" width="36" height="30" rx="7" fill={T.primary} />
-        <rect x="7" y="21" width="30" height="7" rx="3.5" fill="#ffffff" opacity="0.14" />
-        <rect x="4" y="5" width="36" height="14" rx="7" fill={T.gold} />
-        <rect x="7" y="7" width="30" height="4" rx="2" fill="#ffffff" opacity="0.28" />
+      <svg viewBox="0 0 44 52" width={30} height={35.5} style={{ flexShrink: 0, overflow: "visible" }}>
+        <rect x="6" y="18" width="32" height="30" rx="11" fill={T.primary} />
+        <rect x="9" y="21" width="8" height="24" rx="4" fill="#ffffff" opacity="0.14" />
+        <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={T.gold} />
+        <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.32" />
+        <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
+        <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
+        <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
       </svg>
-      <span className="wd-display" style={{ fontSize: 24, fontWeight: 700, color: T.ink, lineHeight: 1 }}>MedBox</span>
+      <span className="wd-display" style={{ fontSize: "calc(24px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.ink, lineHeight: 1 }}>MedBox</span>
     </div>
   );
 }
 
 function IconToggleButton({ onClick, active, icon, label }) {
   const T = useThemeColors();
-  return <button className="wd-btn" onClick={onClick} style={{ display: "flex", alignItems: "center", gap: 6, background: active ? T.primarySoft : T.surface, border: `1.5px solid ${active ? T.primary : T.border}`, color: active ? T.primary : T.muted, borderRadius: 12, padding: "10px 13px", fontSize: 12.5, fontWeight: 600, cursor: "pointer", minHeight: 40 }}>{icon} {label}</button>;
+  return <button className="wd-btn" onClick={onClick} style={{ display: "flex", alignItems: "center", gap: 6, background: active ? T.primarySoft : T.surface, border: `1.5px solid ${active ? T.primary : T.border}`, color: active ? T.primary : T.muted, borderRadius: 12, padding: "10px 13px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer", minHeight: 40 }}>{icon} {label}</button>;
 }
 
 // Compact flag+code button, same visual weight as IconToggleButton, opening a
@@ -4109,9 +4317,9 @@ function LanguagePicker({ language, onChange }) {
         aria-label={L("lang_button")}
         aria-haspopup="listbox"
         aria-expanded={open}
-        style={{ display: "flex", alignItems: "center", gap: 6, background: open ? T.primarySoft : T.surface, border: `1.5px solid ${open ? T.primary : T.border}`, color: open ? T.primary : T.muted, borderRadius: 12, padding: "10px 13px", fontSize: 12.5, fontWeight: 600, cursor: "pointer", minHeight: 40 }}
+        style={{ display: "flex", alignItems: "center", gap: 6, background: open ? T.primarySoft : T.surface, border: `1.5px solid ${open ? T.primary : T.border}`, color: open ? T.primary : T.muted, borderRadius: 12, padding: "10px 13px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer", minHeight: 40 }}
       >
-        <span style={{ fontSize: 15, lineHeight: 1 }}>{current.flag}</span> {current.code.toUpperCase()}
+        <span style={{ fontSize: "calc(15px * var(--wd-text-scale, 1))", lineHeight: 1 }}>{current.flag}</span> {current.code.toUpperCase()}
       </button>
       {open && (
         <div
@@ -4126,9 +4334,9 @@ function LanguagePicker({ language, onChange }) {
               role="option"
               aria-selected={lng.code === language}
               onClick={() => { onChange(lng.code); setOpen(false); }}
-              style={{ display: "flex", alignItems: "center", gap: 9, background: lng.code === language ? T.primarySoft : "transparent", color: lng.code === language ? T.primary : T.ink, border: "none", borderRadius: 9, padding: "9px 10px", fontSize: 13, fontWeight: lng.code === language ? 700 : 500, cursor: "pointer", textAlign: "start", fontFamily: "inherit" }}
+              style={{ display: "flex", alignItems: "center", gap: 9, background: lng.code === language ? T.primarySoft : "transparent", color: lng.code === language ? T.primary : T.ink, border: "none", borderRadius: 9, padding: "9px 10px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: lng.code === language ? 700 : 500, cursor: "pointer", textAlign: "start", fontFamily: "inherit" }}
             >
-              <span style={{ fontSize: 16, lineHeight: 1 }}>{lng.flag}</span> {lng.name}
+              <span style={{ fontSize: "calc(16px * var(--wd-text-scale, 1))", lineHeight: 1 }}>{lng.flag}</span> {lng.name}
             </button>
           ))}
         </div>
@@ -4138,11 +4346,11 @@ function LanguagePicker({ language, onChange }) {
 }
 function SectionTitle({ children, trailing }) {
   const T = useThemeColors();
-  return <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, marginTop: 4, minHeight: 32 }}><div className="wd-display" style={{ fontSize: 17, fontWeight: 600, color: T.ink }}>{children}</div>{trailing}</div>;
+  return <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, marginTop: 4, minHeight: 32 }}><div className="wd-display" style={{ fontSize: "calc(17px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink }}>{children}</div>{trailing}</div>;
 }
 function StatPill({ icon, label, value, color, bg }) {
   const T = useThemeColors();
-  return <div style={{ display: "flex", alignItems: "center", gap: 8, background: bg, color, borderRadius: 12, padding: "9px 13px" }}>{icon}<div><div style={{ fontSize: 10.5, fontWeight: 600, opacity: 0.85 }}>{label}</div><div style={{ fontSize: 13.5, fontWeight: 700 }}>{value}</div></div></div>;
+  return <div style={{ display: "flex", alignItems: "center", gap: 8, background: bg, color, borderRadius: 12, padding: "9px 13px" }}>{icon}<div><div style={{ fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 600, opacity: 0.85 }}>{label}</div><div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{value}</div></div></div>;
 }
 // A small stat/status card echoing the same shape as the "Voortgang vandaag"
 // jar cards (round icon badge, bold mono value, muted caption) — used for the
@@ -4158,73 +4366,11 @@ function StatTile({ icon, label, value, color, bg, onClick }) {
     >
       <div style={{ width: 22, height: 22, borderRadius: "50%", background: bg, color, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{icon}</div>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", minWidth: 0, overflow: "hidden" }}>
-        <div className="wd-mono" style={{ fontSize: 11.5, fontWeight: 700, color: T.ink, lineHeight: 1.2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "100%" }}>{value}</div>
-        <div style={{ fontSize: 9, fontWeight: 600, color: T.muted, letterSpacing: 0.2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "100%" }}>{label}</div>
+        <div className="wd-mono" style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.ink, lineHeight: 1.2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "100%" }}>{value}</div>
+        <div style={{ fontSize: "calc(9px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, letterSpacing: 0.2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "100%" }}>{label}</div>
       </div>
     </button>
   );
-}
-
-function CaregiverView({ codeInput, setCodeInput, data, loading, error, onFetch, onBack }) {
-  const T = useThemeColors();
-  const L = useL();
-  const language = React.useContext(LangContext);
-  return (
-    <div style={{ background: T.bg, minHeight: "100vh", fontFamily: "'Nunito', sans-serif", color: T.ink, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 40 }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
-        .wd-display { font-family: 'Quicksand', 'Nunito', sans-serif; } .wd-mono { font-family: 'IBM Plex Mono', monospace; }
-        .wd-btn { transition: transform 0.15s ease; } .wd-btn:active { transform: scale(0.96); }
-        input::placeholder { color: ${T.mutedSoft}; opacity: 1; }
-      `}</style>
-      <div style={{ maxWidth: 480, margin: "0 auto" }}>
-        <button onClick={onBack} style={{ background: "none", border: "none", color: T.muted, fontSize: 14, cursor: "pointer", marginBottom: 14, padding: "8px 0" }}>{L("caregiver_back")}</button>
-        <div className="wd-display" style={{ fontSize: 23, fontWeight: 700, marginBottom: 4 }}>{L("caregiver_title")}</div>
-        <div style={{ fontSize: 13, color: T.muted, marginBottom: 18 }}>{L("caregiver_intro")}</div>
-        <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-          <input value={codeInput} onChange={(e) => setCodeInput(e.target.value.toUpperCase())} placeholder={L("caregiver_code_placeholder")} className="wd-mono" style={{ ...getInputStyle(T), flex: 1, letterSpacing: 2, fontWeight: 700 }} maxLength={8} />
-          <button className="wd-btn" onClick={onFetch} disabled={!codeInput.trim()} style={{ background: T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "0 18px", fontWeight: 600, cursor: codeInput.trim() ? "pointer" : "not-allowed" }}>{L("caregiver_view_button")}</button>
-        </div>
-        {loading && <div style={{ color: T.muted, fontSize: 13.5 }}>{L("caregiver_loading")}</div>}
-        {error && <div style={{ background: T.warnSoft, color: T.warn, borderRadius: 12, padding: "10px 14px", fontSize: 13, fontWeight: 600 }}>{error}</div>}
-        {data && (
-          <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
-              <div style={{ fontSize: 12, color: T.muted }}>{L("caregiver_last_updated", { time: new Date(data.updatedAt).toLocaleTimeString(LOCALE_MAP[language], { hour: "2-digit", minute: "2-digit" }) })}</div>
-              <button className="wd-btn" onClick={onFetch} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: T.primary, fontSize: 12.5, fontWeight: 600, cursor: "pointer", padding: "6px 0" }}><RefreshCw size={14} /> {L("caregiver_refresh")}</button>
-            </div>
-            <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
-              <StatPill icon={<Check size={14} />} label={L("caregiver_taken_today")} value={`${data.doses.filter((d) => d.status === "taken").length}/${data.doses.length}`} color={T.primary} bg={T.primarySoft} />
-              <StatPill icon={data.streak >= 3 ? <Flame size={14} /> : <Clock size={14} />} label={L("stat_streak")} value={`${data.streak} ${L(data.streak === 1 ? "stat_streak_days_one" : "stat_streak_days_other")}`} color={data.streak >= 3 ? T.gold : T.success} bg={data.streak >= 3 ? T.goldSoft : T.successSoft} />
-            </div>
-            <SectionTitle>{L("nav_today")}</SectionTitle>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
-              {data.doses.map((d, i) => (
-                <div key={i} className="wd-card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 12, padding: "12px 14px", gap: 8 }}>
-                  <div style={{ fontSize: 13.5, fontWeight: 600 }}>{d.name} <span style={{ color: T.muted, fontWeight: 500 }}>{d.moment}</span>{d.dose && <span style={{ color: T.muted, fontWeight: 400 }}> · {d.dose}</span>}</div>
-                  <StatusBadge status={d.status} />
-                </div>
-              ))}
-              {data.doses.length === 0 && <div style={{ color: T.muted, fontSize: 13 }}>{L("caregiver_no_doses")}</div>}
-            </div>
-            {(data.lowStock?.length > 0 || data.needsRefill?.length > 0) && (
-              <>
-                <SectionTitle>{L("caregiver_stock_title")}</SectionTitle>
-                {data.needsRefill.map((m, i) => <div key={i} style={{ fontSize: 13, color: "#8A6420", background: T.goldSoft, borderRadius: 10, padding: "10px 14px", marginBottom: 6 }}>{m.name} {L("refill_days_left", { days: m.daysLeft <= 0 ? 0 : m.daysLeft, unit: L(m.daysLeft === 1 ? "stat_streak_days_one" : "stat_streak_days_other"), date: m.runOutDate ? new Date(`${m.runOutDate}T00:00:00`).toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) : "" })}</div>)}
-              </>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-function StatusBadge({ status }) {
-  const T = useThemeColors();
-  const L = useL();
-  const map = { taken: { text: L("status_taken"), color: T.success, bg: T.successSoft }, missed: { text: L("status_missed"), color: T.warn, bg: T.warnSoft }, upcoming: { text: L("status_upcoming"), color: T.muted, bg: T.surfaceSoft } };
-  const s = map[status] || map.upcoming;
-  return <span style={{ fontSize: 11.5, fontWeight: 700, color: s.color, background: s.bg, borderRadius: 8, padding: "4px 9px", flexShrink: 0 }}>{s.text}</span>;
 }
 
 // Trendgrafiek therapietrouw: percentage ingenomen doses per week, over de
@@ -4276,14 +4422,14 @@ function AdherenceTrend({ medications, log, now, periodBounds }) {
 
   const weeksWithData = weeks.filter((w) => w.total > 0);
   if (weeksWithData.length === 0) {
-    return <div style={{ fontSize: 12.5, color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>;
+    return <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>;
   }
   const avgPct = Math.round(weeksWithData.reduce((sum, w) => sum + w.pct, 0) / weeksWithData.length);
   const barW = 20, gap = 9, chartH = 84;
 
   return (
     <div>
-      <div style={{ fontSize: 12.5, color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_trend_explain")}</div>
+      <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_trend_explain")}</div>
       <div className="wd-scroll" style={{ display: "flex", alignItems: "flex-end", gap, overflowX: "auto", paddingBottom: 6 }}>
         {weeks.map((w, i) => {
           const hasData = w.pct != null;
@@ -4291,16 +4437,16 @@ function AdherenceTrend({ medications, log, now, periodBounds }) {
           const color = !hasData ? T.border : w.pct >= 80 ? T.success : w.pct >= 50 ? T.gold : T.warn;
           return (
             <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, flexShrink: 0, width: barW + 10 }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: hasData ? color : T.mutedSoft }}>{hasData ? `${w.pct}%` : "–"}</div>
+              <div style={{ fontSize: "calc(10px * var(--wd-text-scale, 1))", fontWeight: 700, color: hasData ? color : T.mutedSoft }}>{hasData ? `${w.pct}%` : "–"}</div>
               <div style={{ width: barW, height: chartH, display: "flex", alignItems: "flex-end" }}>
                 <div style={{ width: "100%", height: h, background: color, borderRadius: 4, opacity: hasData ? 1 : 0.35 }} />
               </div>
-              <div className="wd-mono" style={{ fontSize: 9, color: T.mutedSoft, whiteSpace: "nowrap" }}>{w.weekStart.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "short" })}</div>
+              <div className="wd-mono" style={{ fontSize: "calc(9px * var(--wd-text-scale, 1))", color: T.mutedSoft, whiteSpace: "nowrap" }}>{w.weekStart.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "short" })}</div>
             </div>
           );
         })}
       </div>
-      <div style={{ fontSize: 12, fontWeight: 700, color: T.ink, marginTop: 12, textAlign: "center" }}>{P("settings_trend_avg", weeksWithData.length, { pct: avgPct })}</div>
+      <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.ink, marginTop: 12, textAlign: "center" }}>{P("settings_trend_avg", weeksWithData.length, { pct: avgPct })}</div>
     </div>
   );
 }
@@ -4364,19 +4510,19 @@ function ReportView({ medications, log, now, periodBounds, onClose }) {
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "flex-start", justifyContent: "center", padding: 12, zIndex: 60, overflowY: "auto" }}>
       <div style={{ background: "#fff", borderRadius: 16, padding: 20, width: "100%", maxWidth: 640, margin: "20px 0", fontFamily: "Arial, Helvetica, sans-serif", color: "#111" }}>
         <div className="no-print" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 10 }}>
-          <div style={{ fontWeight: 700, fontSize: 16.5 }}>{L("report_title")}</div>
+          <div style={{ fontWeight: 700, fontSize: "calc(16.5px * var(--wd-text-scale, 1))"}}>{L("report_title")}</div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: "#3F3F3F" }}><X size={20} /></button>
         </div>
         <div className="no-print" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
-          <input type="month" value={month} max={currentMonth} onChange={(e) => setMonth(e.target.value)} style={{ border: "1.5px solid #ddd", borderRadius: 10, padding: "10px 12px", fontSize: 15, color: "#111", minHeight: 44 }} />
-          <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "10px 15px", fontWeight: 600, fontSize: 13, cursor: "pointer" }}><Printer size={14} /> {L("report_print")}</button>
+          <input type="month" value={month} max={currentMonth} onChange={(e) => setMonth(e.target.value)} style={{ border: "1.5px solid #ddd", borderRadius: 10, padding: "10px 12px", fontSize: "calc(15px * var(--wd-text-scale, 1))", color: "#111", minHeight: 44 }} />
+          <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "10px 15px", fontWeight: 600, fontSize: "calc(13px * var(--wd-text-scale, 1))", cursor: "pointer" }}><Printer size={14} /> {L("report_print")}</button>
         </div>
         <div style={{ marginBottom: 14 }}>
-          <div style={{ fontWeight: 700, fontSize: 18 }}>{L("report_header", { month: monthLabel })}</div>
-          <div style={{ fontSize: 12, color: "#3F3F3F" }}>{L("report_generated", { date: now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long", year: "numeric" }) })}</div>
+          <div style={{ fontWeight: 700, fontSize: "calc(18px * var(--wd-text-scale, 1))"}}>{L("report_header", { month: monthLabel })}</div>
+          <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: "#3F3F3F" }}>{L("report_generated", { date: now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long", year: "numeric" }) })}</div>
         </div>
         <div style={{ overflowX: "auto" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5, minWidth: 520 }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", minWidth: 520 }}>
           <thead><tr style={{ borderBottom: "2px solid #ddd", textAlign: "left" }}><th style={{ padding: "6px 4px" }}>{L("report_col_date")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_moment")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_med")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_dose")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_status")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_taken_at")}</th></tr></thead>
           <tbody>
             {rows.map((r, i) => (
@@ -4407,24 +4553,89 @@ function RestockModal({ med, onClose, onConfirm }) {
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 55 }} onClick={onClose}>
       <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 340, fontFamily: "'Nunito', sans-serif" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-          <div className="wd-display" style={{ fontSize: 18, fontWeight: 700 }}>{L("restock_title")}</div>
+          <div className="wd-display" style={{ fontSize: "calc(18px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{L("restock_title")}</div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: T.muted }}><X size={20} /></button>
         </div>
 
-        <div style={{ fontSize: 13.5, color: T.muted, marginBottom: 14 }}>{med.name} — {L("restock_current")} <span style={{ fontWeight: 700, color: T.ink }}>{current} {unitWordFor(med, current, L)}</span></div>
+        <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14 }}>{med.name} — {L("restock_current")} <span style={{ fontWeight: 700, color: T.ink }}>{current} {unitWordFor(med, current, L)}</span></div>
 
         <Field label={L("restock_field_label", { unit: unitWordFor(med, 2, L) })}>
           <input type="number" inputMode="numeric" min="1" autoFocus value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={L("restock_placeholder")} style={getInputStyle(T)} />
         </Field>
 
-        <div style={{ fontSize: 13, fontWeight: 600, color: valid ? T.success : T.mutedSoft, marginBottom: 18, minHeight: 18 }}>
+        <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, color: valid ? T.success : T.mutedSoft, marginBottom: 18, minHeight: 18 }}>
           {valid ? L("restock_new_total", { n: newTotal, unit: unitWordFor(med, newTotal, L) }) : L("restock_prompt")}
         </div>
 
         <div style={{ display: "flex", gap: 10 }}>
-          <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "13px", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>{L("common_cancel")}</button>
-          <button className="wd-btn" disabled={!valid} onClick={() => valid && onConfirm(addNum)} style={{ flex: 1, background: valid ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: 14, cursor: valid ? "pointer" : "not-allowed" }}>{L("restock_add")}</button>
+          <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "13px", fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("common_cancel")}</button>
+          <button className="wd-btn" disabled={!valid} onClick={() => valid && onConfirm(addNum)} style={{ flex: 1, background: valid ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: valid ? "pointer" : "not-allowed" }}>{L("restock_add")}</button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Switch between the people sharing one MedBox install, or add/rename/
+// remove one — the same overlay serves both the quick header switcher and
+// the "Profielen" section in Instellingen, so there's only one place that
+// needs to know how profiles work.
+function ProfileModal({ profiles, activeProfileId, onSwitch, onAdd, onRename, onDelete, onClose }) {
+  const T = useThemeColors();
+  const L = useL();
+  const [renamingId, setRenamingId] = useState(null);
+  const [renameValue, setRenameValue] = useState("");
+  const [addingNew, setAddingNew] = useState(false);
+  const [newName, setNewName] = useState("");
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 55 }} onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 380, maxHeight: "85vh", overflowY: "auto", fontFamily: "'Nunito', sans-serif" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+          <div className="wd-display" style={{ fontSize: "calc(18px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{L("profiles_title")}</div>
+          <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: T.muted }}><X size={20} /></button>
+        </div>
+        <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16, lineHeight: 1.4 }}>{L("profiles_manage_explain")}</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+          {profiles.map((p) => (
+            <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, background: p.id === activeProfileId ? T.primarySoft : T.surfaceSoft, border: `1.5px solid ${p.id === activeProfileId ? T.primary : T.border}`, borderRadius: 14, padding: "10px 12px" }}>
+              {renamingId === p.id ? (
+                <>
+                  <AvatarBadge name={p.name} color={p.color} size={34} />
+                  <input autoFocus value={renameValue} onChange={(e) => setRenameValue(e.target.value)} style={{ ...getInputStyle(T), flex: 1, padding: "8px 10px" }} onKeyDown={(e) => { if (e.key === "Enter" && renameValue.trim()) { onRename(p.id, renameValue); setRenamingId(null); } }} />
+                  <button className="wd-btn" disabled={!renameValue.trim()} onClick={() => { onRename(p.id, renameValue); setRenamingId(null); }} style={{ background: renameValue.trim() ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 10, padding: "8px 12px", fontWeight: 600, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: renameValue.trim() ? "pointer" : "not-allowed", flexShrink: 0 }}>{L("common_save")}</button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => onSwitch(p.id)} style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0, background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left", fontFamily: "inherit" }}>
+                    <AvatarBadge name={p.name} color={p.color} size={34} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
+                      {p.id === activeProfileId && <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary }}>{L("profiles_active_badge")}</div>}
+                    </div>
+                  </button>
+                  <button className="wd-iconbtn" onClick={() => { setRenamingId(p.id); setRenameValue(p.name); }} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><Pencil size={16} /></button>
+                  <button
+                    className="wd-iconbtn"
+                    onClick={() => {
+                      if (profiles.length <= 1) { if (typeof window.alert === "function") window.alert(L("profiles_delete_last_blocked")); return; }
+                      if (typeof window.confirm === "function" && !window.confirm(L("profiles_delete_confirm"))) return;
+                      onDelete(p.id);
+                    }}
+                    style={{ background: "none", border: "none", color: profiles.length <= 1 ? T.mutedSoft : T.warn, cursor: profiles.length <= 1 ? "default" : "pointer", flexShrink: 0 }}
+                  ><Trash2 size={16} /></button>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+        {addingNew ? (
+          <div style={{ display: "flex", gap: 8 }}>
+            <input autoFocus value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={L("profiles_name_placeholder")} style={{ ...getInputStyle(T), flex: 1 }} onKeyDown={(e) => { if (e.key === "Enter" && newName.trim()) { onAdd(newName); setAddingNew(false); setNewName(""); } }} />
+            <button className="wd-btn" disabled={!newName.trim()} onClick={() => { onAdd(newName); setAddingNew(false); setNewName(""); }} style={{ background: newName.trim() ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 10, padding: "0 16px", fontWeight: 700, cursor: newName.trim() ? "pointer" : "not-allowed" }}>{L("common_save")}</button>
+          </div>
+        ) : (
+          <button className="wd-btn" onClick={() => setAddingNew(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", background: T.primarySoft, color: T.primary, border: `1.5px dashed ${T.primary}66`, borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("profiles_add_button")}</button>
+        )}
       </div>
     </div>
   );
@@ -4443,27 +4654,27 @@ function EmergencyCardView({ medications, info, onClose }) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <AlertTriangle size={22} color={T.warn} />
-            <div className="wd-display" style={{ fontSize: 21, fontWeight: 700 }}>{L("emergency_title")}</div>
+            <div className="wd-display" style={{ fontSize: "calc(21px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{L("emergency_title")}</div>
           </div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: T.surfaceSoft, border: "none", cursor: "pointer", color: T.ink, borderRadius: 10 }}><X size={20} /></button>
         </div>
 
         {info.allergies && (
           <div style={{ background: T.warnSoft, border: `1.5px solid ${T.warn}55`, borderRadius: 14, padding: "14px 16px", marginBottom: 18 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 700, color: T.warn, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("field_allergies")}</div>
-            <div style={{ fontSize: 15.5, fontWeight: 700 }}>{info.allergies}</div>
+            <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.warn, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("field_allergies")}</div>
+            <div style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{info.allergies}</div>
           </div>
         )}
 
         <SectionTitle>{L("emergency_meds_title")}</SectionTitle>
         {medications.length === 0 ? (
-          <div style={{ fontSize: 13, color: T.muted, marginBottom: 22 }}>{L("emergency_no_meds")}</div>
+          <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 22 }}>{L("emergency_no_meds")}</div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 22 }}>
             {medications.map((med) => (
               <div key={med.id} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 12, padding: "10px 14px" }}>
-                <div style={{ fontWeight: 700, fontSize: 14.5 }}>{med.name}{med.dosePerUnit ? ` — ${med.dosePerUnit}` : ""}</div>
-                <div style={{ fontSize: 12, color: T.muted }}>
+                <div style={{ fontWeight: 700, fontSize: "calc(14.5px * var(--wd-text-scale, 1))"}}>{med.name}{med.dosePerUnit ? ` — ${med.dosePerUnit}` : ""}</div>
+                <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>
                   {med.frequency === "indien_nodig" ? <>{L("freq_prn")} · {doseLabel(med, { count: med.prnDoseCount }, L)}</> : <>{L("beheer_per_day", { n: med.totalPerDay, unit: unitWordFor(med, med.totalPerDay, L) })} · {med.times.map((t) => momentLabel(t, L)).join(", ")}</>}
                 </div>
               </div>
@@ -4473,7 +4684,7 @@ function EmergencyCardView({ medications, info, onClose }) {
 
         <SectionTitle>{L("emergency_contacts_title")}</SectionTitle>
         {!hasContact ? (
-          <div style={{ fontSize: 13, color: T.muted }}>{L("emergency_no_contacts")}</div>
+          <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted }}>{L("emergency_no_contacts")}</div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {(info.contactName || info.contactPhone) && <EmergencyContactRow label={L("emergency_contact_label")} name={info.contactName} phone={info.contactPhone} T={T} />}
@@ -4490,9 +4701,9 @@ function EmergencyContactRow({ label, name, phone, T }) {
   return (
     <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 14, padding: "12px 14px", display: "flex", alignItems: "center", gap: 12 }}>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>{label}</div>
-        {name && <div style={{ fontSize: 14.5, fontWeight: 700 }}>{name}</div>}
-        {phone && <div className="wd-mono" style={{ fontSize: 13, color: T.muted }}>{phone}</div>}
+        <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>{label}</div>
+        {name && <div style={{ fontSize: "calc(14.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{name}</div>}
+        {phone && <div className="wd-mono" style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted }}>{phone}</div>}
       </div>
       {phone && (
         <a href={`tel:${phone}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 44, height: 44, borderRadius: "50%", background: T.primary, color: "#fff", flexShrink: 0 }}><Phone size={18} /></a>
@@ -4520,16 +4731,16 @@ function OnboardingTour({ onClose }) {
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.55)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70 }}>
       <div className="wd-card" style={{ background: T.surface, borderRadius: 24, padding: 26, width: "100%", maxWidth: 360, textAlign: "center", fontFamily: "'Nunito', sans-serif" }}>
         <div style={{ width: 56, height: 56, borderRadius: "50%", background: T.primarySoft, color: T.primary, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>{s.icon}</div>
-        <div className="wd-display" style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{s.title}</div>
-        <div style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.5, marginBottom: 20 }}>{s.body}</div>
+        <div className="wd-display" style={{ fontSize: "calc(20px * var(--wd-text-scale, 1))", fontWeight: 700, marginBottom: 8 }}>{s.title}</div>
+        <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.muted, lineHeight: 1.5, marginBottom: 20 }}>{s.body}</div>
         <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 20 }}>
           {steps.map((_, i) => (
             <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: i === step ? T.primary : T.border }} />
           ))}
         </div>
         <div style={{ display: "flex", gap: 10 }}>
-          {!last && <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: "none", border: "none", color: T.muted, fontWeight: 600, fontSize: 13.5, cursor: "pointer", padding: "13px" }}>{L("onboarding_skip")}</button>}
-          <button className="wd-btn" onClick={() => (last ? onClose() : setStep((v) => v + 1))} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>{last ? L("onboarding_done") : <>{L("onboarding_next")} <ArrowRight size={15} /></>}</button>
+          {!last && <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: "none", border: "none", color: T.muted, fontWeight: 600, fontSize: "calc(13.5px * var(--wd-text-scale, 1))", cursor: "pointer", padding: "13px" }}>{L("onboarding_skip")}</button>}
+          <button className="wd-btn" onClick={() => (last ? onClose() : setStep((v) => v + 1))} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{last ? L("onboarding_done") : <>{L("onboarding_next")} <ArrowRight size={15} /></>}</button>
         </div>
       </div>
     </div>
@@ -4633,7 +4844,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 50 }} onClick={onClose}>
       <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 400, maxHeight: "92vh", overflowY: "auto", fontFamily: "'Nunito', sans-serif" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-          <div className="wd-display" style={{ fontSize: 19, fontWeight: 700 }}>{initial ? L("medmodal_edit_title") : L("medmodal_add_title")}</div>
+          <div className="wd-display" style={{ fontSize: "calc(19px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{initial ? L("medmodal_edit_title") : L("medmodal_add_title")}</div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: T.muted }}><X size={20} /></button>
         </div>
 
@@ -4651,33 +4862,33 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
           {frequency === "weekdagen" && (
             <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
               {DAY_SHORT_BY_LANG[language].map((d, i) => (
-                <button key={i} type="button" onClick={() => toggleWeekday(i)} style={{ width: 42, height: 42, borderRadius: 10, background: weekdays.includes(i) ? T.primary : T.surfaceSoft, color: weekdays.includes(i) ? "#fff" : T.muted, border: `1.5px solid ${weekdays.includes(i) ? T.primary : T.border}`, fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>{d}</button>
+                <button key={i} type="button" onClick={() => toggleWeekday(i)} style={{ width: 42, height: 42, borderRadius: 10, background: weekdays.includes(i) ? T.primary : T.surfaceSoft, color: weekdays.includes(i) ? "#fff" : T.muted, border: `1.5px solid ${weekdays.includes(i) ? T.primary : T.border}`, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 700, cursor: "pointer" }}>{d}</button>
               ))}
             </div>
           )}
-          {frequency === "weekdagen" && weekdays.length === 0 && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: T.warn }}>{L("weekdays_choose_one")}</div>}
-          {frequency === "indien_nodig" && <div style={{ fontSize: 11.5, color: T.mutedSoft, marginTop: 8, lineHeight: 1.4 }}>{L("prn_explain")}</div>}
+          {frequency === "weekdagen" && weekdays.length === 0 && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: T.warn }}>{L("weekdays_choose_one")}</div>}
+          {frequency === "indien_nodig" && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, marginTop: 8, lineHeight: 1.4 }}>{L("prn_explain")}</div>}
         </Field>
 
         <Field label={L("field_photo")}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
             <AvatarBadge name={name} color={color} photo={photo} size={46} />
-            <div style={{ fontSize: 11.5, color: T.mutedSoft, flex: 1 }}>{L("photo_auto_explain")}</div>
+            <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, flex: 1 }}>{L("photo_auto_explain")}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            <label style={{ fontSize: 12.5, fontWeight: 600, color: T.primary, cursor: "pointer", background: T.primarySoft, borderRadius: 10, padding: "10px 14px" }}>
+            <label style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.primary, cursor: "pointer", background: T.primarySoft, borderRadius: 10, padding: "10px 14px" }}>
               {photoBusy ? L("photo_busy") : photo ? L("photo_change") : L("photo_add")}
               <input type="file" accept="image/*" onChange={handlePhoto} style={{ display: "none" }} />
             </label>
             {photo && <button className="wd-iconbtn" onClick={() => { setPhoto(null); setPhotoFile(null); }} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer" }}><X size={18} /></button>}
           </div>
           {photo && (
-            <button type="button" className="wd-btn" onClick={handleRecognize} disabled={recognizing} style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 6, background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.primary, borderRadius: 10, padding: "10px 14px", fontSize: 12.5, fontWeight: 600, cursor: recognizing ? "default" : "pointer" }}>
+            <button type="button" className="wd-btn" onClick={handleRecognize} disabled={recognizing} style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 6, background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.primary, borderRadius: 10, padding: "10px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: recognizing ? "default" : "pointer" }}>
               <ScanLine size={15} /> {recognizing ? L("photo_recognize_busy") : L("photo_recognize")}
             </button>
           )}
-          {recognizedNote && <div style={{ fontSize: 11.5, color: T.success, marginTop: 6 }}>{recognizedNote}</div>}
-          {recognizeError && <div style={{ fontSize: 11.5, color: T.warn, marginTop: 6 }}>{recognizeError}</div>}
+          {recognizedNote && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.success, marginTop: 6 }}>{recognizedNote}</div>}
+          {recognizeError && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.warn, marginTop: 6 }}>{recognizeError}</div>}
         </Field>
 
         <Field label={L("field_color")}>
@@ -4699,8 +4910,8 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
           <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
             <input type="number" inputMode="numeric" min="1" value={totalPerDay} onChange={(e) => setTotalPerDay(e.target.value)} placeholder={L("daily_dose_placeholder")} style={{ ...getInputStyle(T), flex: 1, minWidth: 120 }} />
           </div>
-          {!totalValid && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: T.warn }}>{L("daily_dose_missing", { unit: unitWordFor({ unitType, customUnitLabel }, 2, L) })}</div>}
-          {totalValid && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: distributed === Number(totalPerDay) ? T.success : T.warn }}>{L("daily_dose_distributed", { a: distributed, b: totalPerDay, unit: unitWordFor({ unitType, customUnitLabel }, Number(totalPerDay), L) })}</div>}
+          {!totalValid && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: T.warn }}>{L("daily_dose_missing", { unit: unitWordFor({ unitType, customUnitLabel }, 2, L) })}</div>}
+          {totalValid && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: distributed === Number(totalPerDay) ? T.success : T.warn }}>{L("daily_dose_distributed", { a: distributed, b: totalPerDay, unit: unitWordFor({ unitType, customUnitLabel }, Number(totalPerDay), L) })}</div>}
         </Field>
         )}
 
@@ -4712,12 +4923,12 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
           {strengthType === "mg" ? (
             <div style={{ position: "relative" }}>
               <input type="number" inputMode="decimal" min="0" step="any" value={strengthMg} onChange={(e) => setStrengthMg(e.target.value)} placeholder={L("strength_mg_placeholder")} style={{ ...getInputStyle(T), paddingRight: 44 }} />
-              <span style={{ position: "absolute", right: 13, top: "50%", transform: "translateY(-50%)", fontSize: 13.5, color: T.mutedSoft, fontWeight: 600, pointerEvents: "none" }}>mg</span>
+              <span style={{ position: "absolute", right: 13, top: "50%", transform: "translateY(-50%)", fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, fontWeight: 600, pointerEvents: "none" }}>mg</span>
             </div>
           ) : (
             <input value={strengthOther} onChange={(e) => setStrengthOther(e.target.value)} placeholder={L("strength_other_placeholder")} style={getInputStyle(T)} />
           )}
-          {!strengthValid && <div style={{ fontSize: 11.5, marginTop: 6, fontWeight: 600, color: T.warn }}>{L("strength_missing")}</div>}
+          {!strengthValid && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: T.warn }}>{L("strength_missing")}</div>}
         </Field>
 
         {!isPRN && (
@@ -4726,13 +4937,13 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
             {times.filter((t) => (newMode === "meal" ? isMeal(t) : !isMeal(t))).map((t) => (
               <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                 {isMeal(t) ? (
-                  <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.goldSoft, color: "#8A6420", borderRadius: 9, padding: "8px 9px", fontSize: 11.5, fontWeight: 700, minWidth: 92 }}><Utensils size={12} /> {L(MEAL_KEY_MAP[t.meal] || t.meal)}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.goldSoft, color: "#8A6420", borderRadius: 9, padding: "8px 9px", fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, minWidth: 92 }}><Utensils size={12} /> {L(MEAL_KEY_MAP[t.meal] || t.meal)}</div>
                 ) : (
-                  <div className="wd-mono" style={{ background: T.primarySoft, color: T.primary, borderRadius: 9, padding: "8px 9px", fontSize: 12.5, fontWeight: 700, minWidth: 56, textAlign: "center" }}>{t.time}</div>
+                  <div className="wd-mono" style={{ background: T.primarySoft, color: T.primary, borderRadius: 9, padding: "8px 9px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 700, minWidth: 56, textAlign: "center" }}>{t.time}</div>
                 )}
-                <div className="wd-mono" style={{ fontSize: 9.5, color: T.mutedSoft, minWidth: 42 }}>{L(PERIOD_KEY_MAP[momentPeriod(t, periodBounds)] || momentPeriod(t, periodBounds))}</div>
-                <input type="number" inputMode="numeric" min="1" value={t.count} onChange={(e) => updateTime(t.id, "count", Math.max(1, Number(e.target.value) || 1))} title={L("field_count_short")} style={{ ...getInputStyle(T), width: 60, padding: "8px 4px", textAlign: "center", fontSize: 13 }} />
-                <input value={t.note} onChange={(e) => updateTime(t.id, "note", e.target.value)} placeholder={L("moments_note_placeholder")} style={{ ...getInputStyle(T), flex: 1, minWidth: 100, padding: "8px 10px", fontSize: 13 }} />
+                <div className="wd-mono" style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, minWidth: 42 }}>{L(PERIOD_KEY_MAP[momentPeriod(t, periodBounds)] || momentPeriod(t, periodBounds))}</div>
+                <input type="number" inputMode="numeric" min="1" value={t.count} onChange={(e) => updateTime(t.id, "count", Math.max(1, Number(e.target.value) || 1))} title={L("field_count_short")} style={{ ...getInputStyle(T), width: 60, padding: "8px 4px", textAlign: "center", fontSize: "calc(13px * var(--wd-text-scale, 1))"}} />
+                <input value={t.note} onChange={(e) => updateTime(t.id, "note", e.target.value)} placeholder={L("moments_note_placeholder")} style={{ ...getInputStyle(T), flex: 1, minWidth: 100, padding: "8px 10px", fontSize: "calc(13px * var(--wd-text-scale, 1))"}} />
                 <button className="wd-iconbtn" onClick={() => removeTime(t.id)} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer" }}><X size={16} /></button>
               </div>
             ))}
@@ -4741,7 +4952,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
               if (hiddenCount === 0) return null;
               const labelKey = newMode === "meal" ? (hiddenCount === 1 ? "moments_hidden_time_one" : "moments_hidden_time_other") : (hiddenCount === 1 ? "moments_hidden_meal_one" : "moments_hidden_meal_other");
               return (
-                <button type="button" onClick={() => setNewMode(newMode === "meal" ? "time" : "meal")} style={{ background: "none", border: "none", color: T.mutedSoft, fontSize: 11.5, textAlign: "left", cursor: "pointer", padding: "6px 0" }}>
+                <button type="button" onClick={() => setNewMode(newMode === "meal" ? "time" : "meal")} style={{ background: "none", border: "none", color: T.mutedSoft, fontSize: "calc(11.5px * var(--wd-text-scale, 1))", textAlign: "left", cursor: "pointer", padding: "6px 0" }}>
                   {L("moments_hidden_prefix", { n: hiddenCount, label: L(labelKey), tabLabel: newMode === "meal" ? L("moment_fixed_time") : L("moment_after_meal") })}
                 </button>
               );
@@ -4749,7 +4960,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
           </div>
 
           {atMax ? (
-            <div style={{ fontSize: 12, color: "#8A6420", background: T.goldSoft, borderRadius: 10, padding: "10px 12px", lineHeight: 1.4 }}>
+            <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: "#8A6420", background: T.goldSoft, borderRadius: 10, padding: "10px 12px", lineHeight: 1.4 }}>
               {L("moments_at_max", { n: totalPerDay, unit: unitWordFor({ unitType, customUnitLabel }, Number(totalPerDay), L) })}
             </div>
           ) : (
@@ -4760,7 +4971,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
               </div>
 
               {newMode === "meal" && availableMeals.length === 0 ? (
-                <div style={{ fontSize: 12, color: T.mutedSoft, background: T.surfaceSoft, borderRadius: 10, padding: "10px 12px" }}>{L("moments_all_meals_set")}</div>
+                <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, background: T.surfaceSoft, borderRadius: 10, padding: "10px 12px" }}>{L("moments_all_meals_set")}</div>
               ) : (
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {newMode === "time" ? (
@@ -4771,10 +4982,10 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
                     </select>
                   )}
                   <input type="number" inputMode="numeric" min="1" value={newCount} onChange={(e) => setNewCount(e.target.value)} placeholder={L("field_count_short")} title={L("field_count_short")} style={{ ...getInputStyle(T), width: 68, textAlign: "center" }} />
-                  <button onClick={addMoment} disabled={!newCount || !(Number(newCount) > 0)} style={{ background: (!newCount || !(Number(newCount) > 0)) ? T.mutedSoft : T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "0 16px", fontWeight: 700, fontSize: 16, cursor: (!newCount || !(Number(newCount) > 0)) ? "not-allowed" : "pointer", minHeight: 44 }}>+</button>
+                  <button onClick={addMoment} disabled={!newCount || !(Number(newCount) > 0)} style={{ background: (!newCount || !(Number(newCount) > 0)) ? T.mutedSoft : T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "0 16px", fontWeight: 700, fontSize: "calc(16px * var(--wd-text-scale, 1))", cursor: (!newCount || !(Number(newCount) > 0)) ? "not-allowed" : "pointer", minHeight: 44 }}>+</button>
                 </div>
               )}
-              {newMode === "meal" && availableMeals.length > 0 && <div style={{ fontSize: 11, color: T.mutedSoft, marginTop: 6, lineHeight: 1.4 }}>{L("moments_meal_hint")}</div>}
+              {newMode === "meal" && availableMeals.length > 0 && <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", color: T.mutedSoft, marginTop: 6, lineHeight: 1.4 }}>{L("moments_meal_hint")}</div>}
             </>
           )}
         </Field>
@@ -4788,13 +4999,13 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
 
         <Field label={L("field_stock")}>
           <input type="number" inputMode="numeric" min="0" value={stock} onChange={(e) => setStock(e.target.value)} placeholder={L("stock_placeholder")} style={getInputStyle(T)} />
-          <div style={{ fontSize: 11.5, color: T.mutedSoft, marginTop: 6, lineHeight: 1.4 }}>{isPRN ? L("stock_prn_note") : L("stock_auto_warn", { n: (totalValid ? Number(totalPerDay) : distributed) * REFILL_LEAD_DAYS, unit: unitWordFor({ unitType, customUnitLabel }, 2, L), days: REFILL_LEAD_DAYS, perday: totalValid ? totalPerDay : distributed })}</div>
+          <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, marginTop: 6, lineHeight: 1.4 }}>{isPRN ? L("stock_prn_note") : L("stock_auto_warn", { n: (totalValid ? Number(totalPerDay) : distributed) * REFILL_LEAD_DAYS, unit: unitWordFor({ unitType, customUnitLabel }, 2, L), days: REFILL_LEAD_DAYS, perday: totalValid ? totalPerDay : distributed })}</div>
         </Field>
 
         <button
           disabled={!canSave}
           onClick={() => onSave({ id: initial?.id || uid(), createdAt: initial?.createdAt || new Date().toISOString(), name: name.trim(), frequency, weekdays: isWeekdays ? weekdays : [], prnDoseCount: Math.max(1, Number(prnDoseCount) || 1), unitType, customUnitLabel: customUnitLabel.trim(), totalPerDay: isPRN ? null : Number(totalPerDay), strengthType, strengthMg, strengthOther: strengthOther.trim(), dosePerUnit: computedDosePerUnit, color, times: isPRN ? [] : times, photo, leaflet: initial?.leaflet, stock: stock === "" ? null : Number(stock) })}
-          style={{ width: "100%", marginTop: 8, background: canSave ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 14, padding: "16px", fontWeight: 700, fontSize: 15, cursor: canSave ? "pointer" : "not-allowed" }}
+          style={{ width: "100%", marginTop: 8, background: canSave ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 14, padding: "16px", fontWeight: 700, fontSize: "calc(15px * var(--wd-text-scale, 1))", cursor: canSave ? "pointer" : "not-allowed" }}
         >
           {initial ? L("medmodal_save_edit") : L("medmodal_save_add")}
         </button>
@@ -4805,13 +5016,13 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
 
 function Field({ label, children, style }) {
   const T = useThemeColors();
-  return <div style={{ marginBottom: 16, ...style }}><div style={{ fontSize: 12.5, fontWeight: 600, color: T.muted, marginBottom: 7 }}>{label}</div>{children}</div>;
+  return <div style={{ marginBottom: 16, ...style }}><div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 7 }}>{label}</div>{children}</div>;
 }
 
 function getToggleBtnStyle(T, active) {
-  return { flex: 1, background: active ? T.primary : T.surfaceSoft, color: active ? "#fff" : T.muted, border: `1.5px solid ${active ? T.primary : T.border}`, borderRadius: 10, padding: "11px 0", fontSize: 13, fontWeight: 600, cursor: "pointer", minHeight: 44 };
+  return { flex: 1, background: active ? T.primary : T.surfaceSoft, color: active ? "#fff" : T.muted, border: `1.5px solid ${active ? T.primary : T.border}`, borderRadius: 10, padding: "11px 0", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer", minHeight: 44 };
 }
 
 function getInputStyle(T) {
-  return { width: "100%", boxSizing: "border-box", border: `1.5px solid ${T.border}`, borderRadius: 11, padding: "12px 13px", fontSize: 16, color: T.ink, outline: "none", background: T.surfaceSoft, minHeight: 44 };
+  return { width: "100%", boxSizing: "border-box", border: `1.5px solid ${T.border}`, borderRadius: 11, padding: "12px 13px", fontSize: "calc(16px * var(--wd-text-scale, 1))", color: T.ink, outline: "none", background: T.surfaceSoft, minHeight: 44 };
 }
