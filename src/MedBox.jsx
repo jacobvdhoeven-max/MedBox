@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback, useId } from 
 import {
   Bell, BellOff, Plus, X, Check, AlertTriangle, Package, PackagePlus, Trash2, Clock,
   Pencil, ChevronDown, ChevronUp, Users, Printer,
-  Image as ImageIcon, ScanLine, BookOpen, ExternalLink, Utensils,
+  Image as ImageIcon, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
   Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight, TrendingUp,
   Pill, Droplet, Droplets, User, Baby,
@@ -557,15 +557,6 @@ const TRANSLATIONS = {
   "es": "· se agota el {date}",
   "tr": "· {date} tarihinde biter",
   "ar": "· ينفد في {date}"
- },
- "beheer_leaflet_title": {
-  "nl": "Bijsluiter",
-  "en": "Leaflet",
-  "de": "Beipackzettel",
-  "fr": "Notice",
-  "es": "Prospecto",
-  "tr": "Prospektüs",
-  "ar": "النشرة"
  },
  "beheer_restock_title": {
   "nl": "Voorraad aanvullen",
@@ -1440,96 +1431,6 @@ const TRANSLATIONS = {
   "tr": "Ekle",
   "ar": "إضافة"
  },
- "leaflet_loading": {
-  "nl": "Bijsluiterinformatie laden…",
-  "en": "Loading leaflet information…",
-  "de": "Beipackzettel-Informationen werden geladen…",
-  "fr": "Chargement des informations de la notice…",
-  "es": "Cargando información del prospecto…",
-  "tr": "Prospektüs bilgileri yükleniyor…",
-  "ar": "جارٍ تحميل معلومات النشرة…"
- },
- "leaflet_fetch_failed": {
-  "nl": "Kon geen informatie ophalen.",
-  "en": "Couldn't retrieve information.",
-  "de": "Informationen konnten nicht abgerufen werden.",
-  "fr": "Impossible de récupérer les informations.",
-  "es": "No se pudo obtener la información.",
-  "tr": "Bilgi alınamadı.",
-  "ar": "تعذّر جلب المعلومات."
- },
- "leaflet_retry": {
-  "nl": "Opnieuw proberen",
-  "en": "Try again",
-  "de": "Erneut versuchen",
-  "fr": "Réessayer",
-  "es": "Volver a intentarlo",
-  "tr": "Tekrar dene",
-  "ar": "أعد المحاولة"
- },
- "leaflet_use": {
-  "nl": "Gebruik",
-  "en": "Use",
-  "de": "Verwenden",
-  "fr": "Utiliser",
-  "es": "Usar",
-  "tr": "Kullan",
-  "ar": "استخدام"
- },
- "leaflet_dosage": {
-  "nl": "Gebruikelijke dosering",
-  "en": "Usual dosage",
-  "de": "Übliche Dosierung",
-  "fr": "Posologie habituelle",
-  "es": "Dosis habitual",
-  "tr": "Olağan doz",
-  "ar": "الجرعة المعتادة"
- },
- "leaflet_side_effects": {
-  "nl": "Veelvoorkomende bijwerkingen",
-  "en": "Common side effects",
-  "de": "Häufige Nebenwirkungen",
-  "fr": "Effets secondaires courants",
-  "es": "Efectos secundarios frecuentes",
-  "tr": "Yaygın yan etkiler",
-  "ar": "الآثار الجانبية الشائعة"
- },
- "leaflet_warning": {
-  "nl": "Let op",
-  "en": "Caution",
-  "de": "Achtung",
-  "fr": "Attention",
-  "es": "Precaución",
-  "tr": "Dikkat",
-  "ar": "تنبيه"
- },
- "leaflet_disclaimer": {
-  "nl": "Algemene informatie, geen vervanging voor de officiële bijsluiter of het advies van je arts of apotheker.",
-  "en": "General information, not a substitute for the official leaflet or advice from your doctor or pharmacist.",
-  "de": "Allgemeine Informationen, kein Ersatz für den offiziellen Beipackzettel oder den Rat deines Arztes oder Apothekers.",
-  "fr": "Informations générales, ne remplace pas la notice officielle ni l'avis de ton médecin ou pharmacien.",
-  "es": "Información general, no sustituye al prospecto oficial ni al consejo de tu médico o farmacéutico.",
-  "tr": "Genel bilgidir, resmi prospektüsün veya doktorunun ya da eczacının tavsiyesinin yerini tutmaz.",
-  "ar": "معلومات عامة، ولا تُغني عن النشرة الرسمية أو نصيحة طبيبك أو الصيدلي."
- },
- "leaflet_official_link": {
-  "nl": "Officiële bijsluiter bekijken",
-  "en": "View official leaflet",
-  "de": "Offiziellen Beipackzettel ansehen",
-  "fr": "Voir la notice officielle",
-  "es": "Ver el prospecto oficial",
-  "tr": "Resmi prospektüsü görüntüle",
-  "ar": "عرض النشرة الرسمية"
- },
- "leaflet_fetch_button": {
-  "nl": "Bijsluiter ophalen",
-  "en": "Fetch leaflet",
-  "de": "Beipackzettel abrufen",
-  "fr": "Récupérer la notice",
-  "es": "Obtener prospecto",
-  "tr": "Prospektüsü getir",
-  "ar": "جلب النشرة"
- },
  "medmodal_edit_title": {
   "nl": "Medicijn bewerken",
   "en": "Edit medication",
@@ -1664,51 +1565,6 @@ const TRANSLATIONS = {
   "es": "Añadir tu propia foto",
   "tr": "Kendi fotoğrafını ekle",
   "ar": "إضافة صورتك الخاصة"
- },
- "photo_recognize_busy": {
-  "nl": "Bezig met herkennen…",
-  "en": "Recognizing…",
-  "de": "Wird erkannt…",
-  "fr": "Reconnaissance en cours…",
-  "es": "Reconociendo…",
-  "tr": "Tanınıyor…",
-  "ar": "جارٍ التعرّف…"
- },
- "photo_recognize": {
-  "nl": "Naam herkennen uit foto",
-  "en": "Recognize name from photo",
-  "de": "Namen aus Foto erkennen",
-  "fr": "Reconnaître le nom depuis la photo",
-  "es": "Reconocer nombre desde la foto",
-  "tr": "Fotoğraftan adı tanı",
-  "ar": "التعرّف على الاسم من الصورة"
- },
- "photo_recognized_note": {
-  "nl": "Herkend uit foto — controleer of dit klopt voordat je opslaat.",
-  "en": "Recognized from photo — check that it's correct before saving.",
-  "de": "Aus Foto erkannt — überprüfe, ob es stimmt, bevor du speicherst.",
-  "fr": "Reconnu depuis la photo — vérifie que c'est correct avant d'enregistrer.",
-  "es": "Reconocido a partir de la foto — comprueba que sea correcto antes de guardar.",
-  "tr": "Fotoğraftan tanındı — kaydetmeden önce doğru olduğundan emin ol.",
-  "ar": "تم التعرّف عليه من الصورة — تأكّد من صحته قبل الحفظ."
- },
- "photo_recognize_unclear": {
-  "nl": "Kon de naam niet met zekerheid lezen. Vul 'm handmatig in.",
-  "en": "Couldn't read the name with certainty. Please enter it manually.",
-  "de": "Der Name konnte nicht eindeutig gelesen werden. Bitte gib ihn manuell ein.",
-  "fr": "Impossible de lire le nom avec certitude. Merci de le saisir manuellement.",
-  "es": "No se pudo leer el nombre con certeza. Introdúcelo manualmente.",
-  "tr": "Ad kesin olarak okunamadı. Lütfen elle gir.",
-  "ar": "تعذّرت قراءة الاسم بدقة. يُرجى إدخاله يدويًا."
- },
- "photo_recognize_failed": {
-  "nl": "Herkenning is niet gelukt. Probeer een duidelijkere foto of vul de naam handmatig in.",
-  "en": "Recognition failed. Try a clearer photo or enter the name manually.",
-  "de": "Erkennung fehlgeschlagen. Versuche ein deutlicheres Foto oder gib den Namen manuell ein.",
-  "fr": "Échec de la reconnaissance. Essaie une photo plus nette ou saisis le nom manuellement.",
-  "es": "Ha fallado el reconocimiento. Prueba con una foto más clara o introduce el nombre manualmente.",
-  "tr": "Tanıma başarısız oldu. Daha net bir fotoğraf dene veya adı elle gir.",
-  "ar": "فشل التعرّف. جرّب صورة أوضح أو أدخل الاسم يدويًا."
  },
  "field_color": {
   "nl": "Kleur",
@@ -2864,32 +2720,6 @@ function fileToCompressedDataURL(file, maxSize = 160, quality = 0.82) {
   });
 }
 
-// ---------- Claude API helpers (photo name recognition & general leaflet info) ----------
-async function callClaude(content) {
-  const resp = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 500, messages: [{ role: "user", content }] }),
-  });
-  const data = await resp.json();
-  const text = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("");
-  return text.replace(/```json|```/g, "").trim();
-}
-async function recognizeNameFromPhoto(dataUrl) {
-  const base64 = dataUrl.split(",")[1];
-  const raw = await callClaude([
-    { type: "image", source: { type: "base64", media_type: "image/jpeg", data: base64 } },
-    { type: "text", text: 'Dit is een foto van een medicijnverpakking of pillendoosje. Lees de naam van het medicijn en, indien zichtbaar, de sterkte/dosering op de verpakking. Antwoord ALLEEN met geldige JSON, geen andere tekst: {"naam":"...","dosering":"..."}. Als je de naam niet met voldoende zekerheid kunt lezen, zet "naam" op een lege string.' },
-  ]);
-  return JSON.parse(raw);
-}
-async function fetchLeafletInfo(name) {
-  const raw = await callClaude([
-    { type: "text", text: `Geef algemene, feitelijke informatie in het Nederlands over het medicijn "${name}", puur ter oriëntatie — geen vervanging voor de officiële bijsluiter of medisch advies. Antwoord ALLEEN met geldige JSON, geen andere tekst, in dit formaat: {"gebruik":"...","dosering":"...","bijwerkingen":"...","waarschuwing":"..."}. Houd elk veld tot maximaal 2 korte zinnen. Als je dit medicijn niet met voldoende zekerheid herkent, zet elk veld op "Onbekend — raadpleeg de officiële bijsluiter of je apotheker."` },
-  ]);
-  return JSON.parse(raw);
-}
-
 // ---------- Pillbox compartment (signature visual) ----------
 // Redesigned from scratch around three unambiguous states instead of a lid
 // that tilts to different angles: "upcoming" keeps the lid closed with the
@@ -3145,8 +2975,6 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [activeNav, setActiveNav] = useState("vandaag");
-  const [expandedLeaflet, setExpandedLeaflet] = useState(null);
-  const [leafletLoadingIds, setLeafletLoadingIds] = useState(new Set());
   const firedRef = useRef(new Set());
   const periodEndFiredRef = useRef(new Set());
   const refillFiredRef = useRef(new Set());
@@ -3571,19 +3399,6 @@ export default function App() {
 
   const addMedication = (med) => {
     setMedications((prev) => [...prev, med]);
-    fetchAndStoreLeaflet(med.id, med.name);
-  };
-
-  const fetchAndStoreLeaflet = async (medId, name) => {
-    setLeafletLoadingIds((prev) => new Set(prev).add(medId));
-    try {
-      const info = await fetchLeafletInfo(name);
-      setMedications((prev) => prev.map((m) => (m.id === medId ? { ...m, leaflet: info, leafletError: false } : m)));
-    } catch (e) {
-      setMedications((prev) => prev.map((m) => (m.id === medId ? { ...m, leafletError: true } : m)));
-    } finally {
-      setLeafletLoadingIds((prev) => { const n = new Set(prev); n.delete(medId); return n; });
-    }
   };
 
   const weekDates = useMemo(() => {
@@ -4104,13 +3919,11 @@ export default function App() {
                       </div>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", flexShrink: 0, marginLeft: "auto" }}>
-                      <button className="wd-btn wd-iconbtn" onClick={() => setExpandedLeaflet(expandedLeaflet === med.id ? null : med.id)} title={L("beheer_leaflet_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><BookOpen size={18} /></button>
                       <button className="wd-btn wd-iconbtn" onClick={() => setRestockMed(med)} title={L("beheer_restock_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><PackagePlus size={18} /></button>
                       <button className="wd-btn wd-iconbtn" onClick={() => setEditingMed(med)} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><Pencil size={18} /></button>
                       <button className="wd-btn wd-iconbtn" onClick={() => setMedications((prev) => prev.filter((m) => m.id !== med.id))} style={{ background: "none", border: "none", color: T.warn, cursor: "pointer", flexShrink: 0 }}><Trash2 size={18} /></button>
                     </div>
                   </div>
-                  {expandedLeaflet === med.id && <LeafletPanel med={med} loading={leafletLoadingIds.has(med.id)} onRetry={() => fetchAndStoreLeaflet(med.id, med.name)} />}
                 </div>
               ))}
               <button className="wd-btn" onClick={() => setShowAdd(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: T.primarySoft, color: T.primary, border: `1.5px dashed ${T.primary}66`, borderRadius: 14, padding: "14px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}><Plus size={18} /> {L("beheer_add_button")}</button>
@@ -4306,34 +4119,6 @@ export default function App() {
   );
 }
 
-function LeafletPanel({ med, loading, onRetry }) {
-  const T = useThemeColors();
-  const L = useL();
-  return (
-    <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${T.border}` }}>
-      {loading && <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted }}>{L("leaflet_loading")}</div>}
-      {!loading && med.leafletError && (
-        <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.warn, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>{L("leaflet_fetch_failed")} <button className="wd-btn" onClick={onRetry} style={{ background: "none", border: "none", color: T.primary, fontWeight: 600, cursor: "pointer", padding: "6px 0" }}>{L("leaflet_retry")}</button></div>
-      )}
-      {!loading && med.leaflet && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <LeafletRow label={L("leaflet_use")} text={med.leaflet.gebruik} />
-          <LeafletRow label={L("leaflet_dosage")} text={med.leaflet.dosering} />
-          <LeafletRow label={L("leaflet_side_effects")} text={med.leaflet.bijwerkingen} />
-          <LeafletRow label={L("leaflet_warning")} text={med.leaflet.waarschuwing} />
-          <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", color: T.mutedSoft, fontStyle: "italic", marginTop: 2 }}>{L("leaflet_disclaimer")}</div>
-          <a href={`https://www.apotheek.nl/zoeken?query=${encodeURIComponent(med.name)}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.primary, fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 4, textDecoration: "none", padding: "6px 0" }}>{L("leaflet_official_link")} <ExternalLink size={12} /></a>
-        </div>
-      )}
-      {!loading && !med.leaflet && !med.leafletError && <button className="wd-btn" onClick={onRetry} style={{ background: T.primarySoft, color: T.primary, border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer" }}>{L("leaflet_fetch_button")}</button>}
-    </div>
-  );
-}
-function LeafletRow({ label, text }) {
-  const T = useThemeColors();
-  if (!text) return null;
-  return <div><div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.4 }}>{label}</div><div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.ink }}>{text}</div></div>;
-}
 
 // ---------- Wordmark, drawn from the exact same jar+lid geometry as
 // Compartment/ProgressJar (same viewBox, body rect and lid constants) so the
@@ -4862,9 +4647,6 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
   const [photo, setPhoto] = useState(initial?.photo || null);
   const [photoFile, setPhotoFile] = useState(null);
   const [photoBusy, setPhotoBusy] = useState(false);
-  const [recognizing, setRecognizing] = useState(false);
-  const [recognizeError, setRecognizeError] = useState("");
-  const [recognizedNote, setRecognizedNote] = useState("");
 
   const distributed = times.reduce((s, t) => s + (t.count || 1), 0);
   const availableMeals = MEALS.filter((m) => !times.some((t) => isMeal(t) && t.meal === m.key));
@@ -4891,27 +4673,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
     if (!file) return;
     setPhotoFile(file);
     setPhotoBusy(true);
-    setRecognizeError(""); setRecognizedNote("");
     try { setPhoto(await fileToCompressedDataURL(file, 160, 0.82)); } catch (err) { console.error(err); } finally { setPhotoBusy(false); }
-  };
-
-  const handleRecognize = async () => {
-    setRecognizing(true); setRecognizeError(""); setRecognizedNote("");
-    try {
-      const sourceDataUrl = photoFile ? await fileToCompressedDataURL(photoFile, 1024, 0.85) : photo;
-      if (!sourceDataUrl) throw new Error("Geen foto");
-      const result = await recognizeNameFromPhoto(sourceDataUrl);
-      if (result.naam) {
-        setName(result.naam);
-        if (result.dosering && !strengthMg && !strengthOther) {
-          const m = /^\s*(\d+(?:[.,]\d+)?)\s*mg\s*$/i.exec(result.dosering);
-          if (m) { setStrengthType("mg"); setStrengthMg(m[1]); }
-          else { setStrengthType("overig"); setStrengthOther(result.dosering); }
-        }
-        setRecognizedNote(L("photo_recognized_note"));
-      } else setRecognizeError(L("photo_recognize_unclear"));
-    } catch (err) { setRecognizeError(L("photo_recognize_failed")); }
-    finally { setRecognizing(false); }
   };
 
   const isPRN = frequency === "indien_nodig";
@@ -4968,13 +4730,6 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
             </label>
             {photo && <button className="wd-iconbtn" onClick={() => { setPhoto(null); setPhotoFile(null); }} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer" }}><X size={18} /></button>}
           </div>
-          {photo && (
-            <button type="button" className="wd-btn" onClick={handleRecognize} disabled={recognizing} style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 6, background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.primary, borderRadius: 10, padding: "10px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: recognizing ? "default" : "pointer" }}>
-              <ScanLine size={15} /> {recognizing ? L("photo_recognize_busy") : L("photo_recognize")}
-            </button>
-          )}
-          {recognizedNote && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.success, marginTop: 6 }}>{recognizedNote}</div>}
-          {recognizeError && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.warn, marginTop: 6 }}>{recognizeError}</div>}
         </Field>
 
         <Field label={L("field_color")}>
@@ -5090,7 +4845,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
 
         <button
           disabled={!canSave}
-          onClick={() => onSave({ id: initial?.id || uid(), createdAt: initial?.createdAt || new Date().toISOString(), name: name.trim(), frequency, weekdays: isWeekdays ? weekdays : [], prnDoseCount: Math.max(1, Number(prnDoseCount) || 1), unitType, customUnitLabel: customUnitLabel.trim(), totalPerDay: isPRN ? null : Number(totalPerDay), strengthType, strengthMg, strengthOther: strengthOther.trim(), dosePerUnit: computedDosePerUnit, color, times: isPRN ? [] : times, photo, leaflet: initial?.leaflet, stock: stock === "" ? null : Number(stock) })}
+          onClick={() => onSave({ id: initial?.id || uid(), createdAt: initial?.createdAt || new Date().toISOString(), name: name.trim(), frequency, weekdays: isWeekdays ? weekdays : [], prnDoseCount: Math.max(1, Number(prnDoseCount) || 1), unitType, customUnitLabel: customUnitLabel.trim(), totalPerDay: isPRN ? null : Number(totalPerDay), strengthType, strengthMg, strengthOther: strengthOther.trim(), dosePerUnit: computedDosePerUnit, color, times: isPRN ? [] : times, photo, stock: stock === "" ? null : Number(stock) })}
           style={{ width: "100%", marginTop: 8, background: canSave ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 14, padding: "16px", fontWeight: 700, fontSize: "calc(15px * var(--wd-text-scale, 1))", cursor: canSave ? "pointer" : "not-allowed" }}
         >
           {initial ? L("medmodal_save_edit") : L("medmodal_save_add")}
