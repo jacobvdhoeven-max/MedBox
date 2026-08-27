@@ -5,6 +5,7 @@ import {
   Image as ImageIcon, ScanLine, BookOpen, ExternalLink, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
   Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight, TrendingUp,
+  Pill, Droplet, Droplets,
 } from "lucide-react";
 
 const TRANSLATIONS = {
@@ -1602,13 +1603,13 @@ const TRANSLATIONS = {
   "ar": "صورة مميزة"
  },
  "photo_auto_explain": {
-  "nl": "Er wordt automatisch een herkenbaar rondje met de initialen gemaakt. Wil je liever een echte foto? Dat kan hieronder.",
-  "en": "A recognizable circle with initials is created automatically. Prefer a real photo instead? You can add one below.",
-  "de": "Es wird automatisch ein erkennbarer Kreis mit den Initialen erstellt. Lieber ein echtes Foto? Das kannst du unten hinzufügen.",
-  "fr": "Un cercle reconnaissable avec les initiales est créé automatiquement. Tu préfères une vraie photo ? Tu peux en ajouter une ci-dessous.",
-  "es": "Se crea automáticamente un círculo reconocible con las iniciales. ¿Prefieres una foto real? Puedes añadirla abajo.",
-  "tr": "Otomatik olarak baş harflerle tanınabilir bir daire oluşturulur. Gerçek bir fotoğraf mı tercih edersin? Aşağıdan ekleyebilirsin.",
-  "ar": "يتم إنشاء دائرة مميزة تحتوي على الأحرف الأولى تلقائيًا. تفضّل صورة حقيقية بدلًا من ذلك؟ يمكنك إضافتها أدناه."
+  "nl": "Er wordt automatisch een herkenbaar rondje met een pictogram op basis van de vorm gemaakt. Wil je liever een echte foto? Dat kan hieronder.",
+  "en": "A recognizable circle with an icon based on the shape is created automatically. Prefer a real photo instead? You can add one below.",
+  "de": "Es wird automatisch ein erkennbarer Kreis mit einem Symbol passend zur Form erstellt. Lieber ein echtes Foto? Das kannst du unten hinzufügen.",
+  "fr": "Un cercle reconnaissable avec une icône selon la forme est créé automatiquement. Tu préfères une vraie photo ? Tu peux en ajouter une ci-dessous.",
+  "es": "Se crea automáticamente un círculo reconocible con un icono según la forma. ¿Prefieres una foto real? Puedes añadirla abajo.",
+  "tr": "Otomatik olarak şekle göre bir simge içeren tanınabilir bir daire oluşturulur. Gerçek bir fotoğraf mı tercih edersin? Aşağıdan ekleyebilirsin.",
+  "ar": "يتم إنشاء دائرة مميزة تحتوي على أيقونة حسب الشكل تلقائيًا. تفضّل صورة حقيقية بدلًا من ذلك؟ يمكنك إضافتها أدناه."
  },
  "photo_busy": {
   "nl": "Bezig…",
@@ -2979,9 +2980,23 @@ function ProgressJar({ color, taken, total, size = 58 }) {
 }
 
 // ---------- Auto-generated avatar (used instead of a manually-added photo by default) ----------
-function AvatarBadge({ name, color, photo, size = 32 }) {
+// Medications pass `unitType` (tabletten/zalf/druppels/overig) so the
+// fallback is a shape icon that matches how you'd take it, rather than
+// initials — a jar of "Ibuprofen" and "Amoxicilline" would otherwise both
+// just show "I" and "A", which tells you nothing at a glance. Profiles don't
+// pass unitType, so they keep the initials fallback (a person, not a shape).
+const UNIT_TYPE_ICON = { druppels: Droplet, zalf: Droplets };
+function AvatarBadge({ name, color, photo, unitType, size = 32 }) {
   const T = useThemeColors();
   if (photo) return <img src={photo} alt="" style={{ width: size, height: size, borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: `2px solid ${T.border}` }} />;
+  if (unitType) {
+    const ShapeIcon = UNIT_TYPE_ICON[unitType] || Pill;
+    return (
+      <div style={{ width: size, height: size, borderRadius: "50%", background: color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        <ShapeIcon size={Math.round(size * 0.52)} strokeWidth={2.25} />
+      </div>
+    );
+  }
   const initials = (name || "?").trim().slice(0, 2).toUpperCase();
   return (
     <div className="wd-display" style={{ width: size, height: size, borderRadius: "50%", background: color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: `calc(${size * 0.4}px * var(--wd-text-scale, 1))`, flexShrink: 0 }}>
@@ -3797,7 +3812,7 @@ export default function App() {
                           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))", gap: 14 }}>
                             {items.map((d) => (
                               <div key={d.med.id + d.t.id} className="wd-card" style={{ background: T.surface, borderRadius: 18, padding: "16px 12px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, border: `1.5px solid ${isCurrent ? T.primary + "55" : T.border}` }}>
-                                <AvatarBadge name={d.med.name} color={d.med.color} photo={d.med.photo} size={26} />
+                                <AvatarBadge name={d.med.name} color={d.med.color} photo={d.med.photo} unitType={d.med.unitType} size={26} />
                                 <Compartment status={d.status} color={d.med.color} size={isCurrent ? 56 : 46} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: statusLabel(d.status, L) })} />
                                 <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, textAlign: "center" }}>{d.med.name}</div>
                                 <div className={isMeal(d.t) ? "" : "wd-mono"} style={{ fontSize: isMeal(d.t) ? "calc(11px * var(--wd-text-scale, 1))" : "calc(11.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center" }}>{momentLabel(d.t, L)}</div>
@@ -3894,7 +3909,7 @@ export default function App() {
                         const info = prnToday[med.id] || { count: 0 };
                         return (
                           <div key={med.id} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "14px 16px", display: "flex", alignItems: "center", gap: 12 }}>
-                            <AvatarBadge name={med.name} color={med.color} photo={med.photo} size={36} />
+                            <AvatarBadge name={med.name} color={med.color} photo={med.photo} unitType={med.unitType} size={36} />
                             <div style={{ flex: 1, minWidth: 0 }}>
                               <div style={{ fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))"}}>{med.name}</div>
                               <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>{doseLabel(med, { count: med.prnDoseCount }, L)}{info.count > 0 ? ` ${L("prn_today_count", { n: info.count })}` : ` ${L("prn_not_taken_today")}`}</div>
@@ -4021,7 +4036,7 @@ export default function App() {
               {medications.filter((med) => med.name.toLowerCase().includes(beheerSearch.trim().toLowerCase())).map((med) => (
                 <div key={med.id} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 14, padding: "12px 12px" }}>
                   <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", rowGap: 8, gap: 12 }}>
-                    <AvatarBadge name={med.name} color={med.color} photo={med.photo} size={34} />
+                    <AvatarBadge name={med.name} color={med.color} photo={med.photo} unitType={med.unitType} size={34} />
                     <div style={{ flex: "1 1 140px", minWidth: 0 }}>
                       <div style={{ fontWeight: 600, fontSize: "calc(14.5px * var(--wd-text-scale, 1))"}}>{med.name}</div>
                       <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>
@@ -4873,7 +4888,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
 
         <Field label={L("field_photo")}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-            <AvatarBadge name={name} color={color} photo={photo} size={46} />
+            <AvatarBadge name={name} color={color} photo={photo} unitType={unitType} size={46} />
             <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, flex: 1 }}>{L("photo_auto_explain")}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
