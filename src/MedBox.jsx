@@ -5,7 +5,7 @@ import {
   Image as ImageIcon, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
   Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight, TrendingUp,
-  Pill, Droplet, Droplets, User, Baby,
+  Pill, Droplet, Droplets, User, Baby, Share2, Link2,
 } from "lucide-react";
 
 const TRANSLATIONS = {
@@ -764,6 +764,42 @@ const TRANSLATIONS = {
   "es": "Mostrar de nuevo",
   "tr": "Tekrar göster",
   "ar": "إظهار مرة أخرى"
+ },
+ "settings_share_app_title": {
+  "nl": "MedBox delen",
+  "en": "Share MedBox",
+  "de": "MedBox teilen",
+  "fr": "Partager MedBox",
+  "es": "Compartir MedBox",
+  "tr": "MedBox'ı paylaş",
+  "ar": "مشاركة MedBox"
+ },
+ "settings_share_app_explain": {
+  "nl": "Wil iemand anders MedBox ook gebruiken, los van jouw gegevens? Deel deze link. Diegene start met een eigen, lege MedBox op zijn of haar eigen telefoon — dit deelt geen medicijnen of profielen van jou.",
+  "en": "Want someone else to use MedBox too, separate from your data? Share this link. They'll start with their own, empty MedBox on their own phone — this doesn't share any of your medications or profiles.",
+  "de": "Möchte jemand anders MedBox auch nutzen, unabhängig von deinen Daten? Teile diesen Link. Diese Person startet mit einer eigenen, leeren MedBox auf dem eigenen Handy — dabei werden keine deiner Medikamente oder Profile geteilt.",
+  "fr": "Tu veux que quelqu'un d'autre utilise aussi MedBox, indépendamment de tes données ? Partage ce lien. Cette personne démarre avec sa propre MedBox vide sur son propre téléphone — cela ne partage aucun de tes médicaments ni profils.",
+  "es": "¿Quieres que otra persona también use MedBox, de forma independiente a tus datos? Comparte este enlace. Esa persona empezará con su propia MedBox vacía en su propio teléfono — esto no comparte tus medicamentos ni perfiles.",
+  "tr": "Başka birinin de MedBox'ı, senin verilerinden bağımsız olarak kullanmasını mı istiyorsun? Bu bağlantıyı paylaş. O kişi kendi telefonunda kendi, boş MedBox'ıyla başlar — bu, ilaçlarını veya profillerini paylaşmaz.",
+  "ar": "هل تريد أن يستخدم شخص آخر MedBox أيضًا، بشكل مستقل عن بياناتك؟ شارك هذا الرابط. سيبدأ ذلك الشخص بنسخة MedBox فارغة خاصة به على هاتفه — هذا لا يشارك أيًا من أدويتك أو ملفاتك الشخصية."
+ },
+ "settings_share_app_button": {
+  "nl": "Deel MedBox",
+  "en": "Share MedBox",
+  "de": "MedBox teilen",
+  "fr": "Partager MedBox",
+  "es": "Compartir MedBox",
+  "tr": "MedBox'ı paylaş",
+  "ar": "مشاركة MedBox"
+ },
+ "settings_share_app_copied": {
+  "nl": "Link gekopieerd! Je kunt hem nu plakken in een bericht.",
+  "en": "Link copied! You can now paste it into a message.",
+  "de": "Link kopiert! Du kannst ihn jetzt in einem Bericht einfügen.",
+  "fr": "Lien copié ! Tu peux maintenant le coller dans un message.",
+  "es": "¡Enlace copiado! Ahora puedes pegarlo en un mensaje.",
+  "tr": "Bağlantı kopyalandı! Şimdi bir mesaja yapıştırabilirsin.",
+  "ar": "تم نسخ الرابط! يمكنك الآن لصقه في رسالة."
  },
  "settings_backup_title": {
   "nl": "Back-up",
@@ -2957,6 +2993,7 @@ export default function App() {
   // never fires this event — that platform only supports the manual "Zet op
   // beginscherm" steps already shown further down, which stay in place.
   const [installPromptEvent, setInstallPromptEvent] = useState(null);
+  const [shareCopied, setShareCopied] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
   // Brief "ongedaan maken" affordance right after a dose is checked off, so
   // an accidental tap can be corrected without hunting for the same
@@ -3041,6 +3078,25 @@ export default function App() {
     installPromptEvent.prompt();
     try { await installPromptEvent.userChoice; } catch (e) {}
     setInstallPromptEvent(null);
+  };
+
+  // Shares the app itself (its own URL), not the user's data — the recipient
+  // gets a fresh, empty MedBox on their own device. Prefers the native share
+  // sheet on phones; falls back to copying the link, and to a plain prompt()
+  // if even clipboard access is unavailable.
+  const handleShareApp = async () => {
+    const shareUrl = window.location.origin + window.location.pathname;
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try { await navigator.share({ title: "MedBox", url: shareUrl }); } catch (e) {}
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 3000);
+    } catch (e) {
+      if (typeof window.prompt === "function") window.prompt(L("settings_share_app_button"), shareUrl);
+    }
   };
 
   useEffect(() => {
@@ -4024,6 +4080,15 @@ export default function App() {
                   <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted }}>{L("settings_home_hidden")}</div>
                   <button onClick={() => setHomeTipDismissed(false)} style={{ background: "none", border: "none", color: T.primary, fontWeight: 600, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: "pointer", flexShrink: 0 }}>{L("settings_home_show_again")}</button>
                 </div>
+              )}
+            </div>
+
+            <SectionTitle>{L("settings_share_app_title")}</SectionTitle>
+            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
+              <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_share_app_explain")}</div>
+              <button className="wd-btn" onClick={handleShareApp} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.primary, color: "#fff", border: "none", borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44 }}><Share2 size={17} /> {L("settings_share_app_button")}</button>
+              {shareCopied && (
+                <div style={{ display: "flex", alignItems: "center", gap: 6, color: T.success, fontWeight: 600, fontSize: "calc(11.5px * var(--wd-text-scale, 1))", marginTop: 10 }}><Link2 size={14} /> {L("settings_share_app_copied")}</div>
               )}
             </div>
 
