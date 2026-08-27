@@ -2909,24 +2909,41 @@ function ProgressJar({ color, taken, total, size = 58 }) {
   const fillY = bodyBottom - fillHeight;
   const clipId = useId();
   const lidX = 10, lidY = 10, lidW = 24, lidH = 9, lidRx = 4.5;
+  // Once complete, match Compartment's "taken" treatment exactly: an
+  // open-mouth outline instead of a closed body, the lid animates off to the
+  // side and fades out, and a CompartmentBadge check mark takes the place of
+  // the (previously near-invisible, since the fill had already drained to
+  // nothing) raw checkmark.
+  const lidTransform = complete ? "translate(9px,-15px) rotate(38deg) scale(0.55)" : "translate(0,0) rotate(0deg) scale(1)";
+  const grooveColor = "rgba(0,0,0,0.12)";
   return (
     <svg viewBox="0 0 44 52" width={size} height={size * (52 / 44)} style={{ overflow: "visible" }}>
-      <rect x="6" y="18" width="32" height="30" rx="11" fill={T.surface} stroke={T.mutedSoft} strokeWidth="2" />
+      {complete ? (
+        <>
+          <rect x="6" y="18" width="32" height="30" rx="11" fill={T.successSoft} />
+          <path d={openBodyPath(6, 18, 32, 30, 11)} fill="none" stroke={T.success} strokeWidth="2" strokeLinecap="round" />
+          <ellipse cx="22" cy="18" rx="16" ry="3.2" fill="none" stroke={T.success} strokeWidth="1.6" opacity="0.6" />
+        </>
+      ) : (
+        <rect x="6" y="18" width="32" height="30" rx="11" fill={T.surface} stroke={T.mutedSoft} strokeWidth="2" />
+      )}
       <rect x="9" y="21" width="8" height="24" rx="4" fill="#ffffff" opacity="0.07" />
-      <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={T.raised} stroke={T.mutedSoft} strokeWidth="1.6" />
-      <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.18" />
-      <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke="rgba(0,0,0,0.12)" strokeWidth="1.2" strokeLinecap="round" />
-      <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke="rgba(0,0,0,0.12)" strokeWidth="1.2" strokeLinecap="round" />
-      <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke="rgba(0,0,0,0.12)" strokeWidth="1.2" strokeLinecap="round" />
-      <clipPath id={clipId}><rect x="7" y="19" width="30" height="28" rx="10" /></clipPath>
-      <g clipPath={`url(#${clipId})`}>
-        {fillHeight > 0 && <rect x="7" y={fillY} width="30" height={fillHeight + 4} fill={complete ? T.success : color} opacity="0.85" />}
+      <g style={{ transformBox: "view-box", transformOrigin: "22px 19px", transform: lidTransform, transition: "transform 0.45s cubic-bezier(.3,1.4,.4,1), opacity 0.4s ease", opacity: complete ? 0 : 1 }}>
+        <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={T.raised} stroke={T.mutedSoft} strokeWidth="1.6" />
+        <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.18" />
+        <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+        <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+        <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
       </g>
-      {complete && (
-        <g transform="translate(22,33)">
-          <path d="M-6,0 L-2,5 L7,-6" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      {!complete && (
+        <clipPath id={clipId}><rect x="7" y="19" width="30" height="28" rx="10" /></clipPath>
+      )}
+      {!complete && fillHeight > 0 && (
+        <g clipPath={`url(#${clipId})`}>
+          <rect x="7" y={fillY} width="30" height={fillHeight + 4} fill={color} opacity="0.85" />
         </g>
       )}
+      {complete && <CompartmentBadge kind="check" T={T} cx={33} cy={14} />}
     </svg>
   );
 }
