@@ -3688,7 +3688,7 @@ export default function App() {
                 <Compartment status={nextUpcoming.status} color={nextUpcoming.med.color} size={44} onClick={() => toggleTaken(nextUpcoming.med, todayISO, nextUpcoming.t)} pop={poppedKey === logKeyFor(nextUpcoming.med.id, todayISO, nextUpcoming.t)} label={L("aria_dose_label", { name: nextUpcoming.med.name, moment: momentLabel(nextUpcoming.t, L), status: L("aria_dose_upcoming") })} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>{L("home_next")}</div>
-                  <div style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{nextUpcoming.med.name}</div>
+                  <div title={nextUpcoming.med.name} style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis" }}>{nextUpcoming.med.name}</div>
                   <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>{nextDoseTiming(nextUpcoming.t, now, todayISO, L)}</div>
                 </div>
               </div>
@@ -3702,7 +3702,7 @@ export default function App() {
                   <div key={logKeyFor(d.med.id, todayISO, d.t)} style={{ display: "flex", alignItems: "center", gap: 14, marginTop: i > 0 ? 10 : 0 }}>
                     <Compartment status={d.status} color={d.med.color} size={44} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: L("aria_dose_upcoming") })} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{d.med.name}</div>
+                      <div title={d.med.name} style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.med.name}</div>
                     </div>
                   </div>
                 ))}
@@ -3743,7 +3743,7 @@ export default function App() {
                               <div key={d.med.id + d.t.id} className="wd-card" style={{ background: T.surface, borderRadius: 18, padding: "16px 12px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, border: `1.5px solid ${isCurrent ? T.primary + "55" : T.border}` }}>
                                 <AvatarBadge name={d.med.name} color={d.med.color} photo={d.med.photo} unitType={d.med.unitType} size={26} />
                                 <Compartment status={d.status} color={d.med.color} size={isCurrent ? 56 : 46} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: statusLabel(d.status, L) })} />
-                                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, textAlign: "center" }}>{d.med.name}</div>
+                                <div title={d.med.name} style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", wordBreak: "break-word", width: "100%" }}>{d.med.name}</div>
                                 <div className={isMeal(d.t) ? "" : "wd-mono"} style={{ fontSize: isMeal(d.t) ? "calc(11px * var(--wd-text-scale, 1))" : "calc(11.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center" }}>{momentLabel(d.t, L)}</div>
                                 {doseLabel(d.med, d.t, L) && <div style={{ fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, textAlign: "center" }}>{doseLabel(d.med, d.t, L)}</div>}
                               </div>
@@ -3840,7 +3840,7 @@ export default function App() {
                           <div key={med.id} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "14px 16px", display: "flex", alignItems: "center", gap: 12 }}>
                             <AvatarBadge name={med.name} color={med.color} photo={med.photo} unitType={med.unitType} size={36} />
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))"}}>{med.name}</div>
+                              <div title={med.name} style={{ fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{med.name}</div>
                               <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>{doseLabel(med, { count: med.prnDoseCount }, L)}{info.count > 0 ? ` ${L("prn_today_count", { n: info.count })}` : ` ${L("prn_not_taken_today")}`}</div>
                               {info.count > 0 && <button onClick={() => undoLastPRN(med)} style={{ background: "none", border: "none", color: T.mutedSoft, fontSize: "calc(11px * var(--wd-text-scale, 1))", padding: "4px 0", cursor: "pointer" }}>{L("prn_undo")}</button>}
                             </div>
@@ -3920,7 +3920,7 @@ export default function App() {
                                 {dayByPeriod[period].map((it) => (
                                   <div key={it.med.id + it.t.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, width: 54 }}>
                                     <Compartment status={it.status} color={it.med.color} size={38} onClick={() => toggleTaken(it.med, dISO, it.t)} pop={poppedKey === logKeyFor(it.med.id, dISO, it.t)} label={L("aria_dose_label", { name: it.med.name, moment: `${DAY_NAMES_BY_LANG[language][i]} ${momentLabel(it.t, L)}`, status: statusLabel(it.status, L) })} />
-                                    <div style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, textAlign: "center", lineHeight: 1.2, wordBreak: "break-word" }}>{it.med.name}</div>
+                                    <div title={it.med.name} style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", wordBreak: "break-word", width: "100%" }}>{it.med.name}</div>
                                   </div>
                                 ))}
                               </div>
@@ -3967,7 +3967,7 @@ export default function App() {
                   <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", rowGap: 8, gap: 12 }}>
                     <AvatarBadge name={med.name} color={med.color} photo={med.photo} unitType={med.unitType} size={34} />
                     <div style={{ flex: "1 1 140px", minWidth: 0 }}>
-                      <div style={{ fontWeight: 600, fontSize: "calc(14.5px * var(--wd-text-scale, 1))"}}>{med.name}</div>
+                      <div title={med.name} style={{ fontWeight: 600, fontSize: "calc(14.5px * var(--wd-text-scale, 1))", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{med.name}</div>
                       <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>
                         {med.frequency === "indien_nodig" ? (
                           <>{L("beheer_prn_summary")} · {doseLabel(med, { count: med.prnDoseCount }, L)}</>
