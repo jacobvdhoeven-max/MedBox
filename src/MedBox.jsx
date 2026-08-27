@@ -5,7 +5,7 @@ import {
   Image as ImageIcon, ScanLine, BookOpen, ExternalLink, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
   Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight, TrendingUp,
-  Pill, Droplet, Droplets,
+  Pill, Droplet, Droplets, User, Baby,
 } from "lucide-react";
 
 const TRANSLATIONS = {
@@ -548,6 +548,15 @@ const TRANSLATIONS = {
   "es": "· existencias: {n}",
   "tr": "· stok: {n}",
   "ar": "· المخزون: {n}"
+ },
+ "beheer_runout_date": {
+  "nl": "· leeg op {date}",
+  "en": "· out on {date}",
+  "de": "· leer am {date}",
+  "fr": "· épuisé le {date}",
+  "es": "· se agota el {date}",
+  "tr": "· {date} tarihinde biter",
+  "ar": "· ينفد في {date}"
  },
  "beheer_leaflet_title": {
   "nl": "Bijsluiter",
@@ -1367,6 +1376,24 @@ const TRANSLATIONS = {
   "es": "P. ej. Mamá",
   "tr": "Örn. Anne",
   "ar": "مثال: أمي"
+ },
+ "profile_type_adult": {
+  "nl": "Volwassene",
+  "en": "Adult",
+  "de": "Erwachsen",
+  "fr": "Adulte",
+  "es": "Adulto/a",
+  "tr": "Yetişkin",
+  "ar": "بالغ"
+ },
+ "profile_type_child": {
+  "nl": "Kind",
+  "en": "Child",
+  "de": "Kind",
+  "fr": "Enfant",
+  "es": "Niño/a",
+  "tr": "Çocuk",
+  "ar": "طفل"
  },
  "profiles_rename_title": {
   "nl": "Profiel hernoemen",
@@ -2985,8 +3012,12 @@ function ProgressJar({ color, taken, total, size = 58 }) {
 // initials — a jar of "Ibuprofen" and "Amoxicilline" would otherwise both
 // just show "I" and "A", which tells you nothing at a glance. Profiles don't
 // pass unitType, so they keep the initials fallback (a person, not a shape).
-const UNIT_TYPE_ICON = { druppels: Droplet, zalf: Droplets };
-function AvatarBadge({ name, color, photo, unitType, size = 32 }) {
+const UNIT_TYPE_ICON = { druppels: Droplet, zalf: Droplets, overig: Package };
+// Profiles get a neutral "volwassene" (adult) or "kind" (child) figure instead
+// of initials — lucide-react has no man/vrouw or jongen/meisje icons, so this
+// is the closest honest distinction the icon set supports.
+const PERSON_TYPE_ICON = { volwassene: User, kind: Baby };
+function AvatarBadge({ name, color, photo, unitType, personType, size = 32 }) {
   const T = useThemeColors();
   if (photo) return <img src={photo} alt="" style={{ width: size, height: size, borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: `2px solid ${T.border}` }} />;
   if (unitType) {
@@ -2994,6 +3025,14 @@ function AvatarBadge({ name, color, photo, unitType, size = 32 }) {
     return (
       <div style={{ width: size, height: size, borderRadius: "50%", background: color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
         <ShapeIcon size={Math.round(size * 0.52)} strokeWidth={2.25} />
+      </div>
+    );
+  }
+  if (personType) {
+    const PersonIcon = PERSON_TYPE_ICON[personType] || User;
+    return (
+      <div style={{ width: size, height: size, borderRadius: "50%", background: color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        <PersonIcon size={Math.round(size * 0.56)} strokeWidth={2.25} />
       </div>
     );
   }
@@ -3184,7 +3223,10 @@ export default function App() {
           const pd = data.profilesData && typeof data.profilesData === "object" ? data.profilesData : {};
           const activeId = data.profiles.some((p) => p.id === data.activeProfileId) ? data.activeProfileId : data.profiles[0].id;
           profilesDataRef.current = pd;
-          setProfiles(data.profiles);
+          // Profiles saved before the volwassene/kind icon existed have no
+          // personType yet — default those to "volwassene" so AvatarBadge
+          // always has something valid to render.
+          setProfiles(data.profiles.map((p) => ({ ...p, personType: p.personType === "kind" ? "kind" : "volwassene" })));
           setActiveProfileId(activeId);
           const active = pd[activeId] || {};
           setMedications((active.medications || []).map(normalizeMed));
@@ -3192,7 +3234,7 @@ export default function App() {
           setEmergencyInfo({ allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "", ...(active.emergencyInfo || {}) });
         } else {
           const migratedId = uid();
-          setProfiles([{ id: migratedId, name: L("profile_default_name"), color: MED_COLORS[0] }]);
+          setProfiles([{ id: migratedId, name: L("profile_default_name"), color: MED_COLORS[0], personType: "volwassene" }]);
           setActiveProfileId(migratedId);
           setMedications((data.medications || []).map(normalizeMed));
           setLog(data.log || {});
@@ -3213,7 +3255,7 @@ export default function App() {
         // Brand new install — nothing to migrate, just start with one
         // default profile so the rest of the app always has an active one.
         const freshId = uid();
-        setProfiles([{ id: freshId, name: L("profile_default_name"), color: MED_COLORS[0] }]);
+        setProfiles([{ id: freshId, name: L("profile_default_name"), color: MED_COLORS[0], personType: "volwassene" }]);
         setActiveProfileId(freshId);
       }
       if (readFailed) {
@@ -3442,14 +3484,14 @@ export default function App() {
     setShowProfiles(false);
   };
 
-  const addProfile = (name) => {
+  const addProfile = (name, personType) => {
     const trimmed = (name || "").trim();
     if (!trimmed) return;
     const usedColors = new Set(profiles.map((p) => p.color));
     const color = MED_COLORS.find((c) => !usedColors.has(c)) || MED_COLORS[profiles.length % MED_COLORS.length];
     const newId = uid();
     profilesDataRef.current = { ...profilesDataRef.current, [activeProfileId]: { medications, log, emergencyInfo }, [newId]: { medications: [], log: {}, emergencyInfo: EMPTY_EMERGENCY_INFO } };
-    setProfiles((prev) => [...prev, { id: newId, name: trimmed, color }]);
+    setProfiles((prev) => [...prev, { id: newId, name: trimmed, color, personType: personType === "kind" ? "kind" : "volwassene" }]);
     setMedications([]);
     setLog({});
     setEmergencyInfo(EMPTY_EMERGENCY_INFO);
@@ -3459,10 +3501,10 @@ export default function App() {
     setRestockMed(null);
   };
 
-  const renameProfile = (id, name) => {
+  const renameProfile = (id, name, personType) => {
     const trimmed = (name || "").trim();
     if (!trimmed) return;
-    setProfiles((prev) => prev.map((p) => (p.id === id ? { ...p, name: trimmed } : p)));
+    setProfiles((prev) => prev.map((p) => (p.id === id ? { ...p, name: trimmed, personType: personType === "kind" ? "kind" : "volwassene" } : p)));
   };
 
   const deleteProfile = (id) => {
@@ -3726,7 +3768,7 @@ export default function App() {
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", rowGap: 8 }}>
             {profiles.length > 1 && (
               <button onClick={() => setShowProfiles(true)} aria-label={L("profiles_title")} title={L("profiles_title")} style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}>
-                <AvatarBadge name={activeProfile?.name} color={activeProfile?.color || T.primary} size={36} />
+                <AvatarBadge name={activeProfile?.name} color={activeProfile?.color || T.primary} personType={activeProfile?.personType} size={36} />
               </button>
             )}
             <LanguagePicker language={language} onChange={setLanguage} />
@@ -4012,7 +4054,7 @@ export default function App() {
             <SectionTitle>{L("profiles_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-                <AvatarBadge name={activeProfile?.name} color={activeProfile?.color || T.primary} size={38} />
+                <AvatarBadge name={activeProfile?.name} color={activeProfile?.color || T.primary} personType={activeProfile?.personType} size={38} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{activeProfile?.name}</div>
                   <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary }}>{L("profiles_active_badge")}</div>
@@ -4030,10 +4072,10 @@ export default function App() {
               </div>
             )}
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {medications.filter((med) => med.name.toLowerCase().includes(beheerSearch.trim().toLowerCase())).length === 0 && beheerSearch.trim() && (
+              {medsWithSupply.filter((med) => med.name.toLowerCase().includes(beheerSearch.trim().toLowerCase())).length === 0 && beheerSearch.trim() && (
                 <div className="wd-card" style={{ background: T.surface, border: `1.5px dashed ${T.border}`, borderRadius: 16, padding: "24px 16px", textAlign: "center", fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted }}>{L("beheer_search_empty", { q: beheerSearch.trim() })}</div>
               )}
-              {medications.filter((med) => med.name.toLowerCase().includes(beheerSearch.trim().toLowerCase())).map((med) => (
+              {medsWithSupply.filter((med) => med.name.toLowerCase().includes(beheerSearch.trim().toLowerCase())).map((med) => (
                 <div key={med.id} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 14, padding: "12px 12px" }}>
                   <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", rowGap: 8, gap: 12 }}>
                     <AvatarBadge name={med.name} color={med.color} photo={med.photo} unitType={med.unitType} size={34} />
@@ -4051,7 +4093,12 @@ export default function App() {
                           med.frequency === "indien_nodig" ? (
                             <span style={{ color: med.stock <= 0 ? T.warn : T.muted, fontWeight: med.stock <= 0 ? 700 : 400 }}> {L("beheer_stock", { n: med.stock })}</span>
                           ) : (
-                            <span style={{ color: med.stock <= dosesPerDayFor(med) * REFILL_LEAD_DAYS ? T.warn : T.muted, fontWeight: med.stock <= dosesPerDayFor(med) * REFILL_LEAD_DAYS ? 700 : 400 }}> {L("beheer_stock", { n: med.stock })}</span>
+                            <>
+                              <span style={{ color: med.stock <= med.autoThreshold ? T.warn : T.muted, fontWeight: med.stock <= med.autoThreshold ? 700 : 400 }}> {L("beheer_stock", { n: med.stock })}</span>
+                              {med.runOutDate && (
+                                <span style={{ color: med.stock <= med.autoThreshold ? T.warn : T.mutedSoft, fontWeight: med.stock <= med.autoThreshold ? 700 : 400 }}> {L("beheer_runout_date", { date: med.runOutDate.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) })}</span>
+                              )}
+                            </>
                           )
                         )}
                       </div>
@@ -4601,8 +4648,14 @@ function ProfileModal({ profiles, activeProfileId, onSwitch, onAdd, onRename, on
   const L = useL();
   const [renamingId, setRenamingId] = useState(null);
   const [renameValue, setRenameValue] = useState("");
+  const [renameType, setRenameType] = useState("volwassene");
   const [addingNew, setAddingNew] = useState(false);
   const [newName, setNewName] = useState("");
+  const [newType, setNewType] = useState("volwassene");
+  // Same color-assignment logic as addProfile() — just for an accurate live
+  // preview while picking a name/icon, before the profile actually exists.
+  const usedColors = new Set(profiles.map((p) => p.color));
+  const previewColor = MED_COLORS.find((c) => !usedColors.has(c)) || MED_COLORS[profiles.length % MED_COLORS.length];
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 55 }} onClick={onClose}>
       <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 380, maxHeight: "85vh", overflowY: "auto", fontFamily: "'Nunito', sans-serif" }}>
@@ -4615,21 +4668,29 @@ function ProfileModal({ profiles, activeProfileId, onSwitch, onAdd, onRename, on
           {profiles.map((p) => (
             <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, background: p.id === activeProfileId ? T.primarySoft : T.surfaceSoft, border: `1.5px solid ${p.id === activeProfileId ? T.primary : T.border}`, borderRadius: 14, padding: "10px 12px" }}>
               {renamingId === p.id ? (
-                <>
-                  <AvatarBadge name={p.name} color={p.color} size={34} />
-                  <input autoFocus value={renameValue} onChange={(e) => setRenameValue(e.target.value)} style={{ ...getInputStyle(T), flex: 1, padding: "8px 10px" }} onKeyDown={(e) => { if (e.key === "Enter" && renameValue.trim()) { onRename(p.id, renameValue); setRenamingId(null); } }} />
-                  <button className="wd-btn" disabled={!renameValue.trim()} onClick={() => { onRename(p.id, renameValue); setRenamingId(null); }} style={{ background: renameValue.trim() ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 10, padding: "8px 12px", fontWeight: 600, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: renameValue.trim() ? "pointer" : "not-allowed", flexShrink: 0 }}>{L("common_save")}</button>
-                </>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <AvatarBadge name={p.name} color={p.color} personType={renameType} size={34} />
+                    <div style={{ display: "flex", gap: 6, flex: 1 }}>
+                      <button type="button" onClick={() => setRenameType("volwassene")} style={{ ...getToggleBtnStyle(T, renameType === "volwassene"), padding: "8px 0", fontSize: "calc(12px * var(--wd-text-scale, 1))", minHeight: "auto" }}>{L("profile_type_adult")}</button>
+                      <button type="button" onClick={() => setRenameType("kind")} style={{ ...getToggleBtnStyle(T, renameType === "kind"), padding: "8px 0", fontSize: "calc(12px * var(--wd-text-scale, 1))", minHeight: "auto" }}>{L("profile_type_child")}</button>
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <input autoFocus value={renameValue} onChange={(e) => setRenameValue(e.target.value)} style={{ ...getInputStyle(T), flex: 1, padding: "8px 10px" }} onKeyDown={(e) => { if (e.key === "Enter" && renameValue.trim()) { onRename(p.id, renameValue, renameType); setRenamingId(null); } }} />
+                    <button className="wd-btn" disabled={!renameValue.trim()} onClick={() => { onRename(p.id, renameValue, renameType); setRenamingId(null); }} style={{ background: renameValue.trim() ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 10, padding: "8px 12px", fontWeight: 600, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: renameValue.trim() ? "pointer" : "not-allowed", flexShrink: 0 }}>{L("common_save")}</button>
+                  </div>
+                </div>
               ) : (
                 <>
                   <button onClick={() => onSwitch(p.id)} style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0, background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left", fontFamily: "inherit" }}>
-                    <AvatarBadge name={p.name} color={p.color} size={34} />
+                    <AvatarBadge name={p.name} color={p.color} personType={p.personType} size={34} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
                       {p.id === activeProfileId && <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary }}>{L("profiles_active_badge")}</div>}
                     </div>
                   </button>
-                  <button className="wd-iconbtn" onClick={() => { setRenamingId(p.id); setRenameValue(p.name); }} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><Pencil size={16} /></button>
+                  <button className="wd-iconbtn" onClick={() => { setRenamingId(p.id); setRenameValue(p.name); setRenameType(p.personType === "kind" ? "kind" : "volwassene"); }} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><Pencil size={16} /></button>
                   <button
                     className="wd-iconbtn"
                     onClick={() => {
@@ -4645,9 +4706,18 @@ function ProfileModal({ profiles, activeProfileId, onSwitch, onAdd, onRename, on
           ))}
         </div>
         {addingNew ? (
-          <div style={{ display: "flex", gap: 8 }}>
-            <input autoFocus value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={L("profiles_name_placeholder")} style={{ ...getInputStyle(T), flex: 1 }} onKeyDown={(e) => { if (e.key === "Enter" && newName.trim()) { onAdd(newName); setAddingNew(false); setNewName(""); } }} />
-            <button className="wd-btn" disabled={!newName.trim()} onClick={() => { onAdd(newName); setAddingNew(false); setNewName(""); }} style={{ background: newName.trim() ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 10, padding: "0 16px", fontWeight: 700, cursor: newName.trim() ? "pointer" : "not-allowed" }}>{L("common_save")}</button>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <AvatarBadge name={newName} color={previewColor} personType={newType} size={52} />
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button type="button" onClick={() => setNewType("volwassene")} style={getToggleBtnStyle(T, newType === "volwassene")}>{L("profile_type_adult")}</button>
+              <button type="button" onClick={() => setNewType("kind")} style={getToggleBtnStyle(T, newType === "kind")}>{L("profile_type_child")}</button>
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <input autoFocus value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={L("profiles_name_placeholder")} style={{ ...getInputStyle(T), flex: 1 }} onKeyDown={(e) => { if (e.key === "Enter" && newName.trim()) { onAdd(newName, newType); setAddingNew(false); setNewName(""); setNewType("volwassene"); } }} />
+              <button className="wd-btn" disabled={!newName.trim()} onClick={() => { onAdd(newName, newType); setAddingNew(false); setNewName(""); setNewType("volwassene"); }} style={{ background: newName.trim() ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 10, padding: "0 16px", fontWeight: 700, cursor: newName.trim() ? "pointer" : "not-allowed" }}>{L("common_save")}</button>
+            </div>
           </div>
         ) : (
           <button className="wd-btn" onClick={() => setAddingNew(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", background: T.primarySoft, color: T.primary, border: `1.5px dashed ${T.primary}66`, borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("profiles_add_button")}</button>
