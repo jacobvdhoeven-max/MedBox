@@ -3591,8 +3591,8 @@ export default function App() {
               {notifActive ? <Bell size={16} /> : <BellOff size={16} />}
             </button>
             <IconToggleButton onClick={() => setDarkMode((v) => !v)} active={darkMode} icon={darkMode ? <Sun size={16} /> : <Moon size={16} />} label={darkMode ? L("theme_light") : L("theme_dark")} />
-            <button onClick={() => setShowEmergencyCard(true)} className="no-print" title={L("home_emergency_link")} style={{ display: "flex", alignItems: "center", gap: 6, background: T.warnSoft, border: `1.5px solid ${T.warn}`, color: T.warn, borderRadius: 12, padding: "10px 13px", fontWeight: 700, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 40, flexShrink: 0 }}>
-              <AlertTriangle size={15} /> {L("home_emergency_link")}
+            <button onClick={() => setShowEmergencyCard(true)} className="no-print" aria-label={L("home_emergency_link")} title={L("home_emergency_link")} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: 12, background: T.warnSoft, border: `1.5px solid ${T.warn}`, color: T.warn, cursor: "pointer", flexShrink: 0 }}>
+              <AlertTriangle size={17} />
             </button>
           </div>
         </div>
