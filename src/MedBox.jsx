@@ -3591,6 +3591,9 @@ export default function App() {
               {notifActive ? <Bell size={16} /> : <BellOff size={16} />}
             </button>
             <IconToggleButton onClick={() => setDarkMode((v) => !v)} active={darkMode} icon={darkMode ? <Sun size={16} /> : <Moon size={16} />} label={darkMode ? L("theme_light") : L("theme_dark")} />
+            <button onClick={() => setShowEmergencyCard(true)} className="no-print" title={L("home_emergency_link")} style={{ display: "flex", alignItems: "center", gap: 6, background: T.warnSoft, border: `1.5px solid ${T.warn}`, color: T.warn, borderRadius: 12, padding: "10px 13px", fontWeight: 700, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 40, flexShrink: 0 }}>
+              <AlertTriangle size={15} /> {L("home_emergency_link")}
+            </button>
           </div>
         </div>
 
@@ -3604,12 +3607,7 @@ export default function App() {
 
         {activeNav === "vandaag" && (
           <>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
-              <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted }}>{DAY_NAMES_BY_LANG[language][(now.getDay() + 6) % 7]} · {now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
-              <button onClick={() => setShowEmergencyCard(true)} className="no-print" title={L("home_emergency_link")} style={{ display: "flex", alignItems: "center", gap: 6, background: T.warnSoft, border: `1.5px solid ${T.warn}`, color: T.warn, borderRadius: 12, padding: "9px 13px", fontWeight: 700, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 40, flexShrink: 0 }}>
-                <AlertTriangle size={15} /> {L("home_emergency_link")}
-              </button>
-            </div>
+            <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 18 }}>{DAY_NAMES_BY_LANG[language][(now.getDay() + 6) % 7]} · {now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
 
             {nextUpcomingGroup.length === 1 && (
               <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 14 }}>
