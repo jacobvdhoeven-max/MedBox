@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback, useId } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback, useId } from "react";
 import {
   Bell, BellOff, Plus, X, Check, AlertTriangle, Package, PackagePlus, Trash2, Clock,
   Pencil, ChevronDown, ChevronUp, Users, Printer,
@@ -4156,7 +4156,9 @@ function LanguagePicker({ language, onChange }) {
   const T = useThemeColors();
   const L = useL();
   const [open, setOpen] = useState(false);
+  const [menuPos, setMenuPos] = useState(null);
   const rootRef = useRef(null);
+  const menuRef = useRef(null);
   const current = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
 
   useEffect(() => {
@@ -4164,6 +4166,30 @@ function LanguagePicker({ language, onChange }) {
     const onDocClick = (e) => { if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false); };
     document.addEventListener("mousedown", onDocClick);
     return () => document.removeEventListener("mousedown", onDocClick);
+  }, [open]);
+
+  // Position the dropdown from the button's actual on-screen rect instead of
+  // a fixed inline-end anchor: on a narrow phone, a button sitting near the
+  // left of the header row would otherwise push a right-anchored menu (wider
+  // than the button) off the left edge of the viewport, making it unusable.
+  // Measuring at open-time keeps this correct wherever the button ends up.
+  useLayoutEffect(() => {
+    if (!open || !rootRef.current) return;
+    const place = () => {
+      if (!rootRef.current) return;
+      const btnRect = rootRef.current.getBoundingClientRect();
+      const menuW = menuRef.current ? menuRef.current.offsetWidth : 168;
+      const margin = 8;
+      const vw = window.innerWidth;
+      let left = btnRect.right - menuW;
+      if (left < margin) left = btnRect.left;
+      if (left + menuW > vw - margin) left = vw - margin - menuW;
+      if (left < margin) left = margin;
+      setMenuPos({ top: btnRect.bottom + 6, left });
+    };
+    place();
+    window.addEventListener("resize", place);
+    return () => window.removeEventListener("resize", place);
   }, [open]);
 
   return (
@@ -4180,10 +4206,11 @@ function LanguagePicker({ language, onChange }) {
       </button>
       {open && (
         <div
+          ref={menuRef}
           role="listbox"
           aria-label={L("lang_button")}
           className="wd-card"
-          style={{ position: "absolute", top: "calc(100% + 6px)", insetInlineEnd: 0, background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 14, padding: 6, minWidth: 168, zIndex: 80, display: "flex", flexDirection: "column", gap: 2 }}
+          style={{ position: "fixed", top: menuPos ? menuPos.top : -9999, left: menuPos ? menuPos.left : -9999, visibility: menuPos ? "visible" : "hidden", background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 14, padding: 6, minWidth: 168, zIndex: 80, display: "flex", flexDirection: "column", gap: 2 }}
         >
           {LANGUAGES.map((lng) => (
             <button
