@@ -2592,6 +2592,11 @@ const EMPTY_EMERGENCY_INFO = { allergies: "", contactName: "", contactPhone: "",
 const DAY_NAMES = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"];
 const DAY_SHORT = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
 const REFILL_LEAD_DAYS = 30;
+// How long MedBox has to have been in the background before returning to it
+// triggers the full "opstart" hold-then-fade treatment — briefer than this
+// (e.g. dismissing a notification) and the resume overlay just fades away
+// immediately instead of making you wait it out.
+const RESUME_HOLD_THRESHOLD_MS = 2500;
 const PERIOD_ORDER = ["Ochtend", "Middag", "Avond", "Nacht"];
 const DEFAULT_PERIOD_BOUNDS = { Nacht: "00:00", Ochtend: "06:00", Middag: "12:00", Avond: "18:00" };
 const MEALS = [
@@ -3056,6 +3061,7 @@ export default function App() {
   const [resumePhase, setResumePhase] = useState("hidden"); // hidden -> visible -> fading -> hidden
   const [resumeHoldUp, setResumeHoldUp] = useState(false);
   const [resumeHoldKey, setResumeHoldKey] = useState(0);
+  const backgroundedAtRef = useRef(0);
   const T = withHighContrast(darkMode ? DARK : LIGHT, highContrast, darkMode);
   const textScale = TEXT_SIZE_SCALE[textSize] || 1;
   const activeProfile = profiles.find((p) => p.id === activeProfileId) || null;
@@ -3146,36 +3152,52 @@ export default function App() {
   }, [loaded, minSplashTimeUp]);
 
   // Privacy / resume overlay: cover the screen the instant MedBox goes to
-  // the background (tab/app switch, screen lock, ...); once it's really
-  // back in view, start a fresh ~700ms hold (below) before fading it away
-  // again — so re-opening an already-running MedBox looks the same as
-  // opening it for the first time.
+  // the background (tab/app switch, screen lock, ...) — that part is always
+  // instant, no matter how briefly you're away, since it's what protects
+  // against a stray glance or an OS app-switcher screenshot. What happens on
+  // the way BACK depends on how long you were actually gone: after a real
+  // pause (RESUME_HOLD_THRESHOLD_MS or more) it holds for a brief moment and
+  // fades, the same "opstart" feel as opening the app fresh. After a very
+  // brief glance away (a notification, a quick app-switch and straight
+  // back) it just fades away immediately — nobody wants to wait out a
+  // splash animation every time a text message interrupts them.
   useEffect(() => {
     const onVisibilityChange = () => {
-      if (document.hidden) setResumePhase("visible");
-      else setResumeHoldKey((k) => k + 1);
+      if (document.hidden) {
+        backgroundedAtRef.current = Date.now();
+        setResumePhase("visible");
+      } else {
+        const awayMs = backgroundedAtRef.current ? Date.now() - backgroundedAtRef.current : 0;
+        if (awayMs >= RESUME_HOLD_THRESHOLD_MS) setResumeHoldKey((k) => k + 1);
+        else setResumePhase("fading");
+      }
     };
     document.addEventListener("visibilitychange", onVisibilityChange);
     return () => document.removeEventListener("visibilitychange", onVisibilityChange);
   }, []);
   // (Re)start the minimum-hold window each time the app comes back into
-  // view (resumeHoldKey bumped above). key 0 = app has never been
-  // backgrounded yet this session, so there's nothing to hold for.
+  // view after a real pause (resumeHoldKey bumped above). key 0 = app has
+  // never been backgrounded long enough yet this session.
   useEffect(() => {
     if (resumeHoldKey === 0) return;
     setResumeHoldUp(false);
     const t = setTimeout(() => setResumeHoldUp(true), 700);
     return () => clearTimeout(t);
   }, [resumeHoldKey]);
-  // Fade the resume overlay away once its hold window is up. Deliberately
-  // not depending on resumePhase itself — see the equivalent boot-splash
-  // effect above for why that would cancel its own timeout.
+  // Once the hold window is up, start fading. Deliberately not depending on
+  // resumePhase itself — see the equivalent boot-splash effect above for why
+  // that would cancel its own timeout.
   useEffect(() => {
     if (!resumeHoldUp) return;
     setResumePhase("fading");
+  }, [resumeHoldUp]);
+  // Whatever put the overlay into "fading" (a completed hold, or a brief
+  // glance-away that skips the hold) — actually hide it after the fade.
+  useEffect(() => {
+    if (resumePhase !== "fading") return;
     const t = setTimeout(() => setResumePhase("hidden"), 350);
     return () => clearTimeout(t);
-  }, [resumeHoldUp]);
+  }, [resumePhase]);
 
   const handleInstallClick = async () => {
     if (!installPromptEvent) return;
@@ -3642,15 +3664,12 @@ export default function App() {
     return upcoming.filter((d) => momentKeyPart(d.t) === key);
   }, [todaysDoses]);
   const nextUpcoming = nextUpcomingGroup[0] || null;
-  // De "Volgende"-kaart hierboven toont deze dosis al apart; zonder deze
-  // filtering zou hij nogmaals verschijnen in het rooster hieronder.
-  const gridByPeriod = useMemo(() => {
-    const map = { Ochtend: [], Middag: [], Avond: [], Nacht: [] };
-    PERIOD_ORDER.forEach((p) => {
-      map[p] = todaysByPeriod[p].filter((d) => !nextUpcomingGroup.some((n) => n.med.id === d.med.id && n.t.id === d.t.id));
-    });
-    return map;
-  }, [todaysByPeriod, nextUpcomingGroup]);
+  // The Vandaag-rooster hieronder is alleen een echt duplicaat van de
+  // "Volgende"-kaart wanneer er precies 1 inname vandaag is EN die kaart hem
+  // ook daadwerkelijk toont (dus alleen bij status "upcoming" — bij
+  // "gemist" toont de kaart 'm juist niet, en zou verbergen het enige
+  // tappable potje voor die inname helemaal wegnemen).
+  const gridIsHeroDuplicate = todaysDoses.length === 1 && todaysDoses[0].status === "upcoming";
   const takenToday = todaysDoses.filter((d) => d.status === "taken");
   const allDoneToday = medications.length > 0 && todaysDoses.length > 0 && takenToday.length === todaysDoses.length;
   const prevAllDoneRef = useRef(false);
@@ -3849,13 +3868,19 @@ export default function App() {
               </div>
             )}
 
-            {medications.length > 0 && PERIOD_ORDER.some((p) => todaysByPeriod[p].length > 0 && (gridByPeriod[p].length > 0 || todaysByPeriod[p].every((d) => d.status === "taken"))) && (
+            {/* Net als bij "Voortgang vandaag" hierboven is dit rooster alleen
+                een duplicaat van de "Volgende"-kaart als er in totaal maar 1
+                inname vandaag is ÉN die kaart hem ook toont (dus niet als
+                hij inmiddels "gemist" is) — met 2 of meer innames (bijv. een
+                ochtend- én avonddosering) geeft dit rooster juist het
+                overzicht van de hele dag, en moet elk dagdeel gewoon
+                zichtbaar blijven. */}
+            {medications.length > 0 && !gridIsHeroDuplicate && PERIOD_ORDER.some((p) => todaysByPeriod[p].length > 0) && (
               <>
                 <SectionTitle>{L("home_section_today")}</SectionTitle>
-                {PERIOD_ORDER.filter((p) => todaysByPeriod[p].length > 0 && (gridByPeriod[p].length > 0 || todaysByPeriod[p].every((d) => d.status === "taken"))).map((period) => {
+                {PERIOD_ORDER.filter((p) => todaysByPeriod[p].length > 0).map((period) => {
                   const isCurrent = period === currentPeriod;
                   const items = todaysByPeriod[period];
-                  const visibleItems = gridByPeriod[period];
                   const allTaken = items.every((d) => d.status === "taken");
                   const isCollapsed = allTaken && !expandedPeriods[period];
                   const periodLabel = L(PERIOD_KEY_MAP[period] || period);
@@ -3880,7 +3905,7 @@ export default function App() {
                             {periodLabel}{allTaken && " ✓"}
                           </button>
                           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))", gap: 14 }}>
-                            {visibleItems.map((d) => (
+                            {items.map((d) => (
                               <div key={d.med.id + d.t.id} className="wd-card" style={{ background: T.surface, borderRadius: 18, padding: "16px 12px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, border: `1.5px solid ${isCurrent ? T.primary + "55" : T.border}` }}>
                                 <AvatarBadge name={d.med.name} color={d.med.color} photo={d.med.photo} unitType={d.med.unitType} size={26} />
                                 <Compartment status={d.status} color={d.med.color} size={isCurrent ? 56 : 46} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: statusLabel(d.status, L) })} />
