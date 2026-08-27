@@ -4,7 +4,7 @@ import {
   Pencil, ChevronDown, ChevronUp, Users, Printer,
   Image as ImageIcon, ScanLine, BookOpen, ExternalLink, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
-  Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight,
+  Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight, TrendingUp,
 } from "lucide-react";
 
 const TRANSLATIONS = {
@@ -98,6 +98,15 @@ const TRANSLATIONS = {
   "tr": "Ayarlar",
   "ar": "الإعدادات"
  },
+ "nav_trend": {
+  "nl": "Trend",
+  "en": "Trend",
+  "de": "Trend",
+  "fr": "Tendance",
+  "es": "Tendencia",
+  "tr": "Eğilim",
+  "ar": "الاتجاه"
+ },
  "home_next": {
   "nl": "Volgende",
   "en": "Next",
@@ -170,15 +179,6 @@ const TRANSLATIONS = {
   "tr": "doz",
   "ar": "جرعات"
  },
- "stat_taken": {
-  "nl": "Genomen",
-  "en": "Taken",
-  "de": "Genommen",
-  "fr": "Pris",
-  "es": "Tomado",
-  "tr": "Alındı",
-  "ar": "تم التناول"
- },
  "stat_streak": {
   "nl": "Reeks",
   "en": "Streak",
@@ -205,15 +205,6 @@ const TRANSLATIONS = {
   "es": "días",
   "tr": "gün",
   "ar": "أيام"
- },
- "stat_notif": {
-  "nl": "Meldingen",
-  "en": "Notifications",
-  "de": "Benachrichtigungen",
-  "fr": "Notifications",
-  "es": "Notificaciones",
-  "tr": "Bildirimler",
-  "ar": "الإشعارات"
  },
  "stat_notif_on": {
   "nl": "Aan",
@@ -1051,6 +1042,15 @@ const TRANSLATIONS = {
   "es": "Ver tarjeta de emergencia",
   "tr": "Acil durum kartını görüntüle",
   "ar": "عرض بطاقة الطوارئ"
+ },
+ "home_emergency_link": {
+  "nl": "Noodkaart",
+  "en": "Emergency card",
+  "de": "Notfallkarte",
+  "fr": "Carte d'urgence",
+  "es": "Tarjeta de emergencia",
+  "tr": "Acil durum kartı",
+  "ar": "بطاقة الطوارئ"
  },
  "settings_report_title": {
   "nl": "Maandrapport voor arts of apotheek",
@@ -2998,6 +2998,7 @@ function BottomNav({ active, onNavigate }) {
     { key: "vandaag", label: L("nav_today"), icon: <Home size={21} /> },
     { key: "week", label: L("nav_week"), icon: <Calendar size={21} /> },
     { key: "beheer", label: L("nav_manage"), icon: <ClipboardList size={21} /> },
+    { key: "trend", label: L("nav_trend"), icon: <TrendingUp size={21} /> },
     { key: "instellingen", label: L("nav_settings"), icon: <Settings2 size={21} /> },
   ];
   return (
@@ -3700,15 +3701,23 @@ export default function App() {
       `}</style>
 
       <div className="no-print" style={{ maxWidth: 720, margin: "0 auto", zoom: 1.16 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, gap: 10 }}>
-          <Logo />
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, gap: 10, flexWrap: "wrap", rowGap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+            <Logo />
+            <div title={`${streak} ${L(streak === 1 ? "stat_streak_days_one" : "stat_streak_days_other")}`} style={{ display: "flex", alignItems: "center", gap: 4, background: streak >= 3 ? T.goldSoft : T.successSoft, color: streak >= 3 ? T.gold : T.success, borderRadius: 999, padding: "6px 9px", fontWeight: 700, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", flexShrink: 0 }}>
+              {streak >= 3 ? <Flame size={14} /> : <Clock size={14} />} {streak}
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", rowGap: 8 }}>
             {profiles.length > 1 && (
               <button onClick={() => setShowProfiles(true)} aria-label={L("profiles_title")} title={L("profiles_title")} style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}>
                 <AvatarBadge name={activeProfile?.name} color={activeProfile?.color || T.primary} size={36} />
               </button>
             )}
             <LanguagePicker language={language} onChange={setLanguage} />
+            <button onClick={requestNotif} aria-label={notifPerm === "denied" ? L("settings_notif_denied_label") : notifActive ? L("stat_notif_on") : notifPerm === "granted" ? L("stat_notif_off") : L("settings_notif_enable")} title={notifPerm === "denied" ? L("settings_notif_denied_label") : notifActive ? L("stat_notif_on") : notifPerm === "granted" ? L("stat_notif_off") : L("settings_notif_enable")} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: 12, background: notifActive ? T.primarySoft : T.surface, border: `1.5px solid ${notifActive ? T.primary : T.border}`, color: notifActive ? T.primary : T.muted, cursor: "pointer", flexShrink: 0 }}>
+              {notifActive ? <Bell size={16} /> : <BellOff size={16} />}
+            </button>
             <IconToggleButton onClick={() => setDarkMode((v) => !v)} active={darkMode} icon={darkMode ? <Sun size={16} /> : <Moon size={16} />} label={darkMode ? L("theme_light") : L("theme_dark")} />
           </div>
         </div>
@@ -3723,7 +3732,12 @@ export default function App() {
 
         {activeNav === "vandaag" && (
           <>
-            <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 18 }}>{DAY_NAMES_BY_LANG[language][(now.getDay() + 6) % 7]} · {now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
+              <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted }}>{DAY_NAMES_BY_LANG[language][(now.getDay() + 6) % 7]} · {now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
+              <button onClick={() => setShowEmergencyCard(true)} className="no-print" style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: T.warn, fontWeight: 700, fontSize: "calc(12px * var(--wd-text-scale, 1))", cursor: "pointer", padding: "4px 2px", flexShrink: 0 }}>
+                <AlertTriangle size={14} /> {L("home_emergency_link")}
+              </button>
+            </div>
 
             {nextUpcomingGroup.length === 1 && (
               <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 14 }}>
@@ -3798,12 +3812,6 @@ export default function App() {
                 })}
               </>
             )}
-
-            <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-              <StatTile icon={<Check size={13} />} label={L("stat_taken")} value={`${takenToday.length}/${todaysDoses.length || 0}`} color={T.primary} bg={T.primarySoft} />
-              <StatTile icon={streak >= 3 ? <Flame size={13} /> : <Clock size={13} />} label={L("stat_streak")} value={`${streak} ${L(streak === 1 ? "stat_streak_days_one" : "stat_streak_days_other")}`} color={streak >= 3 ? T.gold : T.success} bg={streak >= 3 ? T.goldSoft : T.successSoft} />
-              <StatTile icon={notifActive ? <Bell size={13} /> : <BellOff size={13} />} label={L("stat_notif")} value={notifActive ? L("stat_notif_on") : L("stat_notif_off")} color={notifActive ? T.primary : T.muted} bg={notifActive ? T.primarySoft : T.surfaceSoft} onClick={requestNotif} />
-            </div>
 
             {milestoneHit && (
               <div style={{ position: "relative", overflow: "hidden", background: T.goldSoft, border: `1.5px solid ${T.gold}66`, borderRadius: 16, padding: "15px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
@@ -3986,6 +3994,19 @@ export default function App() {
 
         {activeNav === "beheer" && (
           <>
+            <SectionTitle>{L("profiles_title")}</SectionTitle>
+            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                <AvatarBadge name={activeProfile?.name} color={activeProfile?.color || T.primary} size={38} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{activeProfile?.name}</div>
+                  <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary }}>{L("profiles_active_badge")}</div>
+                </div>
+              </div>
+              <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: 14 }}>{L("profiles_manage_explain")}</div>
+              <button className="wd-btn" onClick={() => setShowProfiles(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", background: T.primarySoft, color: T.primary, border: `1.5px dashed ${T.primary}66`, borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}><Users size={18} /> {L("settings_profiles_manage_button")}</button>
+            </div>
+
             <SectionTitle>{L("beheer_title")}</SectionTitle>
             {medications.length > 4 && (
               <div style={{ position: "relative", marginBottom: 14 }}>
@@ -4035,6 +4056,22 @@ export default function App() {
           </>
         )}
 
+        {activeNav === "trend" && (
+          <>
+            <SectionTitle>{L("settings_trend_title")}</SectionTitle>
+            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
+              {medications.length === 0 ? (
+                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>
+              ) : (
+                <AdherenceTrend medications={medications} log={log} now={now} periodBounds={periodBounds} />
+              )}
+            </div>
+
+            <SectionTitle>{L("settings_report_title")}</SectionTitle>
+            <button className="wd-btn" onClick={() => setShowReport(true)} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.surface, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "15px", fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer", marginBottom: 10 }}><Printer size={17} /> {L("settings_report_button")}</button>
+          </>
+        )}
+
         {activeNav === "instellingen" && (
           <>
             <SectionTitle>{L("settings_title")}</SectionTitle>
@@ -4054,19 +4091,6 @@ export default function App() {
                 <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_contrast_toggle")}</span>
               </label>
               <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginTop: 8 }}>{L("settings_contrast_explain")}</div>
-            </div>
-
-            <SectionTitle>{L("profiles_title")}</SectionTitle>
-            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-                <AvatarBadge name={activeProfile?.name} color={activeProfile?.color || T.primary} size={38} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{activeProfile?.name}</div>
-                  <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary }}>{L("profiles_active_badge")}</div>
-                </div>
-              </div>
-              <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: 14 }}>{L("profiles_manage_explain")}</div>
-              <button className="wd-btn" onClick={() => setShowProfiles(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", background: T.primarySoft, color: T.primary, border: `1.5px dashed ${T.primary}66`, borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}><Users size={18} /> {L("settings_profiles_manage_button")}</button>
             </div>
 
             <SectionTitle>{L("settings_notif_title")}</SectionTitle>
@@ -4173,18 +4197,6 @@ export default function App() {
               </div>
               <button className="wd-btn" onClick={() => setShowEmergencyCard(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.warnSoft, border: `1.5px solid ${T.warn}55`, color: T.warn, borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(13.5px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44, marginTop: 4 }}><AlertTriangle size={16} /> {L("settings_emergency_view_button")}</button>
             </div>
-
-            <SectionTitle>{L("settings_trend_title")}</SectionTitle>
-            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              {medications.length === 0 ? (
-                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>
-              ) : (
-                <AdherenceTrend medications={medications} log={log} now={now} periodBounds={periodBounds} />
-              )}
-            </div>
-
-            <SectionTitle>{L("settings_report_title")}</SectionTitle>
-            <button className="wd-btn" onClick={() => setShowReport(true)} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.surface, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "15px", fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer", marginBottom: 10 }}><Printer size={17} /> {L("settings_report_button")}</button>
           </>
         )}
       </div>
@@ -4356,69 +4368,58 @@ function StatPill({ icon, label, value, color, bg }) {
 // jar cards (round icon badge, bold mono value, muted caption) — used for the
 // home screen's quick-glance row so it reads as part of the same system
 // instead of a generic colored chip. Pass onClick to make one tappable.
-function StatTile({ icon, label, value, color, bg, onClick }) {
-  const T = useThemeColors();
-  return (
-    <button
-      onClick={onClick}
-      className={onClick ? "wd-btn" : undefined}
-      style={{ display: "flex", alignItems: "center", gap: 7, background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 12, padding: "7px 9px", flex: "1 1 0", minWidth: 0, cursor: onClick ? "pointer" : "default", fontFamily: "inherit" }}
-    >
-      <div style={{ width: 22, height: 22, borderRadius: "50%", background: bg, color, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{icon}</div>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", minWidth: 0, overflow: "hidden" }}>
-        <div className="wd-mono" style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.ink, lineHeight: 1.2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "100%" }}>{value}</div>
-        <div style={{ fontSize: "calc(9px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, letterSpacing: 0.2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "100%" }}>{label}</div>
-      </div>
-    </button>
-  );
-}
-
 // Trendgrafiek therapietrouw: percentage ingenomen doses per week, over de
 // laatste weken — los van het maandelijkse printbare rapport hierboven, dat
 // per dosis een lijst geeft. Alleen doses met een vast schema tellen mee
 // ("indien nodig"-medicatie heeft geen schema om trouw aan af te meten).
+// Losgetrokken van AdherenceTrend zodat de Vandaag-tegel (die alleen de
+// meest recente week met data nodig heeft) en de volledige grafiek dezelfde
+// berekening delen in plaats van hem te dupliceren.
+function computeAdherenceWeeks(medications, log, now, periodBounds, numWeeks) {
+  const todayISO = isoDate(now);
+  const periodEnds = periodEndDateTimes(periodBounds || DEFAULT_PERIOD_BOUNDS, todayISO);
+  const list = [];
+  for (let w = numWeeks - 1; w >= 0; w--) {
+    const weekStart = startOfWeek(new Date(now.getTime() - w * 7 * 86400000));
+    let taken = 0, total = 0;
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(weekStart.getTime() + i * 86400000);
+      const dISO = isoDate(d);
+      if (dISO > todayISO) continue;
+      medications.forEach((med) => {
+        if (med.frequency === "indien_nodig") return;
+        if (!isDayScheduled(med, d)) return;
+        med.times.forEach((t) => {
+          const entry = log[logKeyFor(med.id, dISO, t)];
+          // Same "hasn't happened yet" rule as the printable report: don't
+          // count today's still-open doses as missed before their time.
+          if (dISO === todayISO && !entry?.taken) {
+            if (isMeal(t)) {
+              const end = periodEnds[mealInfo(t.meal).period];
+              if (!end || now <= end) return;
+            } else if (scheduledDateTime(dISO, t.time) > now) {
+              return;
+            }
+          }
+          total++;
+          if (entry?.taken) taken++;
+        });
+      });
+    }
+    list.push({ weekStart, taken, total, pct: total > 0 ? Math.round((taken / total) * 100) : null });
+  }
+  return list;
+}
 function AdherenceTrend({ medications, log, now, periodBounds }) {
   const T = useThemeColors();
   const L = useL();
   const P = usePlural();
   const language = React.useContext(LangContext);
-  const todayISO = isoDate(now);
-  const periodEnds = useMemo(() => periodEndDateTimes(periodBounds || DEFAULT_PERIOD_BOUNDS, todayISO), [periodBounds, todayISO]);
   const NUM_WEEKS = 8;
 
   const weeks = useMemo(() => {
-    const list = [];
-    for (let w = NUM_WEEKS - 1; w >= 0; w--) {
-      const weekStart = startOfWeek(new Date(now.getTime() - w * 7 * 86400000));
-      let taken = 0, total = 0;
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(weekStart.getTime() + i * 86400000);
-        const dISO = isoDate(d);
-        if (dISO > todayISO) continue;
-        medications.forEach((med) => {
-          if (med.frequency === "indien_nodig") return;
-          if (!isDayScheduled(med, d)) return;
-          med.times.forEach((t) => {
-            const entry = log[logKeyFor(med.id, dISO, t)];
-            // Same "hasn't happened yet" rule as the printable report: don't
-            // count today's still-open doses as missed before their time.
-            if (dISO === todayISO && !entry?.taken) {
-              if (isMeal(t)) {
-                const end = periodEnds[mealInfo(t.meal).period];
-                if (!end || now <= end) return;
-              } else if (scheduledDateTime(dISO, t.time) > now) {
-                return;
-              }
-            }
-            total++;
-            if (entry?.taken) taken++;
-          });
-        });
-      }
-      list.push({ weekStart, taken, total, pct: total > 0 ? Math.round((taken / total) * 100) : null });
-    }
-    return list;
-  }, [medications, log, now, todayISO, periodEnds]);
+    return computeAdherenceWeeks(medications, log, now, periodBounds, NUM_WEEKS);
+  }, [medications, log, now, periodBounds]);
 
   const weeksWithData = weeks.filter((w) => w.total > 0);
   if (weeksWithData.length === 0) {
