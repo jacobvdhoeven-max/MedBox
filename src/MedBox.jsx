@@ -3036,6 +3036,18 @@ export default function App() {
   // compartment again (which may have already collapsed out of view once
   // its whole dagdeel is done).
   const [undoToast, setUndoToast] = useState(null);
+  // Boot splash: logo + gevuld potje, shown for a brief minimum moment when
+  // the app opens (regardless of how fast storage loads) so opening MedBox
+  // feels like a deliberate little "opstart" rather than a flash of content.
+  // splashPhase goes visible -> fading -> done; "done" is when the real app
+  // JSX takes over.
+  const [minSplashTimeUp, setMinSplashTimeUp] = useState(false);
+  const [splashPhase, setSplashPhase] = useState("visible");
+  // Privacy: the same logo + potje, shown instantly (no fade-in, so it's
+  // already opaque before the OS can grab an app-switcher thumbnail) the
+  // moment MedBox goes to the background, and faded away again once it's
+  // genuinely back in view.
+  const [backgrounded, setBackgrounded] = useState(false);
   const T = withHighContrast(darkMode ? DARK : LIGHT, highContrast, darkMode);
   const textScale = TEXT_SIZE_SCALE[textSize] || 1;
   const activeProfile = profiles.find((p) => p.id === activeProfileId) || null;
@@ -3108,6 +3120,31 @@ export default function App() {
   }, []);
 
   useEffect(() => () => { if (undoTimerRef.current) clearTimeout(undoTimerRef.current); }, []);
+
+  // Boot splash: guarantee a minimum ~700ms of visible splash time, whether
+  // storage loading was instant or not — see splashPhase declaration above.
+  useEffect(() => {
+    const t = setTimeout(() => setMinSplashTimeUp(true), 700);
+    return () => clearTimeout(t);
+  }, []);
+  useEffect(() => {
+    // Deliberately NOT depending on splashPhase here: setting it below would
+    // otherwise re-run this effect immediately, whose cleanup would clear
+    // the very timeout it just scheduled before it ever fires.
+    if (!(loaded && minSplashTimeUp)) return;
+    setSplashPhase("fading");
+    const t = setTimeout(() => setSplashPhase("done"), 350);
+    return () => clearTimeout(t);
+  }, [loaded, minSplashTimeUp]);
+
+  // Privacy: cover the screen the instant MedBox goes to the background
+  // (tab/app switch, screen lock, ...), and lift it again once it's really
+  // back in view.
+  useEffect(() => {
+    const onVisibilityChange = () => setBackgrounded(document.hidden);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+  }, []);
 
   const handleInstallClick = async () => {
     if (!installPromptEvent) return;
@@ -3664,7 +3701,17 @@ export default function App() {
     if (key === "week") setWeekOffset(0);
   };
 
-  if (!loaded) return <div style={{ minHeight: 400, display: "flex", alignItems: "center", justifyContent: "center", color: T.muted, fontFamily: "Inter, sans-serif" }}>{L("loading")}</div>;
+  if (splashPhase !== "done") {
+    return (
+      <ThemeContext.Provider value={T}>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap'); .wd-display { font-family: 'Quicksand', 'Nunito', sans-serif; }`}</style>
+        <div style={{ minHeight: "100vh", background: T.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 34, opacity: splashPhase === "fading" ? 0 : 1, transition: "opacity 350ms ease" }}>
+          <Logo size={68} scaleText={false} />
+          <SplashJar size={160} />
+        </div>
+      </ThemeContext.Provider>
+    );
+  }
 
   return (
     <ThemeContext.Provider value={T}>
@@ -3690,6 +3737,23 @@ export default function App() {
         input::placeholder, select::placeholder, textarea::placeholder { color: ${T.mutedSoft}; opacity: 1; }
         @media print { .no-print { display: none !important; } }
       `}</style>
+
+      <div
+        className="no-print"
+        aria-hidden={!backgrounded}
+        style={{
+          position: "fixed", inset: 0, zIndex: 200,
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 34,
+          background: T.bg,
+          opacity: backgrounded ? 1 : 0,
+          visibility: backgrounded ? "visible" : "hidden",
+          transition: backgrounded ? "opacity 0ms linear" : "opacity 220ms ease, visibility 0s linear 220ms",
+          pointerEvents: backgrounded ? "auto" : "none",
+        }}
+      >
+        <Logo size={68} scaleText={false} />
+        <SplashJar size={160} />
+      </div>
 
       <div className="no-print" style={{ maxWidth: 720, margin: "0 auto", zoom: 1.16 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, gap: 10, flexWrap: "wrap", rowGap: 8 }}>
@@ -4258,13 +4322,14 @@ export default function App() {
 // recolored in the brand's own green/goud two-tone instead of the neutral
 // surface colors the potjes use, which is what gave the old logo its
 // character in the first place. ----------
-function Logo() {
+function Logo({ size = 30, scaleText = true }) {
   const T = useThemeColors();
   const lidX = 10, lidY = 10, lidW = 24, lidH = 9, lidRx = 4.5;
   const groove = "rgba(0,0,0,0.16)";
+  const fontSize = Math.round(size * 0.8);
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-      <svg viewBox="0 0 44 52" width={30} height={35.5} style={{ flexShrink: 0, overflow: "visible" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: Math.round(size * 0.3) }}>
+      <svg viewBox="0 0 44 52" width={size} height={size * (52 / 44)} style={{ flexShrink: 0, overflow: "visible" }}>
         <rect x="6" y="18" width="32" height="30" rx="11" fill={T.primary} />
         <rect x="9" y="21" width="8" height="24" rx="4" fill="#ffffff" opacity="0.14" />
         <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={T.gold} />
@@ -4273,8 +4338,33 @@ function Logo() {
         <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
         <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
       </svg>
-      <span className="wd-display" style={{ fontSize: "calc(24px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.ink, lineHeight: 1 }}>MedBox</span>
+      <span className="wd-display" style={{ fontSize: scaleText ? "calc(24px * var(--wd-text-scale, 1))" : fontSize, fontWeight: 700, color: T.ink, lineHeight: 1 }}>MedBox</span>
     </div>
+  );
+}
+
+// Large, purely decorative "gevuld potje" — same visual language as the
+// Compartment jars (closed lid, one pill inside) but not a button and not
+// tied to any medication, used only for the boot splash and the privacy
+// overlay below.
+function SplashJar({ size = 160 }) {
+  const T = useThemeColors();
+  const lidX = 10, lidY = 10, lidW = 24, lidH = 9, lidRx = 4.5;
+  const groove = "rgba(0,0,0,0.12)";
+  return (
+    <svg viewBox="0 0 44 52" width={size} height={size * (52 / 44)} style={{ overflow: "visible" }} aria-hidden="true">
+      <rect x="6" y="18" width="32" height="30" rx="11" fill={T.surface} stroke={T.mutedSoft} strokeWidth="2" />
+      <rect x="9" y="21" width="8" height="24" rx="4" fill="#ffffff" opacity="0.07" />
+      <g style={{ transformBox: "view-box", transformOrigin: "22px 34px", transform: "rotate(28deg)" }}>
+        <rect x="14.5" y="28.5" width="15" height="8.4" rx="4.2" fill={T.primary} />
+        <rect x="14.5" y="28.5" width="7" height="8.4" rx="4.2" fill="#ffffff" opacity="0.35" />
+      </g>
+      <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={T.raised} stroke={T.mutedSoft} strokeWidth="1.6" />
+      <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.18" />
+      <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
+      <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
+      <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
   );
 }
 
