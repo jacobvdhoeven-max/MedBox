@@ -775,13 +775,13 @@ const TRANSLATIONS = {
   "ar": "النسخ الاحتياطي"
  },
  "settings_backup_explain": {
-  "nl": "Je gegevens staan alleen op dit apparaat. Maak af en toe een back-up, zodat je niets kwijtraakt bij een nieuwe telefoon of browser.",
-  "en": "Your data lives only on this device. Make a backup now and then, so you don't lose anything with a new phone or browser.",
-  "de": "Deine Daten befinden sich nur auf diesem Gerät. Erstelle hin und wieder ein Backup, damit bei einem neuen Handy oder Browser nichts verloren geht.",
-  "fr": "Tes données ne se trouvent que sur cet appareil. Fais une sauvegarde de temps en temps pour ne rien perdre en cas de nouveau téléphone ou navigateur.",
-  "es": "Tus datos solo están en este dispositivo. Haz una copia de seguridad de vez en cuando para no perder nada si cambias de teléfono o navegador.",
-  "tr": "Verilerin yalnızca bu cihazda bulunuyor. Yeni bir telefon veya tarayıcıda hiçbir şey kaybetmemek için ara sıra yedek al.",
-  "ar": "بياناتك موجودة فقط على هذا الجهاز. أنشئ نسخة احتياطية بين الحين والآخر حتى لا تفقد شيئًا عند الانتقال إلى هاتف أو متصفح جديد."
+  "nl": "Je gegevens (medicijnen, innamegeschiedenis) staan alleen op dit apparaat, nergens anders. Een back-up is een bestand waarin je die gegevens opslaat, zodat je ze niet kwijtraakt en kunt terugzetten op een nieuw apparaat.",
+  "en": "Your data (medications, dose history) lives only on this device, nowhere else. A backup is a file where you save that data, so you don't lose it and can restore it on a new device.",
+  "de": "Deine Daten (Medikamente, Einnahmeverlauf) befinden sich nur auf diesem Gerät, nirgendwo sonst. Ein Backup ist eine Datei, in der du diese Daten speicherst, damit du sie nicht verlierst und auf einem neuen Gerät wiederherstellen kannst.",
+  "fr": "Tes données (médicaments, historique des prises) ne se trouvent que sur cet appareil, nulle part ailleurs. Une sauvegarde est un fichier dans lequel tu enregistres ces données, pour ne rien perdre et pouvoir les restaurer sur un nouvel appareil.",
+  "es": "Tus datos (medicamentos, historial de tomas) solo están en este dispositivo, en ningún otro lugar. Una copia de seguridad es un archivo donde guardas esos datos, para no perderlos y poder recuperarlos en un dispositivo nuevo.",
+  "tr": "Verilerin (ilaçlar, alım geçmişi) yalnızca bu cihazda bulunuyor, başka hiçbir yerde değil. Yedekleme, bu verileri kaydettiğin bir dosyadır; böylece verilerini kaybetmez ve yeni bir cihazda geri yükleyebilirsin.",
+  "ar": "بياناتك (الأدوية وسجل الجرعات) موجودة فقط على هذا الجهاز، ولا مكان آخر. النسخة الاحتياطية هي ملف تحفظ فيه هذه البيانات، حتى لا تفقدها وتتمكن من استعادتها على جهاز جديد."
  },
  "settings_backup_export": {
   "nl": "Exporteren",
@@ -792,6 +792,15 @@ const TRANSLATIONS = {
   "tr": "Dışa aktar",
   "ar": "تصدير"
  },
+ "settings_backup_export_hint": {
+  "nl": "Downloadt een bestand met al je huidige gegevens. Bewaar dit ergens veilig, bijvoorbeeld door het naar jezelf te mailen of op te slaan in de cloud.",
+  "en": "Downloads a file with all your current data. Keep it somewhere safe, for example by emailing it to yourself or saving it in the cloud.",
+  "de": "Lädt eine Datei mit all deinen aktuellen Daten herunter. Bewahre sie sicher auf, zum Beispiel indem du sie dir selbst per E-Mail schickst oder in der Cloud speicherst.",
+  "fr": "Télécharge un fichier avec toutes tes données actuelles. Conserve-le en lieu sûr, par exemple en te l'envoyant par e-mail ou en le sauvegardant dans le cloud.",
+  "es": "Descarga un archivo con todos tus datos actuales. Guárdalo en un lugar seguro, por ejemplo enviándotelo por correo o guardándolo en la nube.",
+  "tr": "Tüm mevcut verilerini içeren bir dosya indirir. Bunu güvenli bir yerde sakla, örneğin kendine e-postayla göndererek veya buluta kaydederek.",
+  "ar": "يقوم بتنزيل ملف يحتوي على جميع بياناتك الحالية. احتفظ به في مكان آمن، مثلاً بإرساله إلى بريدك الإلكتروني أو حفظه في التخزين السحابي."
+ },
  "settings_backup_import": {
   "nl": "Importeren",
   "en": "Import",
@@ -800,6 +809,15 @@ const TRANSLATIONS = {
   "es": "Importar",
   "tr": "İçe aktar",
   "ar": "استيراد"
+ },
+ "settings_backup_import_hint": {
+  "nl": "Haalt eerder opgeslagen gegevens terug uit zo'n bestand. Handig na een nieuwe telefoon, een herinstallatie van de app, of als je per ongeluk iets hebt verwijderd. Let op: dit vervangt je huidige gegevens.",
+  "en": "Brings back data you saved earlier in such a file. Handy after a new phone, reinstalling the app, or if you accidentally deleted something. Note: this replaces your current data.",
+  "de": "Holt zuvor gespeicherte Daten aus so einer Datei zurück. Praktisch nach einem neuen Handy, einer Neuinstallation der App oder wenn du versehentlich etwas gelöscht hast. Achtung: Dies ersetzt deine aktuellen Daten.",
+  "fr": "Récupère les données enregistrées précédemment dans un tel fichier. Utile après un nouveau téléphone, une réinstallation de l'app, ou si tu as accidentellement supprimé quelque chose. Attention : cela remplace tes données actuelles.",
+  "es": "Recupera los datos guardados anteriormente en ese archivo. Útil después de un teléfono nuevo, al reinstalar la app, o si borraste algo por accidente. Ten en cuenta: esto reemplaza tus datos actuales.",
+  "tr": "Daha önce böyle bir dosyaya kaydedilen verileri geri getirir. Yeni bir telefon aldığında, uygulamayı yeniden yüklediğinde veya yanlışlıkla bir şey sildiğinde işine yarar. Dikkat: bu, mevcut verilerinin yerini alır.",
+  "ar": "يستعيد البيانات المحفوظة سابقًا من ملف كهذا. مفيد بعد شراء هاتف جديد أو إعادة تثبيت التطبيق أو إذا حذفت شيئًا عن طريق الخطأ. ملاحظة: سيؤدي هذا إلى استبدال بياناتك الحالية."
  },
  "settings_backup_never": {
   "nl": "Je hebt nog geen back-up gemaakt.",
@@ -4011,13 +4029,19 @@ export default function App() {
 
             <SectionTitle>{L("settings_backup_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_backup_explain")}</div>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <button className="wd-btn" onClick={handleExport} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", gap: 6, background: medications.length === 0 ? T.mutedSoft : T.primarySoft, color: medications.length === 0 ? "#fff" : T.primary, border: "none", borderRadius: 10, padding: "10px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: medications.length === 0 ? "not-allowed" : "pointer" }}><Download size={15} /> {L("settings_backup_export")}</button>
-                <label style={{ display: "flex", alignItems: "center", gap: 6, background: T.surfaceSoft, color: T.muted, border: `1.5px solid ${T.border}`, borderRadius: 10, padding: "10px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer" }}>
-                  <Upload size={15} /> {L("settings_backup_import")}
-                  <input type="file" accept="application/json" onChange={handleImportFile} style={{ display: "none" }} />
-                </label>
+              <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16, lineHeight: 1.4 }}>{L("settings_backup_explain")}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                <div>
+                  <button className="wd-btn" onClick={handleExport} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.primarySoft, color: medications.length === 0 ? "#fff" : T.primary, border: "none", borderRadius: 12, padding: "11px 14px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 700, cursor: medications.length === 0 ? "not-allowed" : "pointer" }}><Download size={15} /> {L("settings_backup_export")}</button>
+                  <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginTop: 6 }}>{L("settings_backup_export_hint")}</div>
+                </div>
+                <div>
+                  <label style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.surfaceSoft, color: T.muted, border: `1.5px solid ${T.border}`, borderRadius: 12, padding: "11px 14px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 700, cursor: "pointer", boxSizing: "border-box" }}>
+                    <Upload size={15} /> {L("settings_backup_import")}
+                    <input type="file" accept="application/json" onChange={handleImportFile} style={{ display: "none" }} />
+                  </label>
+                  <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginTop: 6 }}>{L("settings_backup_import_hint")}</div>
+                </div>
               </div>
               {medications.length > 0 && (() => {
                 const daysSince = lastBackupAt ? Math.floor((now - new Date(lastBackupAt)) / 86400000) : null;
