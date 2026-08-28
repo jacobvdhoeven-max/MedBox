@@ -5,7 +5,7 @@ import {
   Image as ImageIcon, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
   Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight, TrendingUp,
-  Pill, Droplet, Droplets, User, Baby, Share2, Link2,
+  Pill, User, Baby, Share2, Link2,
 } from "lucide-react";
 
 const TRANSLATIONS = {
@@ -2616,6 +2616,9 @@ const REFILL_LEAD_DAYS = 30;
 // immediately instead of making you wait it out.
 const RESUME_HOLD_THRESHOLD_MS = 2500;
 const PERIOD_ORDER = ["Ochtend", "Middag", "Avond", "Nacht"];
+// Fixed display order for the per-product-type progress icons on Vandaag —
+// pills/"overig" (jar), then zalf (tube), then druppels (spray bottle).
+const SHAPE_ORDER = ["jar", "tube", "dropper"];
 const DEFAULT_PERIOD_BOUNDS = { Nacht: "00:00", Ochtend: "06:00", Middag: "12:00", Avond: "18:00" };
 const MEALS = [
   { key: "ontbijt", label: "Na het ontbijt", period: "Ochtend", order: 420 },
@@ -2864,10 +2867,16 @@ function CompartmentBadge({ kind, T, cx, cy }) {
 function openBodyPath(x, y, w, h, rx) {
   return `M ${x},${y} L ${x},${y + h - rx} Q ${x},${y + h} ${x + rx},${y + h} L ${x + w - rx},${y + h} Q ${x + w},${y + h} ${x + w},${y + h - rx} L ${x + w},${y}`;
 }
-function Compartment({ status, color, size = 44, onClick, label, pop }) {
+// The tube/dropper body shape never itself "opens" the way the jar does —
+// real tubes and dropper bottles don't gape open once used. So for those two
+// shapes only the cap/bulb detaches (reusing the jar's exact fly-off
+// transform/timing) and a small dab-of-cream or falling-drop glyph appears
+// in its place, instead of switching to an open-mouth body outline.
+function Compartment({ status, color, unitType, size = 44, onClick, label, pop }) {
   const T = useThemeColors();
   const isTaken = status === "taken";
   const isMissed = status === "missed";
+  const shape = unitType === "zalf" ? "tube" : unitType === "druppels" ? "dropper" : "jar";
   const bodyFill = isTaken ? T.successSoft : isMissed ? T.warnSoft : T.surface;
   // A clearly-visible neutral outline (instead of the near-invisible pale
   // gray "border" token) for the closed states; taken/missed keep their own
@@ -2880,33 +2889,116 @@ function Compartment({ status, color, size = 44, onClick, label, pop }) {
   // Smaller lid (24 wide / 9 tall) than the full jar mouth, so it reads as a
   // compact cap rather than dominating the icon.
   const lidX = 10, lidY = 10, lidW = 24, lidH = 9, lidRx = 4.5;
+  const glyphFill = isMissed ? "#E7C3B2" : color;
+  const glyphOpacity = isMissed ? 0.55 : 1;
+  // The tube's own "empty" cue: real cosmetic tubes don't have a dramatic
+  // detachable cap the way a jar lid does, so instead of the fly-off
+  // mechanic the drawn-in product level drains from full to empty on tap —
+  // same fill-clip technique as ProgressJar, so the two read as one family.
+  const tubeClipId = useId();
+  const tubeFillTop = 11, tubeFillBottom = 34, tubeFillMax = tubeFillBottom - tubeFillTop;
+  const tubeFillHeight = isTaken ? 0 : tubeFillMax;
+  const tubeFillY = tubeFillBottom - tubeFillHeight;
+  // Same reasoning for the spray bottle: real pump actuators stay clipped
+  // onto the bottle after use (they don't detach or fall off), so instead
+  // of a fly-off cap the liquid level drawn inside the glass drains from
+  // full to empty on tap — reusing the tube's own fill-clip technique.
+  const sprayClipId = useId();
+  const sprayFillTop = 29, sprayFillBottom = 46, sprayFillMax = sprayFillBottom - sprayFillTop;
+  const sprayFillHeight = isTaken ? 0 : sprayFillMax;
+  const sprayFillY = sprayFillBottom - sprayFillHeight;
   return (
     <button onClick={onClick} aria-label={label} title={label} className={pop ? "wd-pop" : undefined} style={{ background: "none", border: "none", padding: 0, cursor: onClick ? "pointer" : "default", display: "inline-flex", width: size, height: size * 1.16 }}>
       <svg viewBox="0 0 44 52" width={size} height={size * 1.16} style={{ overflow: "visible" }}>
-        {isTaken ? (
+        {shape === "jar" && (
           <>
-            <rect x="6" y="18" width="32" height="30" rx="11" fill={bodyFill} />
-            <path d={openBodyPath(6, 18, 32, 30, 11)} fill="none" stroke={bodyStroke} strokeWidth="2" strokeLinecap="round" />
-            {/* Rim at the mouth, spanning the full body width so its ends meet the open path's wall tops exactly — reads as one continuous open rim instead of a separate floating ring. */}
-            <ellipse cx="22" cy="18" rx="16" ry="3.2" fill="none" stroke={bodyStroke} strokeWidth="1.6" opacity="0.6" />
+            {isTaken ? (
+              <>
+                <rect x="6" y="18" width="32" height="30" rx="11" fill={bodyFill} />
+                <path d={openBodyPath(6, 18, 32, 30, 11)} fill="none" stroke={bodyStroke} strokeWidth="2" strokeLinecap="round" />
+                {/* Rim at the mouth, spanning the full body width so its ends meet the open path's wall tops exactly — reads as one continuous open rim instead of a separate floating ring. */}
+                <ellipse cx="22" cy="18" rx="16" ry="3.2" fill="none" stroke={bodyStroke} strokeWidth="1.6" opacity="0.6" />
+              </>
+            ) : (
+              <rect x="6" y="18" width="32" height="30" rx="11" fill={bodyFill} stroke={bodyStroke} strokeWidth="2" />
+            )}
+            <rect x="9" y="21" width="8" height="24" rx="4" fill="#ffffff" opacity="0.07" />
+            {!isTaken && (
+              <g style={{ transformBox: "view-box", transformOrigin: "22px 34px", transform: "rotate(28deg)" }}>
+                <rect x="14.5" y="28.5" width="15" height="8.4" rx="4.2" fill={glyphFill} opacity={glyphOpacity} />
+                <rect x="14.5" y="28.5" width="7" height="8.4" rx="4.2" fill="#ffffff" opacity="0.35" />
+              </g>
+            )}
+            <g style={{ transformBox: "view-box", transformOrigin: "22px 19px", transform: lidTransform, transition: "transform 0.45s cubic-bezier(.3,1.4,.4,1), opacity 0.4s ease", opacity: isTaken ? 0 : 1 }}>
+              <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={lidFill} stroke={lidStroke} strokeWidth="1.6" />
+              <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.18" />
+              <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+              <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+              <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+            </g>
           </>
-        ) : (
-          <rect x="6" y="18" width="32" height="30" rx="11" fill={bodyFill} stroke={bodyStroke} strokeWidth="2" />
         )}
-        <rect x="9" y="21" width="8" height="24" rx="4" fill="#ffffff" opacity="0.07" />
-        {!isTaken && (
-          <g style={{ transformBox: "view-box", transformOrigin: "22px 34px", transform: "rotate(28deg)" }}>
-            <rect x="14.5" y="28.5" width="15" height="8.4" rx="4.2" fill={isMissed ? "#E7C3B2" : color} opacity={isMissed ? 0.55 : 1} />
-            <rect x="14.5" y="28.5" width="7" height="8.4" rx="4.2" fill="#ffffff" opacity="0.35" />
-          </g>
+        {shape === "tube" && (
+          <>
+            {/* Real cosmetic tube, cap-down like the classic Nivea-style
+                photo: a pleated, crimped seal at the TOP (fixed — the tube
+                is sealed shut there in the factory and it never opens),
+                widest right below that seal, then tapering — wide to
+                narrow, top to bottom — down through a printed band to a
+                slimmer, ribbed screw cap at the BOTTOM. So instead of any
+                cap animating off, tapping a dose drains the drawn-in
+                product level from full to empty. */}
+            <path d="M12,2 L32,2 L32,5 C34.6,6 36,7.4 36,9 L31.6,35 C31.2,37 30.6,38.5 30,39.5 L29.3,43.5 C29,46 27.5,48 25,48 L19,48 C16.5,48 15,46 14.7,43.5 L14,39.5 C13.4,38.5 12.8,37 12.4,35 L8,9 C8,7.4 9.4,6 12,5 Z" fill={bodyFill} stroke={bodyStroke} strokeWidth="2" strokeLinejoin="round" />
+            {/* Pleated crimp ribbing on the sealed top edge. */}
+            <line x1="16" y1="2.3" x2="16" y2="5.6" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.45" />
+            <line x1="19" y1="2.3" x2="19" y2="5.1" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.45" />
+            <line x1="22" y1="2.3" x2="22" y2="4.9" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.45" />
+            <line x1="25" y1="2.3" x2="25" y2="5.1" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.45" />
+            <line x1="28" y1="2.3" x2="28" y2="5.6" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.45" />
+            <rect x="10" y="12" width="5.5" height="20" rx="2.7" fill="#ffffff" opacity="0.08" />
+            {/* Printed band, then the screw cap's own outline + grip ribs. */}
+            <rect x="13.6" y="35.5" width="16.8" height="3" fill={T.surface} opacity="0.9" />
+            <line x1="13.9" y1="35.3" x2="30.1" y2="35.3" stroke={bodyStroke} strokeWidth="1" opacity="0.3" />
+            <line x1="13.7" y1="38.7" x2="30.3" y2="38.7" stroke={bodyStroke} strokeWidth="1" opacity="0.3" />
+            <line x1="16.3" y1="41" x2="16.1" y2="45.5" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+            <line x1="19.5" y1="41" x2="19.5" y2="46.2" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+            <line x1="24.5" y1="41" x2="24.5" y2="46.2" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+            <line x1="27.7" y1="41" x2="27.9" y2="45.5" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+            <clipPath id={tubeClipId}><rect x="11.5" y={tubeFillTop} width="21" height={tubeFillMax + 2} rx="5" /></clipPath>
+            {tubeFillHeight > 0 && (
+              <g clipPath={`url(#${tubeClipId})`}>
+                <rect x="11.5" y={tubeFillY} width="21" height={tubeFillHeight + 3} fill={glyphFill} opacity={glyphOpacity} style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
+              </g>
+            )}
+          </>
         )}
-        <g style={{ transformBox: "view-box", transformOrigin: "22px 19px", transform: lidTransform, transition: "transform 0.45s cubic-bezier(.3,1.4,.4,1), opacity 0.4s ease", opacity: isTaken ? 0 : 1 }}>
-          <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={lidFill} stroke={lidStroke} strokeWidth="1.6" />
-          <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.18" />
-          <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
-          <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
-          <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
-        </g>
+        {shape === "dropper" && (
+          <>
+            {/* Slim glass throat/nasal-spray bottle — narrow body, not a
+                round squat perfume bottle — topped by the pump: a tall,
+                straight actuator sleeve with finger-press grip ridges and
+                an angled nozzle spout. Real spray pumps stay clipped onto
+                the bottle after use — they don't detach — so the pump is
+                fixed in every state, and tapping a dose instead drains the
+                liquid level drawn inside the bottle from full to empty. */}
+            <rect x="17" y="6" width="10" height="16" rx="2.3" fill={lidFill} stroke={lidStroke} strokeWidth="1.6" />
+            <line x1="18.6" y1="16.4" x2="25.4" y2="16.4" stroke={grooveColor} strokeWidth="1.1" strokeLinecap="round" />
+            <line x1="18.6" y1="18.9" x2="25.4" y2="18.9" stroke={grooveColor} strokeWidth="1.1" strokeLinecap="round" />
+            <rect x="19" y="8" width="3" height="6.5" rx="1.2" fill="#ffffff" opacity="0.2" />
+            <g transform="rotate(35 25 7)">
+              <rect x="23.3" y="-1.5" width="3.4" height="9" rx="1.5" fill={lidFill} stroke={lidStroke} strokeWidth="1.4" />
+            </g>
+            <rect x="19" y="22" width="6" height="6" rx="1.2" fill={bodyFill} stroke={bodyStroke} strokeWidth="1.6" />
+            <rect x="14" y="27" width="16" height="21" rx="4" fill={bodyFill} stroke={bodyStroke} strokeWidth="2" />
+            <rect x="16.5" y="31" width="4" height="13" rx="2" fill="#ffffff" opacity="0.08" />
+            <clipPath id={sprayClipId}><rect x="15.5" y={sprayFillTop} width="13" height={sprayFillMax + 2} rx="3" /></clipPath>
+            {sprayFillHeight > 0 && (
+              <g clipPath={`url(#${sprayClipId})`}>
+                <rect x="15.5" y={sprayFillY} width="13" height={sprayFillHeight + 3} fill={glyphFill} opacity={glyphOpacity} style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
+              </g>
+            )}
+          </>
+        )}
         {isTaken && <CompartmentBadge kind="check" T={T} cx={33} cy={14} />}
         {isMissed && <CompartmentBadge kind="warn" T={T} cx={33} cy={14} />}
       </svg>
@@ -2914,18 +3006,90 @@ function Compartment({ status, color, size = 44, onClick, label, pop }) {
   );
 }
 
-// ---------- Day-progress jar: drains as doses are checked off, in the same visual language as the compartments ----------
-function ProgressJar({ color, taken, total, size = 58 }) {
+// ---------- Day-progress icon: drains as doses are checked off, in the same visual language as the compartments ----------
+// Pills, a tube of zalf and a spray bottle are different products, so this
+// draws whichever body shape the "Voortgang vandaag" bucket actually holds
+// (jar/tube/dropper — same geometry as Compartment) instead of always a
+// jar, with the fill fraction and "complete" checkmark treatment shared
+// across all three.
+function ProgressShape({ shape = "jar", color, taken, total, size = 58 }) {
   const T = useThemeColors();
   const remaining = Math.max(0, total - taken);
   const frac = total > 0 ? Math.min(1, remaining / total) : 0;
   const complete = remaining <= 0 && total > 0;
-  // Same body + lid geometry as Compartment's "upcoming" jar (viewBox, body
-  // rect, lid position/size) so the two icon families form one visual whole.
+  const clipId = useId();
+  const grooveColor = "rgba(0,0,0,0.12)";
+
+  if (shape === "tube") {
+    // Same silhouette as Compartment's tube; only the fill fraction and the
+    // "complete" body tint vary here instead of a hard vol/leeg switch.
+    const fillTop = 11, fillBottom = 34, fillMax = fillBottom - fillTop;
+    const fillHeight = fillMax * frac;
+    const fillY = fillBottom - fillHeight;
+    const bodyFill = complete ? T.successSoft : T.surface;
+    const bodyStroke = complete ? T.success : T.mutedSoft;
+    return (
+      <svg viewBox="0 0 44 52" width={size} height={size * (52 / 44)} style={{ overflow: "visible" }}>
+        <path d="M12,2 L32,2 L32,5 C34.6,6 36,7.4 36,9 L31.6,35 C31.2,37 30.6,38.5 30,39.5 L29.3,43.5 C29,46 27.5,48 25,48 L19,48 C16.5,48 15,46 14.7,43.5 L14,39.5 C13.4,38.5 12.8,37 12.4,35 L8,9 C8,7.4 9.4,6 12,5 Z" fill={bodyFill} stroke={bodyStroke} strokeWidth="2" strokeLinejoin="round" />
+        <line x1="16" y1="2.3" x2="16" y2="5.6" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.45" />
+        <line x1="19" y1="2.3" x2="19" y2="5.1" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.45" />
+        <line x1="22" y1="2.3" x2="22" y2="4.9" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.45" />
+        <line x1="25" y1="2.3" x2="25" y2="5.1" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.45" />
+        <line x1="28" y1="2.3" x2="28" y2="5.6" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.45" />
+        <rect x="10" y="12" width="5.5" height="20" rx="2.7" fill="#ffffff" opacity="0.08" />
+        <rect x="13.6" y="35.5" width="16.8" height="3" fill={T.surface} opacity="0.9" />
+        <line x1="13.9" y1="35.3" x2="30.1" y2="35.3" stroke={bodyStroke} strokeWidth="1" opacity="0.3" />
+        <line x1="13.7" y1="38.7" x2="30.3" y2="38.7" stroke={bodyStroke} strokeWidth="1" opacity="0.3" />
+        <line x1="16.3" y1="41" x2="16.1" y2="45.5" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+        <line x1="19.5" y1="41" x2="19.5" y2="46.2" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+        <line x1="24.5" y1="41" x2="24.5" y2="46.2" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+        <line x1="27.7" y1="41" x2="27.9" y2="45.5" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+        <clipPath id={clipId}><rect x="11.5" y={fillTop} width="21" height={fillMax + 2} rx="5" /></clipPath>
+        {fillHeight > 0 && (
+          <g clipPath={`url(#${clipId})`}>
+            <rect x="11.5" y={fillY} width="21" height={fillHeight + 3} fill={color} opacity="0.85" style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
+          </g>
+        )}
+        {complete && <CompartmentBadge kind="check" T={T} cx={33} cy={14} />}
+      </svg>
+    );
+  }
+
+  if (shape === "dropper") {
+    // Same silhouette as Compartment's spray bottle — pump stays put, only
+    // the drawn-in liquid level and the "complete" body tint change.
+    const fillTop = 29, fillBottom = 46, fillMax = fillBottom - fillTop;
+    const fillHeight = fillMax * frac;
+    const fillY = fillBottom - fillHeight;
+    const bodyFill = complete ? T.successSoft : T.surface;
+    const bodyStroke = complete ? T.success : T.mutedSoft;
+    return (
+      <svg viewBox="0 0 44 52" width={size} height={size * (52 / 44)} style={{ overflow: "visible" }}>
+        <rect x="17" y="6" width="10" height="16" rx="2.3" fill={T.raised} stroke={T.mutedSoft} strokeWidth="1.6" />
+        <line x1="18.6" y1="16.4" x2="25.4" y2="16.4" stroke={grooveColor} strokeWidth="1.1" strokeLinecap="round" />
+        <line x1="18.6" y1="18.9" x2="25.4" y2="18.9" stroke={grooveColor} strokeWidth="1.1" strokeLinecap="round" />
+        <rect x="19" y="8" width="3" height="6.5" rx="1.2" fill="#ffffff" opacity="0.2" />
+        <g transform="rotate(35 25 7)">
+          <rect x="23.3" y="-1.5" width="3.4" height="9" rx="1.5" fill={T.raised} stroke={T.mutedSoft} strokeWidth="1.4" />
+        </g>
+        <rect x="19" y="22" width="6" height="6" rx="1.2" fill={bodyFill} stroke={bodyStroke} strokeWidth="1.6" />
+        <rect x="14" y="27" width="16" height="21" rx="4" fill={bodyFill} stroke={bodyStroke} strokeWidth="2" />
+        <rect x="16.5" y="31" width="4" height="13" rx="2" fill="#ffffff" opacity="0.08" />
+        <clipPath id={clipId}><rect x="15.5" y={fillTop} width="13" height={fillMax + 2} rx="3" /></clipPath>
+        {fillHeight > 0 && (
+          <g clipPath={`url(#${clipId})`}>
+            <rect x="15.5" y={fillY} width="13" height={fillHeight + 3} fill={color} opacity="0.85" style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
+          </g>
+        )}
+        {complete && <CompartmentBadge kind="check" T={T} cx={33} cy={14} />}
+      </svg>
+    );
+  }
+
+  // jar (default) — pills/"overig"
   const bodyTop = 18, bodyBottom = 48, bodyHeight = bodyBottom - bodyTop;
   const fillHeight = bodyHeight * frac;
   const fillY = bodyBottom - fillHeight;
-  const clipId = useId();
   const lidX = 10, lidY = 10, lidW = 24, lidH = 9, lidRx = 4.5;
   // Once complete, match Compartment's "taken" treatment exactly: an
   // open-mouth outline instead of a closed body, the lid animates off to the
@@ -2933,7 +3097,6 @@ function ProgressJar({ color, taken, total, size = 58 }) {
   // the (previously near-invisible, since the fill had already drained to
   // nothing) raw checkmark.
   const lidTransform = complete ? "translate(9px,-15px) rotate(38deg) scale(0.55)" : "translate(0,0) rotate(0deg) scale(1)";
-  const grooveColor = "rgba(0,0,0,0.12)";
   return (
     <svg viewBox="0 0 44 52" width={size} height={size * (52 / 44)} style={{ overflow: "visible" }}>
       {complete ? (
@@ -2972,7 +3135,44 @@ function ProgressJar({ color, taken, total, size = 58 }) {
 // initials — a jar of "Ibuprofen" and "Amoxicilline" would otherwise both
 // just show "I" and "A", which tells you nothing at a glance. Profiles don't
 // pass unitType, so they keep the initials fallback (a person, not a shape).
-const UNIT_TYPE_ICON = { druppels: Droplet, zalf: Droplets, overig: Package };
+// lucide-react has no cosmetic/cream-tube icon (its "test tube" icons are lab
+// glassware, the wrong metaphor entirely for an ointment tube), so this is a
+// small hand-drawn stand-in kept in the same stroke-only, 24x24-viewBox,
+// round-cap style as the surrounding lucide icons, so it doesn't stand out
+// as visually foreign next to them.
+function TubeIcon({ size = 24, strokeWidth = 2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      {/* Same cap-down, wide-to-narrow silhouette as the big Compartment
+          tube — a pleated seal at the top (fixed, never opens), widest
+          right below it, tapering down to a slimmer banded screw cap at
+          the bottom, since this one only ever appears static. */}
+      <path d="M6.9,1.1 L17.1,1.1 L17.1,2.5 C18.9,3.2 19.6,4 19.6,4.7 L17.2,16 C17,16.9 16.6,17.7 16.2,18.1 L15.8,19.7 C15.6,20.7 14.7,21.6 13.4,21.6 L10.6,21.6 C9.3,21.6 8.4,20.7 8.2,19.7 L7.8,18.1 C7.4,17.7 7,16.9 6.8,16 L4.4,4.7 C4.4,4 5.1,3.2 6.9,2.5 Z" />
+      <line x1="8.2" y1="16.3" x2="15.8" y2="16.3" />
+      <line x1="9.2" y1="18" x2="9.1" y2="19.9" />
+      <line x1="14.8" y1="18" x2="14.9" y2="19.9" />
+    </svg>
+  );
+}
+// lucide-react has no nasal-spray icon either, so this is a small hand-drawn
+// stand-in in the same style as TubeIcon, matching the big Compartment
+// version — a slim labeled bottle topped by a tall straight pump sleeve
+// with an angled nozzle spout, the silhouette a real throat/nasal spray
+// actually has (not a squat perfume-style bottle with side wings).
+function NasalSprayIcon({ size = 24, strokeWidth = 2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <rect x="10" y="10.8" width="3.2" height="3" rx="0.6" />
+      <rect x="7.4" y="13.4" width="8.4" height="9.4" rx="2" />
+      <rect x="8.8" y="3.2" width="5.6" height="8.4" rx="1.3" />
+      <line x1="9.3" y1="8.5" x2="13.1" y2="8.5" />
+      <g transform="rotate(35 13.6 4.1)">
+        <rect x="12.4" y="-0.3" width="2.1" height="4.8" rx="0.95" />
+      </g>
+    </svg>
+  );
+}
+const UNIT_TYPE_ICON = { druppels: NasalSprayIcon, zalf: TubeIcon, overig: Package };
 // Profiles get a neutral "volwassene" (adult) or "kind" (child) figure instead
 // of initials — lucide-react has no man/vrouw or jongen/meisje icons, so this
 // is the closest honest distinction the icon set supports.
@@ -3713,6 +3913,25 @@ export default function App() {
     return acc;
   }, { taken: 0, total: 0 }), [medsScheduledToday, progressByMed]);
 
+  // ...but a jar of pills, a tube of zalf and a spray bottle are different
+  // products, so within that combined total each product shape (pillen/
+  // "overig" → jar, zalf → tube, druppels → spray) gets counted, and shown,
+  // separately. With only one shape in play today this collapses back to
+  // exactly the single combined card above (just with the matching icon);
+  // it's only once someone uses e.g. pills AND a spray on the same day that
+  // this actually splits into multiple icons.
+  const progressByShape = useMemo(() => {
+    const buckets = { jar: { taken: 0, total: 0, count: 0 }, tube: { taken: 0, total: 0, count: 0 }, dropper: { taken: 0, total: 0, count: 0 } };
+    medsScheduledToday.forEach((med) => {
+      const shape = med.unitType === "zalf" ? "tube" : med.unitType === "druppels" ? "dropper" : "jar";
+      const p = progressByMed[med.id] || { taken: 0, total: 1 };
+      buckets[shape].taken += p.taken;
+      buckets[shape].total += p.total;
+      buckets[shape].count += 1;
+    });
+    return SHAPE_ORDER.map((shape) => ({ shape, ...buckets[shape] })).filter((b) => b.total > 0);
+  }, [medsScheduledToday, progressByMed]);
+
   const missedToday = todaysDoses.filter((d) => d.status === "missed");
   // A snoozed dose stays out of the "gemist" banner until its 15 minuten om zijn.
   const visibleMissed = missedToday.filter((d) => !(snoozedUntil[logKeyFor(d.med.id, todayISO, d.t)] > now.getTime()));
@@ -3914,7 +4133,7 @@ export default function App() {
 
             {nextUpcomingGroup.length === 1 && (
               <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 14 }}>
-                <Compartment status={nextUpcoming.status} color={nextUpcoming.med.color} size={44} onClick={() => toggleTaken(nextUpcoming.med, todayISO, nextUpcoming.t)} pop={poppedKey === logKeyFor(nextUpcoming.med.id, todayISO, nextUpcoming.t)} label={L("aria_dose_label", { name: nextUpcoming.med.name, moment: momentLabel(nextUpcoming.t, L), status: L("aria_dose_upcoming") })} />
+                <Compartment status={nextUpcoming.status} color={nextUpcoming.med.color} unitType={nextUpcoming.med.unitType} size={44} onClick={() => toggleTaken(nextUpcoming.med, todayISO, nextUpcoming.t)} pop={poppedKey === logKeyFor(nextUpcoming.med.id, todayISO, nextUpcoming.t)} label={L("aria_dose_label", { name: nextUpcoming.med.name, moment: momentLabel(nextUpcoming.t, L), status: L("aria_dose_upcoming") })} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>{L("home_next")}</div>
                   <div title={nextUpcoming.med.name} style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis" }}>{nextUpcoming.med.name}</div>
@@ -3929,7 +4148,7 @@ export default function App() {
                 <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 10 }}>{nextDoseTiming(nextUpcoming.t, now, todayISO, L)}</div>
                 {nextUpcomingGroup.map((d, i) => (
                   <div key={logKeyFor(d.med.id, todayISO, d.t)} style={{ display: "flex", alignItems: "center", gap: 14, marginTop: i > 0 ? 10 : 0 }}>
-                    <Compartment status={d.status} color={d.med.color} size={44} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: L("aria_dose_upcoming") })} />
+                    <Compartment status={d.status} color={d.med.color} unitType={d.med.unitType} size={44} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: L("aria_dose_upcoming") })} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div title={d.med.name} style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.med.name}</div>
                     </div>
@@ -3978,7 +4197,7 @@ export default function App() {
                             {items.map((d) => (
                               <div key={d.med.id + d.t.id} className="wd-card" style={{ background: T.surface, borderRadius: 18, padding: "16px 12px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, border: `1.5px solid ${isCurrent ? T.primary + "55" : T.border}` }}>
                                 <AvatarBadge name={d.med.name} color={d.med.color} photo={d.med.photo} unitType={d.med.unitType} size={26} />
-                                <Compartment status={d.status} color={d.med.color} size={isCurrent ? 56 : 46} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: statusLabel(d.status, L) })} />
+                                <Compartment status={d.status} color={d.med.color} unitType={d.med.unitType} size={isCurrent ? 56 : 46} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: statusLabel(d.status, L) })} />
                                 <div title={d.med.name} style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", wordBreak: "break-word", width: "100%" }}>{d.med.name}</div>
                                 <div className={isMeal(d.t) ? "" : "wd-mono"} style={{ fontSize: isMeal(d.t) ? "calc(11px * var(--wd-text-scale, 1))" : "calc(11.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center" }}>{momentLabel(d.t, L)}</div>
                                 {doseLabel(d.med, d.t, L) && <div style={{ fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, textAlign: "center" }}>{doseLabel(d.med, d.t, L)}</div>}
@@ -4056,13 +4275,23 @@ export default function App() {
                 {medsScheduledToday.length > 0 && combinedProgress.total > 1 && (
                   <>
                     <SectionTitle>{L("progress_today_title")}</SectionTitle>
-                    <div className="wd-card" style={{ background: T.surface, borderRadius: 16, padding: "14px 16px", display: "flex", alignItems: "center", gap: 16, marginBottom: 24, border: `1.5px solid ${T.border}` }}>
-                      <ProgressJar color={T.primary} taken={combinedProgress.taken} total={combinedProgress.total} size={58} />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div className="wd-mono" style={{ fontSize: "calc(19px * var(--wd-text-scale, 1))", fontWeight: 700, color: combinedProgress.taken >= combinedProgress.total ? T.success : T.ink }}>{combinedProgress.taken}/{combinedProgress.total}</div>
-                        <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginTop: 2 }}>{L(medsScheduledToday.length === 1 ? "progress_today_combined_meds_one" : "progress_today_combined_meds_other", { n: medsScheduledToday.length })}</div>
+                    {/* One card per product shape in use today (pills/"overig",
+                        zalf, druppels) — a jar of pills and a spray bottle are
+                        different products, so with just one shape in play this
+                        renders exactly the single combined card it always did
+                        (now with the matching icon); it only splits into
+                        multiple cards once more than one shape is actually
+                        scheduled for today. */}
+                    {progressByShape.map((p) => (
+                      <div key={p.shape} className="wd-card" style={{ background: T.surface, borderRadius: 16, padding: "14px 16px", display: "flex", alignItems: "center", gap: 16, marginBottom: 12, border: `1.5px solid ${T.border}` }}>
+                        <ProgressShape shape={p.shape} color={T.primary} taken={p.taken} total={p.total} size={58} />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div className="wd-mono" style={{ fontSize: "calc(19px * var(--wd-text-scale, 1))", fontWeight: 700, color: p.taken >= p.total ? T.success : T.ink }}>{p.taken}/{p.total}</div>
+                          <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginTop: 2 }}>{L(p.count === 1 ? "progress_today_combined_meds_one" : "progress_today_combined_meds_other", { n: p.count })}</div>
+                        </div>
                       </div>
-                    </div>
+                    ))}
+                    <div style={{ marginBottom: 12 }} />
                   </>
                 )}
 
@@ -4155,7 +4384,7 @@ export default function App() {
                               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                                 {dayByPeriod[period].map((it) => (
                                   <div key={it.med.id + it.t.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, width: 54 }}>
-                                    <Compartment status={it.status} color={it.med.color} size={38} onClick={() => toggleTaken(it.med, dISO, it.t)} pop={poppedKey === logKeyFor(it.med.id, dISO, it.t)} label={L("aria_dose_label", { name: it.med.name, moment: `${DAY_NAMES_BY_LANG[language][i]} ${momentLabel(it.t, L)}`, status: statusLabel(it.status, L) })} />
+                                    <Compartment status={it.status} color={it.med.color} unitType={it.med.unitType} size={38} onClick={() => toggleTaken(it.med, dISO, it.t)} pop={poppedKey === logKeyFor(it.med.id, dISO, it.t)} label={L("aria_dose_label", { name: it.med.name, moment: `${DAY_NAMES_BY_LANG[language][i]} ${momentLabel(it.t, L)}`, status: statusLabel(it.status, L) })} />
                                     <div title={it.med.name} style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", wordBreak: "break-word", width: "100%" }}>{it.med.name}</div>
                                   </div>
                                 ))}
