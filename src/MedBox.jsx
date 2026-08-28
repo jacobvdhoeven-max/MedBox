@@ -1702,7 +1702,7 @@ const TRANSLATIONS = {
   "ar": "أقراص"
  },
  "shape_ointment": {
-  "nl": "Zalf/crème",
+  "nl": "Crème/Zalf",
   "en": "Ointment/cream",
   "de": "Salbe/Creme",
   "fr": "Pommade/crème",
@@ -1711,7 +1711,7 @@ const TRANSLATIONS = {
   "ar": "مرهم/كريم"
  },
  "shape_drops": {
-  "nl": "Druppels",
+  "nl": "Spray/Druppels",
   "en": "Drops",
   "de": "Tropfen",
   "fr": "Gouttes",
@@ -2617,8 +2617,21 @@ const REFILL_LEAD_DAYS = 30;
 const RESUME_HOLD_THRESHOLD_MS = 2500;
 const PERIOD_ORDER = ["Ochtend", "Middag", "Avond", "Nacht"];
 // Fixed display order for the per-product-type progress icons on Vandaag —
-// pills/"overig" (jar), then zalf (tube), then druppels (spray bottle).
-const SHAPE_ORDER = ["jar", "tube", "dropper"];
+// pills (jar), then zalf (tube), then druppels (spray bottle), then the
+// simple box for "overig" — matching the shape-picker's own order.
+const SHAPE_ORDER = ["jar", "tube", "dropper", "box"];
+// Maps a medication's unitType (tabletten/zalf/druppels/overig) to the icon
+// family it draws with, shared by Compartment, the per-shape "Voortgang
+// vandaag" buckets, and anywhere else that needs to know which body shape a
+// medication uses. "Overig" gets its own simple box rather than sharing the
+// tabletten jar, since it can be anything from patches to inhalers — a
+// pill jar would misleadingly imply "these are pills".
+function shapeForUnitType(unitType) {
+  if (unitType === "zalf") return "tube";
+  if (unitType === "druppels") return "dropper";
+  if (unitType === "overig") return "box";
+  return "jar";
+}
 const DEFAULT_PERIOD_BOUNDS = { Nacht: "00:00", Ochtend: "06:00", Middag: "12:00", Avond: "18:00" };
 const MEALS = [
   { key: "ontbijt", label: "Na het ontbijt", period: "Ochtend", order: 420 },
@@ -2876,7 +2889,7 @@ function Compartment({ status, color, unitType, size = 44, onClick, label, pop }
   const T = useThemeColors();
   const isTaken = status === "taken";
   const isMissed = status === "missed";
-  const shape = unitType === "zalf" ? "tube" : unitType === "druppels" ? "dropper" : "jar";
+  const shape = shapeForUnitType(unitType);
   const bodyFill = isTaken ? T.successSoft : isMissed ? T.warnSoft : T.surface;
   // A clearly-visible neutral outline (instead of the near-invisible pale
   // gray "border" token) for the closed states; taken/missed keep their own
@@ -2907,6 +2920,14 @@ function Compartment({ status, color, unitType, size = 44, onClick, label, pop }
   const sprayFillTop = 29, sprayFillBottom = 46, sprayFillMax = sprayFillBottom - sprayFillTop;
   const sprayFillHeight = isTaken ? 0 : sprayFillMax;
   const sprayFillY = sprayFillBottom - sprayFillHeight;
+  // "Overig" can be anything (not specifically solid pills), so instead of
+  // the jar's single rotated-pill glyph it shows the same "filled until
+  // used" product level as the tube/spray — draining away as the lid flips
+  // open, same fill-clip technique as those two.
+  const boxClipId = useId();
+  const boxFillTop = 19, boxFillBottom = 46, boxFillMax = boxFillBottom - boxFillTop;
+  const boxFillHeight = isTaken ? 0 : boxFillMax;
+  const boxFillY = boxFillBottom - boxFillHeight;
   return (
     <button onClick={onClick} aria-label={label} title={label} className={pop ? "wd-pop" : undefined} style={{ background: "none", border: "none", padding: 0, cursor: onClick ? "pointer" : "default", display: "inline-flex", width: size, height: size * 1.16 }}>
       <svg viewBox="0 0 44 52" width={size} height={size * 1.16} style={{ overflow: "visible" }}>
@@ -2964,10 +2985,16 @@ function Compartment({ status, color, unitType, size = 44, onClick, label, pop }
             <line x1="19.5" y1="41" x2="19.5" y2="46.2" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
             <line x1="24.5" y1="41" x2="24.5" y2="46.2" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
             <line x1="27.7" y1="41" x2="27.9" y2="45.5" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
-            <clipPath id={tubeClipId}><rect x="11.5" y={tubeFillTop} width="21" height={tubeFillMax + 2} rx="5" /></clipPath>
+            {/* Clip to the tube's own tapered silhouette (not a plain
+                rectangle) so the drawn-in product reaches all the way to
+                the side walls at every height, including the wide part
+                right below the seal — a fixed-width rect left visible gaps
+                at the sides up there since the tube is noticeably wider at
+                the top than lower down. */}
+            <clipPath id={tubeClipId}><path d="M12,2 L32,2 L32,5 C34.6,6 36,7.4 36,9 L31.6,35 C31.2,37 30.6,38.5 30,39.5 L29.3,43.5 C29,46 27.5,48 25,48 L19,48 C16.5,48 15,46 14.7,43.5 L14,39.5 C13.4,38.5 12.8,37 12.4,35 L8,9 C8,7.4 9.4,6 12,5 Z" /></clipPath>
             {tubeFillHeight > 0 && (
               <g clipPath={`url(#${tubeClipId})`}>
-                <rect x="11.5" y={tubeFillY} width="21" height={tubeFillHeight + 3} fill={glyphFill} opacity={glyphOpacity} style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
+                <rect x="6" y={tubeFillY} width="32" height={tubeFillHeight + 3} fill={glyphFill} opacity={glyphOpacity} style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
               </g>
             )}
           </>
@@ -2991,12 +3018,52 @@ function Compartment({ status, color, unitType, size = 44, onClick, label, pop }
             <rect x="19" y="22" width="6" height="6" rx="1.2" fill={bodyFill} stroke={bodyStroke} strokeWidth="1.6" />
             <rect x="14" y="27" width="16" height="21" rx="4" fill={bodyFill} stroke={bodyStroke} strokeWidth="2" />
             <rect x="16.5" y="31" width="4" height="13" rx="2" fill="#ffffff" opacity="0.08" />
-            <clipPath id={sprayClipId}><rect x="15.5" y={sprayFillTop} width="13" height={sprayFillMax + 2} rx="3" /></clipPath>
+            {/* Clip to the bottle's own body rect (same x/width/rx as the
+                outline) instead of a narrower inset rect, so the product
+                reaches all the way to the side walls, same fix as the
+                tube. */}
+            <clipPath id={sprayClipId}><rect x="14" y={sprayFillTop} width="16" height={sprayFillMax + 2} rx="4" /></clipPath>
             {sprayFillHeight > 0 && (
               <g clipPath={`url(#${sprayClipId})`}>
-                <rect x="15.5" y={sprayFillY} width="13" height={sprayFillHeight + 3} fill={glyphFill} opacity={glyphOpacity} style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
+                <rect x="14" y={sprayFillY} width="16" height={sprayFillHeight + 3} fill={glyphFill} opacity={glyphOpacity} style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
               </g>
             )}
+          </>
+        )}
+        {shape === "box" && (
+          <>
+            {/* Simple rectangular carton for "overig" — same lid-flip
+                mechanic as the jar (a flat flap that flips open on tap),
+                just with straight, sharp-ish corners instead of the jar's
+                big rounded body, so it reads as a distinct plain little box
+                rather than another jar. Filled with the product's color
+                until tapped (like the tube/spray), then drains away as the
+                lid flips open. */}
+            {isTaken ? (
+              <>
+                <rect x="7" y="18" width="30" height="30" rx="4" fill={bodyFill} />
+                <path d={openBodyPath(7, 18, 30, 30, 4)} fill="none" stroke={bodyStroke} strokeWidth="2" strokeLinecap="round" />
+                <line x1="7" y1="18" x2="37" y2="18" stroke={bodyStroke} strokeWidth="1.6" opacity="0.6" />
+              </>
+            ) : (
+              <rect x="7" y="18" width="30" height="30" rx="4" fill={bodyFill} stroke={bodyStroke} strokeWidth="2" />
+            )}
+            <rect x="10" y="21" width="8" height="24" rx="2" fill="#ffffff" opacity="0.07" />
+            {/* Clip to the box's own body rect so the product reaches all
+                the way to the corners, same technique as the tube/spray. */}
+            <clipPath id={boxClipId}><rect x="7" y={boxFillTop} width="30" height={boxFillMax + 2} rx="4" /></clipPath>
+            {boxFillHeight > 0 && (
+              <g clipPath={`url(#${boxClipId})`}>
+                <rect x="7" y={boxFillY} width="30" height={boxFillHeight + 3} fill={glyphFill} opacity={glyphOpacity} style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
+              </g>
+            )}
+            <g style={{ transformBox: "view-box", transformOrigin: "22px 19px", transform: lidTransform, transition: "transform 0.45s cubic-bezier(.3,1.4,.4,1), opacity 0.4s ease", opacity: isTaken ? 0 : 1 }}>
+              <rect x={lidX} y={lidY} width={lidW} height={lidH} rx="2" fill={lidFill} stroke={lidStroke} strokeWidth="1.6" />
+              <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.18" />
+              <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+              <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+              <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+            </g>
           </>
         )}
         {isTaken && <CompartmentBadge kind="check" T={T} cx={33} cy={14} />}
@@ -3044,10 +3111,12 @@ function ProgressShape({ shape = "jar", color, taken, total, size = 58 }) {
         <line x1="19.5" y1="41" x2="19.5" y2="46.2" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
         <line x1="24.5" y1="41" x2="24.5" y2="46.2" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
         <line x1="27.7" y1="41" x2="27.9" y2="45.5" stroke={bodyStroke} strokeWidth="1" strokeLinecap="round" opacity="0.3" />
-        <clipPath id={clipId}><rect x="11.5" y={fillTop} width="21" height={fillMax + 2} rx="5" /></clipPath>
+        {/* Clip to the tube's own tapered silhouette so the fill reaches the
+            side walls at every height, same fix as Compartment's tube. */}
+        <clipPath id={clipId}><path d="M12,2 L32,2 L32,5 C34.6,6 36,7.4 36,9 L31.6,35 C31.2,37 30.6,38.5 30,39.5 L29.3,43.5 C29,46 27.5,48 25,48 L19,48 C16.5,48 15,46 14.7,43.5 L14,39.5 C13.4,38.5 12.8,37 12.4,35 L8,9 C8,7.4 9.4,6 12,5 Z" /></clipPath>
         {fillHeight > 0 && (
           <g clipPath={`url(#${clipId})`}>
-            <rect x="11.5" y={fillY} width="21" height={fillHeight + 3} fill={color} opacity="0.85" style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
+            <rect x="6" y={fillY} width="32" height={fillHeight + 3} fill={color} opacity="0.85" style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
           </g>
         )}
         {complete && <CompartmentBadge kind="check" T={T} cx={33} cy={14} />}
@@ -3075,10 +3144,12 @@ function ProgressShape({ shape = "jar", color, taken, total, size = 58 }) {
         <rect x="19" y="22" width="6" height="6" rx="1.2" fill={bodyFill} stroke={bodyStroke} strokeWidth="1.6" />
         <rect x="14" y="27" width="16" height="21" rx="4" fill={bodyFill} stroke={bodyStroke} strokeWidth="2" />
         <rect x="16.5" y="31" width="4" height="13" rx="2" fill="#ffffff" opacity="0.08" />
-        <clipPath id={clipId}><rect x="15.5" y={fillTop} width="13" height={fillMax + 2} rx="3" /></clipPath>
+        {/* Clip to the bottle's own body rect, same fix as Compartment's
+            spray bottle, so the fill reaches the side walls. */}
+        <clipPath id={clipId}><rect x="14" y={fillTop} width="16" height={fillMax + 2} rx="4" /></clipPath>
         {fillHeight > 0 && (
           <g clipPath={`url(#${clipId})`}>
-            <rect x="15.5" y={fillY} width="13" height={fillHeight + 3} fill={color} opacity="0.85" style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
+            <rect x="14" y={fillY} width="16" height={fillHeight + 3} fill={color} opacity="0.85" style={{ transition: "y 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1)" }} />
           </g>
         )}
         {complete && <CompartmentBadge kind="check" T={T} cx={33} cy={14} />}
@@ -3086,7 +3157,51 @@ function ProgressShape({ shape = "jar", color, taken, total, size = 58 }) {
     );
   }
 
-  // jar (default) — pills/"overig"
+  if (shape === "box") {
+    // Same plain-carton silhouette as Compartment's box — a flat rectangular
+    // body with sharp-ish corners and a flip-open flap, distinct from the
+    // jar's big rounded shoulders, matching the "complete" open-mouth +
+    // lid-fly treatment the other shapes share.
+    const bodyTop = 18, bodyBottom = 48, bodyHeight = bodyBottom - bodyTop;
+    const fillHeight = bodyHeight * frac;
+    const fillY = bodyBottom - fillHeight;
+    const lidX = 10, lidY = 10, lidW = 24, lidH = 9;
+    const lidTransform = complete ? "translate(9px,-15px) rotate(38deg) scale(0.55)" : "translate(0,0) rotate(0deg) scale(1)";
+    return (
+      <svg viewBox="0 0 44 52" width={size} height={size * (52 / 44)} style={{ overflow: "visible" }}>
+        {complete ? (
+          <>
+            <rect x="7" y="18" width="30" height="30" rx="4" fill={T.successSoft} />
+            <path d={openBodyPath(7, 18, 30, 30, 4)} fill="none" stroke={T.success} strokeWidth="2" strokeLinecap="round" />
+            <line x1="7" y1="18" x2="37" y2="18" stroke={T.success} strokeWidth="1.6" opacity="0.6" />
+          </>
+        ) : (
+          <rect x="7" y="18" width="30" height="30" rx="4" fill={T.surface} stroke={T.mutedSoft} strokeWidth="2" />
+        )}
+        <rect x="10" y="21" width="8" height="24" rx="2" fill="#ffffff" opacity="0.07" />
+        <g style={{ transformBox: "view-box", transformOrigin: "22px 19px", transform: lidTransform, transition: "transform 0.45s cubic-bezier(.3,1.4,.4,1), opacity 0.4s ease", opacity: complete ? 0 : 1 }}>
+          <rect x={lidX} y={lidY} width={lidW} height={lidH} rx="2" fill={T.raised} stroke={T.mutedSoft} strokeWidth="1.6" />
+          <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.18" />
+          <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+          <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+          <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke={grooveColor} strokeWidth="1.2" strokeLinecap="round" />
+        </g>
+        {/* Clip to the box's own body rect, same fix as Compartment's box,
+            so the fill reaches the corners. */}
+        {!complete && (
+          <clipPath id={clipId}><rect x="7" y="19" width="30" height="28" rx="4" /></clipPath>
+        )}
+        {!complete && fillHeight > 0 && (
+          <g clipPath={`url(#${clipId})`}>
+            <rect x="7" y={fillY} width="30" height={fillHeight + 4} fill={color} opacity="0.85" />
+          </g>
+        )}
+        {complete && <CompartmentBadge kind="check" T={T} cx={33} cy={14} />}
+      </svg>
+    );
+  }
+
+  // jar (default) — pills/"tabletten"
   const bodyTop = 18, bodyBottom = 48, bodyHeight = bodyBottom - bodyTop;
   const fillHeight = bodyHeight * frac;
   const fillY = bodyBottom - fillHeight;
@@ -3172,7 +3287,21 @@ function NasalSprayIcon({ size = 24, strokeWidth = 2 }) {
     </svg>
   );
 }
-const UNIT_TYPE_ICON = { druppels: NasalSprayIcon, zalf: TubeIcon, overig: Package };
+// lucide's own Package icon reads as a shipping parcel (angled 3D box with
+// a diagonal seam), which looks out of place next to the flat, front-on
+// TubeIcon/NasalSprayIcon silhouettes above. This is a small hand-drawn
+// stand-in in the same style — a plain flat carton with a lid — matching
+// the big Compartment "box" shape for "overig".
+function BoxIcon({ size = 24, strokeWidth = 2 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5" y="9.5" width="14" height="11.5" rx="1.3" />
+      <rect x="4.3" y="4.2" width="15.4" height="5.6" rx="1.6" />
+      <line x1="9.3" y1="9.5" x2="9.3" y2="21" />
+    </svg>
+  );
+}
+const UNIT_TYPE_ICON = { druppels: NasalSprayIcon, zalf: TubeIcon, overig: BoxIcon };
 // Profiles get a neutral "volwassene" (adult) or "kind" (child) figure instead
 // of initials — lucide-react has no man/vrouw or jongen/meisje icons, so this
 // is the closest honest distinction the icon set supports.
@@ -3913,17 +4042,18 @@ export default function App() {
     return acc;
   }, { taken: 0, total: 0 }), [medsScheduledToday, progressByMed]);
 
-  // ...but a jar of pills, a tube of zalf and a spray bottle are different
-  // products, so within that combined total each product shape (pillen/
-  // "overig" → jar, zalf → tube, druppels → spray) gets counted, and shown,
-  // separately. With only one shape in play today this collapses back to
-  // exactly the single combined card above (just with the matching icon);
-  // it's only once someone uses e.g. pills AND a spray on the same day that
-  // this actually splits into multiple icons.
+  // ...but a jar of pills, a tube of zalf, a spray bottle and a plain box of
+  // "overig" are different products, so within that combined total each
+  // product shape (tabletten → jar, zalf → tube, druppels → spray, overig →
+  // box) gets counted, and shown, separately. With only one shape in play
+  // today this collapses back to exactly the single combined card above
+  // (just with the matching icon); it's only once someone uses e.g. pills
+  // AND a spray on the same day that this actually splits into multiple
+  // icons.
   const progressByShape = useMemo(() => {
-    const buckets = { jar: { taken: 0, total: 0, count: 0 }, tube: { taken: 0, total: 0, count: 0 }, dropper: { taken: 0, total: 0, count: 0 } };
+    const buckets = { jar: { taken: 0, total: 0, count: 0 }, tube: { taken: 0, total: 0, count: 0 }, dropper: { taken: 0, total: 0, count: 0 }, box: { taken: 0, total: 0, count: 0 } };
     medsScheduledToday.forEach((med) => {
-      const shape = med.unitType === "zalf" ? "tube" : med.unitType === "druppels" ? "dropper" : "jar";
+      const shape = shapeForUnitType(med.unitType);
       const p = progressByMed[med.id] || { taken: 0, total: 1 };
       buckets[shape].taken += p.taken;
       buckets[shape].total += p.total;
