@@ -586,13 +586,13 @@ const TRANSLATIONS = {
   "ar": "حذف"
  },
  "beheer_delete_confirm": {
-  "nl": "{name} verwijderen? Alle innamegeschiedenis van dit medicijn gaat hierbij verloren.",
-  "en": "Delete {name}? All dose history for this medication will be lost too.",
-  "de": "{name} löschen? Der gesamte Einnahmeverlauf dieses Medikaments geht dabei verloren.",
-  "fr": "Supprimer {name} ? Tout l'historique des prises de ce médicament sera perdu aussi.",
-  "es": "¿Eliminar {name}? También se perderá todo el historial de tomas de este medicamento.",
-  "tr": "{name} silinsin mi? Bu ilaca ait tüm alım geçmişi de kaybolacak.",
-  "ar": "حذف {name}؟ سيُفقد أيضًا كل سجلّ جرعات هذا الدواء."
+  "nl": "{name} verwijderen? Het medicijn verdwijnt uit je lijst, maar eerdere innamegeschiedenis blijft zichtbaar in het weekoverzicht, therapietrouw en maandrapport.",
+  "en": "Delete {name}? It'll disappear from your list, but earlier dose history stays visible in the week overview, adherence trend, and monthly report.",
+  "de": "{name} löschen? Es verschwindet aus deiner Liste, aber der bisherige Einnahmeverlauf bleibt in der Wochenübersicht, der Therapietreue und dem Monatsbericht sichtbar.",
+  "fr": "Supprimer {name} ? Il disparaîtra de votre liste, mais l'historique des prises reste visible dans l'aperçu de la semaine, l'observance et le rapport mensuel.",
+  "es": "¿Eliminar {name}? Desaparecerá de tu lista, pero el historial de tomas anterior seguirá visible en el resumen semanal, la adherencia y el informe mensual.",
+  "tr": "{name} silinsin mi? Listenden kaldırılır, ancak önceki alım geçmişi hafta özetinde, tedaviye uyumda ve aylık raporda görünmeye devam eder.",
+  "ar": "حذف {name}؟ سيختفي من قائمتك، لكن سجلّ الجرعات السابق يبقى ظاهرًا في ملخص الأسبوع والالتزام والتقرير الشهري."
  },
  "beheer_add_button": {
   "nl": "+ Medicijn toevoegen",
@@ -1782,6 +1782,15 @@ const TRANSLATIONS = {
   "tr": "{unit} başına doz gücü",
   "ar": "التركيز لكل {unit}"
  },
+ "field_optional_suffix": {
+  "nl": "(optioneel)",
+  "en": "(optional)",
+  "de": "(optional)",
+  "fr": "(facultatif)",
+  "es": "(opcional)",
+  "tr": "(isteğe bağlı)",
+  "ar": "(اختياري)"
+ },
  "strength_mg_placeholder": {
   "nl": "bijv. 500",
   "en": "e.g. 500",
@@ -2799,6 +2808,17 @@ function isDayScheduled(med, date) {
     const created0 = new Date(created.getFullYear(), created.getMonth(), created.getDate());
     if (day0 < created0) return false;
   }
+  // Symmetrically, a "deleted" medication (soft-deleted — kept around so its
+  // dose history keeps showing up in Week/Trend/Report, see deletedAt below)
+  // never counts as due again for any day AFTER it was removed, same as it
+  // wouldn't count for a day before it was added. The day it was deleted on
+  // still counts, so today's already-scheduled doses don't vanish mid-day.
+  if (med.deletedAt) {
+    const deleted = new Date(med.deletedAt);
+    const day0 = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const deleted0 = new Date(deleted.getFullYear(), deleted.getMonth(), deleted.getDate());
+    if (day0 > deleted0) return false;
+  }
   if (med.frequency === "weekdagen") return (med.weekdays || []).includes((date.getDay() + 6) % 7);
   return true;
 }
@@ -3387,6 +3407,19 @@ export default function App() {
   const [showProfiles, setShowProfiles] = useState(false);
   const profilesDataRef = useRef({});
   const [medications, setMedications] = useState([]);
+  // Deleting a medication soft-deletes it (sets deletedAt, see the Beheer
+  // delete button below) instead of removing it from `medications`, so its
+  // past doses keep showing up in Week/Trend/Report — isDayScheduled already
+  // stops counting it as due from the day after deletion onward there.
+  // Anything "current" — today's tappable dose list, notifications, the
+  // Beheer list, refill tracking, PRN buttons, calendar export — uses this
+  // active-only list instead, so a deleted med disappears from all of that
+  // right away instead of lingering for the rest of the day. Declared this
+  // early (right after the state it derives from) because a couple of the
+  // notification effects below reference it in their dependency array,
+  // which — unlike an effect's own body — is evaluated immediately during
+  // render, so it has to already be initialized by then.
+  const activeMedications = useMemo(() => medications.filter((m) => !m.deletedAt), [medications]);
   const [log, setLog] = useState({});
   const [periodBounds, setPeriodBounds] = useState(DEFAULT_PERIOD_BOUNDS);
   const [darkMode, setDarkMode] = useState(false);
@@ -3710,7 +3743,8 @@ export default function App() {
   useEffect(() => {
     if (!notifActive) return;
     const todayISO = isoDate(now);
-    medications.forEach((med) => {
+    // Active-only — a deleted medication shouldn't keep firing reminders.
+    activeMedications.forEach((med) => {
       if (!isDayScheduled(med, now)) return;
       med.times.forEach((t) => {
         if (isMeal(t)) return;
@@ -3724,7 +3758,7 @@ export default function App() {
         }
       });
     });
-  }, [now, medications, log, notifActive, L]);
+  }, [now, activeMedications, log, notifActive, L]);
 
   // Period-end catch-up notification — fires once when a dagdeel ends, listing anything in it
   // that's still unchecked (this covers "na maaltijd" moments, which have no clock time of their
@@ -3740,7 +3774,7 @@ export default function App() {
       if (periodEndFiredRef.current.has(fireKey)) return;
       periodEndFiredRef.current.add(fireKey);
       const pending = [];
-      medications.forEach((med) => { if (isDayScheduled(med, now)) med.times.forEach((t) => {
+      activeMedications.forEach((med) => { if (isDayScheduled(med, now)) med.times.forEach((t) => {
         if (momentPeriod(t, periodBounds) !== period) return;
         if (!log[logKeyFor(med.id, todayISO, t)]?.taken) pending.push(`${med.name}${isMeal(t) ? ` (${momentLabel(t, L)})` : ""}`);
       }); });
@@ -3748,7 +3782,7 @@ export default function App() {
         try { new Notification(L("notif_period_title", { period: L(PERIOD_KEY_MAP[period] || period) }), { body: L("notif_period_body", { list: pending.join(", ") }), tag: fireKey }); } catch (e) {}
       }
     });
-  }, [now, medications, log, notifActive, periodBounds, L]);
+  }, [now, activeMedications, log, notifActive, periodBounds, L]);
 
   const requestNotif = async () => {
     if (typeof Notification === "undefined") return;
@@ -3956,7 +3990,9 @@ export default function App() {
 
   const handleIcsExport = () => {
     const todayISO = isoDate(new Date());
-    const ics = buildIcsCalendar(medications, periodBounds, todayISO, L);
+    // Active-only: a deleted medication shouldn't keep adding recurring
+    // reminders to someone's calendar going forward.
+    const ics = buildIcsCalendar(activeMedications, periodBounds, todayISO, L);
     const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -4000,12 +4036,15 @@ export default function App() {
 
   const todaysDoses = useMemo(() => {
     const items = [];
-    medications.forEach((med) => { if (isDayScheduled(med, now)) med.times.forEach((t) => items.push({ med, t, period: momentPeriod(t, periodBounds), sortValue: momentSortValue(t), status: getStatus(med, t, todayISO) })); });
+    activeMedications.forEach((med) => { if (isDayScheduled(med, now)) med.times.forEach((t) => items.push({ med, t, period: momentPeriod(t, periodBounds), sortValue: momentSortValue(t), status: getStatus(med, t, todayISO) })); });
     return items.sort((a, b) => a.sortValue - b.sortValue);
-  }, [medications, todayISO, getStatus, periodBounds, now]);
+  }, [activeMedications, todayISO, getStatus, periodBounds, now]);
 
   // Same shape as todaysDoses, generalized to any date — used by the week
-  // view, which lists one day per row instead of one column per day.
+  // view, which lists one day per row instead of one column per day. Unlike
+  // todaysDoses this deliberately uses the FULL medications list (deleted
+  // ones included) so past — and, per isDayScheduled, today's — doses for a
+  // since-deleted medication keep showing up in week history.
   const dosesForDate = useCallback((d) => {
     const dISO = isoDate(d);
     const items = [];
@@ -4018,7 +4057,7 @@ export default function App() {
     return map;
   }, [todaysDoses]);
 
-  const medsScheduledToday = useMemo(() => medications.filter((m) => m.frequency !== "indien_nodig" && isDayScheduled(m, now)), [medications, now]);
+  const medsScheduledToday = useMemo(() => activeMedications.filter((m) => m.frequency !== "indien_nodig" && isDayScheduled(m, now)), [activeMedications, now]);
 
   const progressByMed = useMemo(() => {
     const map = {};
@@ -4082,7 +4121,7 @@ export default function App() {
   // tappable potje voor die inname helemaal wegnemen).
   const gridIsHeroDuplicate = todaysDoses.length === 1 && todaysDoses[0].status === "upcoming";
   const takenToday = todaysDoses.filter((d) => d.status === "taken");
-  const allDoneToday = medications.length > 0 && todaysDoses.length > 0 && takenToday.length === todaysDoses.length;
+  const allDoneToday = activeMedications.length > 0 && todaysDoses.length > 0 && takenToday.length === todaysDoses.length;
   const prevAllDoneRef = useRef(false);
   useEffect(() => {
     if (allDoneToday && !prevAllDoneRef.current) {
@@ -4092,7 +4131,10 @@ export default function App() {
     prevAllDoneRef.current = allDoneToday;
   }, [allDoneToday]);
 
-  const prnMeds = medications.filter((m) => m.frequency === "indien_nodig");
+  // PRN meds have no day-schedule for isDayScheduled to gate, so a deleted
+  // one needs an explicit activeMedications filter or its "take now" button
+  // would keep showing up forever.
+  const prnMeds = activeMedications.filter((m) => m.frequency === "indien_nodig");
   const prnToday = useMemo(() => {
     const map = {};
     prnMeds.forEach((med) => {
@@ -4132,13 +4174,16 @@ export default function App() {
     prevStreakRef.current = streak;
   }, [streak]);
 
-  const medsWithSupply = useMemo(() => medications.map((m) => {
+  // Powers both the Beheer list and the refill banner, neither of which is
+  // date-scoped, so a deleted med needs the explicit activeMedications
+  // filter to actually disappear from them.
+  const medsWithSupply = useMemo(() => activeMedications.map((m) => {
     const dosesPerDay = dosesPerDayFor(m);
     const daysLeft = typeof m.stock === "number" ? Math.floor(m.stock / dosesPerDay) : null;
     const autoThreshold = dosesPerDay * REFILL_LEAD_DAYS;
     const runOutDate = daysLeft != null ? new Date(now.getTime() + daysLeft * 86400000) : null;
     return { ...m, dosesPerDay, daysLeft, autoThreshold, runOutDate };
-  }), [medications, now]);
+  }), [activeMedications, now]);
 
   const lowStock = medsWithSupply.filter((m) => m.frequency !== "indien_nodig" && typeof m.stock === "number" && m.stock <= m.autoThreshold);
   const needsRefill = lowStock;
@@ -4294,7 +4339,7 @@ export default function App() {
                 ochtend- én avonddosering) geeft dit rooster juist het
                 overzicht van de hele dag, en moet elk dagdeel gewoon
                 zichtbaar blijven. */}
-            {medications.length > 0 && !gridIsHeroDuplicate && PERIOD_ORDER.some((p) => todaysByPeriod[p].length > 0) && (
+            {activeMedications.length > 0 && !gridIsHeroDuplicate && PERIOD_ORDER.some((p) => todaysByPeriod[p].length > 0) && (
               <>
                 <SectionTitle>{L("home_section_today")}</SectionTitle>
                 {PERIOD_ORDER.filter((p) => todaysByPeriod[p].length > 0).map((period) => {
@@ -4392,7 +4437,11 @@ export default function App() {
               </div>
             )}
 
-            {medications.length === 0 && (
+            {/* activeMedications, not medications — a soft-deleted medication
+                (kept around only so its history keeps showing in Week/Trend/
+                Report) must not stop this "add your first medication" empty
+                state from showing once nothing is actively tracked anymore. */}
+            {activeMedications.length === 0 && (
               <div className="wd-card" style={{ background: T.surface, border: `1.5px dashed ${T.border}`, borderRadius: 20, padding: "36px 20px", textAlign: "center", marginBottom: 20 }}>
                 <div className="wd-display" style={{ fontSize: "calc(18px * var(--wd-text-scale, 1))", fontWeight: 600, marginBottom: 6 }}>{L("empty_no_meds_title")}</div>
                 <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16 }}>{L("empty_no_meds_body")}</div>
@@ -4400,7 +4449,7 @@ export default function App() {
               </div>
             )}
 
-            {medications.length > 0 && (
+            {activeMedications.length > 0 && (
               <>
                 {medsScheduledToday.length > 0 && combinedProgress.total > 1 && (
                   <>
@@ -4547,7 +4596,7 @@ export default function App() {
             </div>
 
             <SectionTitle>{L("beheer_title")}</SectionTitle>
-            {medications.length > 4 && (
+            {medsWithSupply.length > 4 && (
               <div style={{ position: "relative", marginBottom: 14 }}>
                 <Search size={16} color={T.mutedSoft} style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }} />
                 <input value={beheerSearch} onChange={(e) => setBeheerSearch(e.target.value)} placeholder={L("beheer_search_placeholder")} style={{ ...getInputStyle(T), paddingLeft: 38 }} />
@@ -4588,7 +4637,11 @@ export default function App() {
                     <div style={{ display: "flex", alignItems: "center", flexShrink: 0, marginLeft: "auto" }}>
                       <button className="wd-btn wd-iconbtn" onClick={() => setRestockMed(med)} aria-label={L("beheer_restock_title")} title={L("beheer_restock_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><PackagePlus size={18} /></button>
                       <button className="wd-btn wd-iconbtn" onClick={() => setEditingMed(med)} aria-label={L("beheer_edit_title")} title={L("beheer_edit_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><Pencil size={18} /></button>
-                      <button className="wd-btn wd-iconbtn" onClick={() => askConfirm(L("beheer_delete_confirm", { name: med.name }), () => setMedications((prev) => prev.filter((m) => m.id !== med.id)), { confirmLabel: L("common_delete") })} aria-label={L("beheer_delete_title")} title={L("beheer_delete_title")} style={{ background: "none", border: "none", color: T.warn, cursor: "pointer", flexShrink: 0 }}><Trash2 size={18} /></button>
+                      {/* Soft-delete: mark it deletedAt instead of removing it from
+                          `medications`, so its dose history keeps showing up in
+                          the week overview, adherence trend, and monthly report —
+                          it just disappears from here and from today's active list. */}
+                      <button className="wd-btn wd-iconbtn" onClick={() => askConfirm(L("beheer_delete_confirm", { name: med.name }), () => setMedications((prev) => prev.map((m) => (m.id === med.id ? { ...m, deletedAt: new Date().toISOString() } : m))), { confirmLabel: L("common_delete") })} aria-label={L("beheer_delete_title")} title={L("beheer_delete_title")} style={{ background: "none", border: "none", color: T.warn, cursor: "pointer", flexShrink: 0 }}><Trash2 size={18} /></button>
                     </div>
                   </div>
                 </div>
@@ -4620,7 +4673,7 @@ export default function App() {
               </label>
               <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: icsExportEnabled ? 14 : 0 }}>{L("settings_calendar_explain")}</div>
               {icsExportEnabled && (
-                <button className="wd-btn" onClick={handleIcsExport} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.primarySoft, color: medications.length === 0 ? "#fff" : T.primary, border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer" }}><Calendar size={17} /> {L("settings_calendar_export_button")}</button>
+                <button className="wd-btn" onClick={handleIcsExport} disabled={activeMedications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: activeMedications.length === 0 ? T.mutedSoft : T.primarySoft, color: activeMedications.length === 0 ? "#fff" : T.primary, border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: activeMedications.length === 0 ? "not-allowed" : "pointer" }}><Calendar size={17} /> {L("settings_calendar_export_button")}</button>
               )}
             </div>
           </>
@@ -4779,7 +4832,7 @@ export default function App() {
 
       {showReport && <ReportView medications={medications} log={log} now={now} periodBounds={periodBounds} onClose={() => setShowReport(false)} />}
 
-      {showEmergencyCard && <EmergencyCardView medications={medications} info={emergencyInfo} onClose={() => setShowEmergencyCard(false)} />}
+      {showEmergencyCard && <EmergencyCardView medications={activeMedications} info={emergencyInfo} onClose={() => setShowEmergencyCard(false)} />}
 
       {showProfiles && <ProfileModal profiles={profiles} activeProfileId={activeProfileId} onSwitch={switchProfile} onAdd={addProfile} onRename={renameProfile} onDelete={deleteProfile} onClose={() => setShowProfiles(false)} askConfirm={askConfirm} showAlert={showAlert} />}
 
@@ -5400,7 +5453,12 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
   const [frequency, setFrequency] = useState(initial?.frequency || "dagelijks");
   const [weekdays, setWeekdays] = useState(initial?.weekdays || []);
   const [prnDoseCount, setPrnDoseCount] = useState(initial?.prnDoseCount ?? 1);
-  const [unitType, setUnitType] = useState(initial?.unitType === "overig" ? "overig" : "tabletten");
+  // Preserve whichever shape the medication was actually saved with — this
+  // used to only special-case "overig" and silently fell back to
+  // "tabletten" for zalf/druppels too, which meant opening a Crème/Zalf or
+  // Spray/Druppels medication to edit it (e.g. just to update the stock)
+  // would quietly flip it back to Tabletten on save.
+  const [unitType, setUnitType] = useState(["tabletten", "zalf", "druppels", "overig"].includes(initial?.unitType) ? initial.unitType : "tabletten");
   const [customUnitLabel, setCustomUnitLabel] = useState(initial?.customUnitLabel || "");
   const [totalPerDay, setTotalPerDay] = useState(initial?.totalPerDay ?? "");
   const parsedMg = (() => {
@@ -5455,7 +5513,13 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
   const totalValid = isPRN || (totalPerDay !== "" && Number(totalPerDay) > 0);
   const atMax = totalValid && distributed >= Number(totalPerDay);
   const unitValid = unitType !== "overig" || customUnitLabel.trim().length > 0;
-  const strengthValid = strengthType === "mg" ? (strengthMg !== "" && Number(strengthMg) > 0) : strengthOther.trim().length > 0;
+  // Strength is only mandatory for tabletten — for zalf/crème, spray/druppels
+  // and overig it's genuinely hard to pin a single "strength per dose" (a
+  // drop, a pump, a smear don't have one fixed number the way a tablet does),
+  // so leave it optional there and let people just note the dosage via the
+  // moments/count fields instead.
+  const strengthRequired = unitType === "tabletten";
+  const strengthValid = !strengthRequired || (strengthType === "mg" ? (strengthMg !== "" && Number(strengthMg) > 0) : strengthOther.trim().length > 0);
   const computedDosePerUnit = strengthType === "mg" ? (strengthMg !== "" ? `${strengthMg} mg` : "") : strengthOther.trim();
   const weekdaysValid = !isWeekdays || weekdays.length > 0;
   const timesValid = isPRN || times.length > 0;
@@ -5530,7 +5594,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
         </Field>
         )}
 
-        <Field label={L("field_strength", { unit: unitWordFor({ unitType, customUnitLabel }, 1, L) })}>
+        <Field label={L("field_strength", { unit: unitWordFor({ unitType, customUnitLabel }, 1, L) }) + (strengthRequired ? "" : ` ${L("field_optional_suffix")}`)}>
           <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
             <button type="button" onClick={() => setStrengthType("mg")} style={getToggleBtnStyle(T, strengthType === "mg")}>mg</button>
             <button type="button" onClick={() => setStrengthType("overig")} style={getToggleBtnStyle(T, strengthType === "overig")}>{L("shape_other")}</button>
