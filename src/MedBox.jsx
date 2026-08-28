@@ -2457,15 +2457,6 @@ const TRANSLATIONS = {
   "tr": "Tedaviye uyum",
   "ar": "الالتزام بالعلاج"
  },
- "settings_trend_export_hint": {
-  "nl": "Het maandrapport, de kalenderexport en de back-up vind je bij Instellingen.",
-  "en": "The monthly report, calendar export and backup can be found under Settings.",
-  "de": "Den Monatsbericht, den Kalenderexport und das Backup findest du unter Einstellungen.",
-  "fr": "Le rapport mensuel, l'export du calendrier et la sauvegarde se trouvent dans Paramètres.",
-  "es": "El informe mensual, la exportación del calendario y la copia de seguridad están en Ajustes.",
-  "tr": "Aylık rapor, takvim dışa aktarımı ve yedekleme, Ayarlar bölümünde bulunur.",
-  "ar": "يمكنك العثور على التقرير الشهري وتصدير التقويم والنسخة الاحتياطية ضمن الإعدادات."
- },
  "settings_trend_explain": {
   "nl": "Percentage ingenomen doses per week, over de laatste 8 weken. Alleen medicatie met een vast schema telt mee.",
   "en": "Percentage of doses taken per week, over the last 8 weeks. Only medication with a fixed schedule counts.",
@@ -4258,7 +4249,21 @@ export default function App() {
                 <AdherenceTrend medications={medications} log={log} now={now} periodBounds={periodBounds} />
               )}
             </div>
-            <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4 }}>{L("settings_trend_export_hint")}</div>
+
+            <SectionTitle>{L("settings_report_title")}</SectionTitle>
+            <button className="wd-btn" onClick={() => setShowReport(true)} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.surface, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "15px", fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer", marginBottom: 24 }}><Printer size={17} /> {L("settings_report_button")}</button>
+
+            <SectionTitle>{L("settings_calendar_title")}</SectionTitle>
+            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", minHeight: 24, marginBottom: 12 }}>
+                <input type="checkbox" checked={icsExportEnabled} onChange={(e) => setIcsExportEnabled(e.target.checked)} style={{ width: 20, height: 20, accentColor: T.primary }} />
+                <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_calendar_toggle")}</span>
+              </label>
+              <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: icsExportEnabled ? 14 : 0 }}>{L("settings_calendar_explain")}</div>
+              {icsExportEnabled && (
+                <button className="wd-btn" onClick={handleIcsExport} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.primarySoft, color: medications.length === 0 ? "#fff" : T.primary, border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer" }}><Calendar size={17} /> {L("settings_calendar_export_button")}</button>
+              )}
+            </div>
           </>
         )}
 
@@ -4333,9 +4338,6 @@ export default function App() {
               )}
             </div>
 
-            <SectionTitle>{L("settings_report_title")}</SectionTitle>
-            <button className="wd-btn" onClick={() => setShowReport(true)} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.surface, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "15px", fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer", marginBottom: 24 }}><Printer size={17} /> {L("settings_report_button")}</button>
-
             <SectionTitle>{L("settings_backup_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16, lineHeight: 1.4 }}>{L("settings_backup_explain")}</div>
@@ -4358,18 +4360,6 @@ export default function App() {
                 const text = daysSince === null ? L("settings_backup_never") : daysSince === 0 ? L("settings_backup_today") : daysSince === 1 ? L("settings_backup_yesterday") : L("settings_backup_days_ago", { n: daysSince });
                 return <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: needsNudge ? 700 : 500, color: needsNudge ? T.warn : T.mutedSoft, marginTop: 10 }}>{text}{needsNudge ? L("settings_backup_nudge") : ""}</div>;
               })()}
-            </div>
-
-            <SectionTitle>{L("settings_calendar_title")}</SectionTitle>
-            <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", minHeight: 24, marginBottom: 12 }}>
-                <input type="checkbox" checked={icsExportEnabled} onChange={(e) => setIcsExportEnabled(e.target.checked)} style={{ width: 20, height: 20, accentColor: T.primary }} />
-                <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_calendar_toggle")}</span>
-              </label>
-              <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: icsExportEnabled ? 14 : 0 }}>{L("settings_calendar_explain")}</div>
-              {icsExportEnabled && (
-                <button className="wd-btn" onClick={handleIcsExport} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.primarySoft, color: medications.length === 0 ? "#fff" : T.primary, border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: medications.length === 0 ? "not-allowed" : "pointer" }}><Calendar size={17} /> {L("settings_calendar_export_button")}</button>
-              )}
             </div>
 
             <div onClick={() => setSettingsOpen((v) => !v)} style={{ cursor: "pointer" }}>
