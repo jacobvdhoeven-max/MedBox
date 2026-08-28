@@ -1395,6 +1395,33 @@ const TRANSLATIONS = {
   "tr": "Kaydet",
   "ar": "حفظ"
  },
+ "common_ok": {
+  "nl": "Oké",
+  "en": "OK",
+  "de": "OK",
+  "fr": "OK",
+  "es": "Vale",
+  "tr": "Tamam",
+  "ar": "حسنًا"
+ },
+ "common_delete": {
+  "nl": "Verwijderen",
+  "en": "Delete",
+  "de": "Löschen",
+  "fr": "Supprimer",
+  "es": "Eliminar",
+  "tr": "Sil",
+  "ar": "حذف"
+ },
+ "common_continue": {
+  "nl": "Doorgaan",
+  "en": "Continue",
+  "de": "Fortfahren",
+  "fr": "Continuer",
+  "es": "Continuar",
+  "tr": "Devam et",
+  "ar": "متابعة"
+ },
  "profile_default_name": {
   "nl": "Ik",
   "en": "Me",
@@ -2998,7 +3025,22 @@ function BottomNav({ active, onNavigate }) {
     { key: "instellingen", label: L("nav_settings"), icon: <Settings2 size={21} /> },
   ];
   return (
-    <div className="no-print" style={{ position: "fixed", left: 0, right: 0, bottom: 0, background: T.surface, borderTop: `1.5px solid ${T.border}`, display: "flex", justifyContent: "space-around", paddingTop: 6, paddingBottom: "max(6px, env(safe-area-inset-bottom))", zIndex: 40, boxShadow: "0 -3px 14px rgba(27,58,52,0.08)" }}>
+    <div
+      className="no-print"
+      // position: sticky (not fixed) deliberately — a fixed-position bottom
+      // bar is positioned relative to the browser's *layout* viewport,
+      // which on mobile can visibly desync from the actual visible screen
+      // while the address/toolbar bar is animating in or out during a
+      // scroll gesture, making the bar appear to float mid-screen instead
+      // of staying pinned to the true bottom. Sticky keeps it in normal
+      // document flow (as the last child of a min-height:100dvh flex
+      // column — see App()'s render), which browsers handle correctly
+      // during that toolbar animation, while still visually behaving like
+      // a fixed bar: pinned to the bottom the moment you scroll past it,
+      // and — since it's also the very last element on the page — never
+      // able to "unstick" before the page itself ends.
+      style={{ position: "sticky", bottom: 0, flexShrink: 0, background: T.surface, borderTop: `1.5px solid ${T.border}`, display: "flex", justifyContent: "space-around", paddingTop: 6, paddingBottom: "max(6px, env(safe-area-inset-bottom))", zIndex: 40, boxShadow: "0 -3px 14px rgba(27,58,52,0.08)" }}
+    >
       {items.map((it) => (
         <button key={it.key} onClick={() => onNavigate(it.key)} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, background: "none", border: "none", color: active === it.key ? T.primary : T.mutedSoft, cursor: "pointer", minWidth: 68, minHeight: 52, padding: "4px 6px" }}>
           {it.icon}
@@ -3108,6 +3150,15 @@ export default function App() {
   const [weekOffset, setWeekOffset] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showReport, setShowReport] = useState(false);
+  // Themed replacements for window.confirm()/window.alert() — see
+  // ConfirmModal/AlertModal. askConfirm/showAlert are handed down as props
+  // to any component (e.g. ProfileModal) that needs to ask before a
+  // destructive action, so every such prompt renders in the app's own style
+  // rather than a native, unstyled browser dialog.
+  const [confirmDialog, setConfirmDialog] = useState(null); // { message, confirmLabel?, danger?, onConfirm, onCancel? }
+  const [alertDialog, setAlertDialog] = useState(null); // { message }
+  const askConfirm = (message, onConfirm, opts) => setConfirmDialog({ message, onConfirm, confirmLabel: opts?.confirmLabel, danger: opts?.danger, onCancel: opts?.onCancel });
+  const showAlert = (message) => setAlertDialog({ message });
   const [activeNav, setActiveNav] = useState("vandaag");
   const firedRef = useRef(new Set());
   const periodEndFiredRef = useRef(new Set());
@@ -3598,20 +3649,23 @@ export default function App() {
   };
 
   const handleImportFile = async (e) => {
-    const file = e.target.files?.[0];
+    const fileInput = e.target;
+    const file = fileInput.files?.[0];
     if (!file) return;
     try {
       const text = await file.text();
       const parsed = JSON.parse(text);
       if (!parsed.medications) throw new Error("Invalid file");
-      if (typeof window.confirm === "function" && !window.confirm(L("confirm_import"))) { e.target.value = ""; return; }
-      setMedications((parsed.medications || []).map(normalizeMed));
-      setLog(parsed.log || {});
-      if (parsed.periodBounds) setPeriodBounds(parsed.periodBounds);
+      askConfirm(L("confirm_import"), () => {
+        setMedications((parsed.medications || []).map(normalizeMed));
+        setLog(parsed.log || {});
+        if (parsed.periodBounds) setPeriodBounds(parsed.periodBounds);
+        fileInput.value = "";
+      }, { onCancel: () => { fileInput.value = ""; } });
     } catch (err) {
-      if (typeof window.alert === "function") window.alert(L("alert_import_failed"));
+      showAlert(L("alert_import_failed"));
+      fileInput.value = "";
     }
-    e.target.value = "";
   };
 
   const addMedication = (med) => {
@@ -3783,7 +3837,7 @@ export default function App() {
   return (
     <ThemeContext.Provider value={T}>
     <LangContext.Provider value={language}>
-    <div dir={RTL_LANGS.has(language) ? "rtl" : "ltr"} style={{ "--wd-text-scale": textScale, background: T.bg, minHeight: "100vh", fontFamily: "'Nunito', sans-serif", color: T.ink, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 96 }}>
+    <div dir={RTL_LANGS.has(language) ? "rtl" : "ltr"} style={{ "--wd-text-scale": textScale, background: T.bg, minHeight: "100dvh", fontFamily: "'Nunito', sans-serif", color: T.ink, display: "flex", flexDirection: "column" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
         .wd-mono { font-family: 'IBM Plex Mono', monospace; }
@@ -3821,6 +3875,14 @@ export default function App() {
         <Logo size={68} scaleText={false} />
         <SplashJar size={160} />
       </div>
+
+      {/* Scrollable content area: grows to at least fill the space above
+          BottomNav (via flex: 1 on a min-height:100dvh column) so short
+          pages still keep the nav pinned to the true bottom, and holds all
+          the horizontal/top padding that used to sit on the outermost div.
+          BottomNav itself now lives OUTSIDE this padded area (see below) so
+          it still spans full width edge-to-edge. */}
+      <div style={{ flex: 1, paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 14, paddingRight: 14, paddingBottom: 16 }}>
 
       <div className="no-print" style={{ maxWidth: 720, margin: "0 auto", zoom: 1.16 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, gap: 10, flexWrap: "wrap", rowGap: 8 }}>
@@ -4176,7 +4238,7 @@ export default function App() {
                     <div style={{ display: "flex", alignItems: "center", flexShrink: 0, marginLeft: "auto" }}>
                       <button className="wd-btn wd-iconbtn" onClick={() => setRestockMed(med)} aria-label={L("beheer_restock_title")} title={L("beheer_restock_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><PackagePlus size={18} /></button>
                       <button className="wd-btn wd-iconbtn" onClick={() => setEditingMed(med)} aria-label={L("beheer_edit_title")} title={L("beheer_edit_title")} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><Pencil size={18} /></button>
-                      <button className="wd-btn wd-iconbtn" onClick={() => { if (typeof window.confirm === "function" && !window.confirm(L("beheer_delete_confirm", { name: med.name }))) return; setMedications((prev) => prev.filter((m) => m.id !== med.id)); }} aria-label={L("beheer_delete_title")} title={L("beheer_delete_title")} style={{ background: "none", border: "none", color: T.warn, cursor: "pointer", flexShrink: 0 }}><Trash2 size={18} /></button>
+                      <button className="wd-btn wd-iconbtn" onClick={() => askConfirm(L("beheer_delete_confirm", { name: med.name }), () => setMedications((prev) => prev.filter((m) => m.id !== med.id)), { confirmLabel: L("common_delete") })} aria-label={L("beheer_delete_title")} title={L("beheer_delete_title")} style={{ background: "none", border: "none", color: T.warn, cursor: "pointer", flexShrink: 0 }}><Trash2 size={18} /></button>
                     </div>
                   </div>
                 </div>
@@ -4370,7 +4432,11 @@ export default function App() {
 
       {showEmergencyCard && <EmergencyCardView medications={medications} info={emergencyInfo} onClose={() => setShowEmergencyCard(false)} />}
 
-      {showProfiles && <ProfileModal profiles={profiles} activeProfileId={activeProfileId} onSwitch={switchProfile} onAdd={addProfile} onRename={renameProfile} onDelete={deleteProfile} onClose={() => setShowProfiles(false)} />}
+      {showProfiles && <ProfileModal profiles={profiles} activeProfileId={activeProfileId} onSwitch={switchProfile} onAdd={addProfile} onRename={renameProfile} onDelete={deleteProfile} onClose={() => setShowProfiles(false)} askConfirm={askConfirm} showAlert={showAlert} />}
+
+      {confirmDialog && <ConfirmModal message={confirmDialog.message} confirmLabel={confirmDialog.confirmLabel} danger={confirmDialog.danger !== false} onCancel={() => { confirmDialog.onCancel?.(); setConfirmDialog(null); }} onConfirm={() => { confirmDialog.onConfirm?.(); setConfirmDialog(null); }} />}
+
+      {alertDialog && <AlertModal message={alertDialog.message} onClose={() => setAlertDialog(null)} />}
 
       {undoToast && (
         <div className="no-print" style={{ position: "fixed", left: "50%", transform: "translateX(-50%)", bottom: 86, zIndex: 55, background: T.ink, color: T.bg, borderRadius: 14, padding: "11px 8px 11px 14px", display: "flex", alignItems: "center", gap: 10, boxShadow: "0 8px 24px rgba(0,0,0,0.28)", maxWidth: "calc(100% - 28px)", width: 380 }}>
@@ -4380,6 +4446,8 @@ export default function App() {
           <button className="wd-iconbtn" onClick={hideUndoToast} aria-label={L("undo_toast_dismiss")} style={{ background: "none", border: "none", color: "inherit", opacity: 0.65, cursor: "pointer", flexShrink: 0, minWidth: 32, minHeight: 32 }}><X size={15} /></button>
         </div>
       )}
+
+      </div>
 
       <BottomNav active={activeNav} onNavigate={navigateTo} />
     </div>
@@ -4712,6 +4780,41 @@ function ReportView({ medications, log, now, periodBounds, onClose }) {
 // replacing the number outright — so filling in "300" when 200 are left
 // results in 500, without having to do that sum yourself or risk resetting
 // the countdown that "afvinken" already keeps in sync.
+// A themed stand-in for window.confirm(), used for destructive/consequential
+// actions (deleting a medication, deleting a profile, overwriting data on
+// import) so the choice appears in the app's own modal style — matching
+// dark mode, translations, and the rest of the UI — instead of a native
+// browser dialog that looks out of place and can't be styled at all.
+function ConfirmModal({ message, confirmLabel, danger = true, onCancel, onConfirm }) {
+  const T = useThemeColors();
+  const L = useL();
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 70 }} onClick={onCancel}>
+      <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 340, fontFamily: "'Nunito', sans-serif" }}>
+        <div style={{ fontSize: "calc(14.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, lineHeight: 1.4, marginBottom: 20 }}>{message}</div>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button className="wd-btn" onClick={onCancel} style={{ flex: 1, background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "13px", fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("common_cancel")}</button>
+          <button className="wd-btn" onClick={onConfirm} style={{ flex: 1, background: danger ? T.warn : T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{confirmLabel || L("common_continue")}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// A themed stand-in for window.alert() — same reasoning as ConfirmModal.
+function AlertModal({ message, onClose }) {
+  const T = useThemeColors();
+  const L = useL();
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 70 }} onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 340, fontFamily: "'Nunito', sans-serif" }}>
+        <div style={{ fontSize: "calc(14.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, lineHeight: 1.4, marginBottom: 20 }}>{message}</div>
+        <button className="wd-btn" onClick={onClose} style={{ width: "100%", background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("common_ok")}</button>
+      </div>
+    </div>
+  );
+}
+
 function RestockModal({ med, onClose, onConfirm }) {
   const T = useThemeColors();
   const L = useL();
@@ -4751,7 +4854,7 @@ function RestockModal({ med, onClose, onConfirm }) {
 // remove one — the same overlay serves both the quick header switcher and
 // the "Profielen" section in Instellingen, so there's only one place that
 // needs to know how profiles work.
-function ProfileModal({ profiles, activeProfileId, onSwitch, onAdd, onRename, onDelete, onClose }) {
+function ProfileModal({ profiles, activeProfileId, onSwitch, onAdd, onRename, onDelete, onClose, askConfirm, showAlert }) {
   const T = useThemeColors();
   const L = useL();
   const [renamingId, setRenamingId] = useState(null);
@@ -4802,9 +4905,8 @@ function ProfileModal({ profiles, activeProfileId, onSwitch, onAdd, onRename, on
                   <button
                     className="wd-iconbtn"
                     onClick={() => {
-                      if (profiles.length <= 1) { if (typeof window.alert === "function") window.alert(L("profiles_delete_last_blocked")); return; }
-                      if (typeof window.confirm === "function" && !window.confirm(L("profiles_delete_confirm"))) return;
-                      onDelete(p.id);
+                      if (profiles.length <= 1) { showAlert(L("profiles_delete_last_blocked")); return; }
+                      askConfirm(L("profiles_delete_confirm"), () => onDelete(p.id), { confirmLabel: L("common_delete") });
                     }}
                     style={{ background: "none", border: "none", color: profiles.length <= 1 ? T.mutedSoft : T.warn, cursor: profiles.length <= 1 ? "default" : "pointer", flexShrink: 0 }}
                   ><Trash2 size={16} /></button>
