@@ -61,7 +61,7 @@ const TRANSLATIONS = {
   "fr": "Réessayer",
   "es": "Volver a intentarlo",
   "tr": "Tekrar dene",
-  "ar": "أعد المحاولة"
+  "ar": "إعادة المحاولة"
  },
  "nav_today": {
   "nl": "Vandaag",
@@ -141,7 +141,7 @@ const TRANSLATIONS = {
   "de": "um {time}",
   "fr": "à {time}",
   "es": "a las {time}",
-  "tr": "{time} saatinde",
+  "tr": "saat {time}'te",
   "ar": "الساعة {time}"
  },
  "home_section_today": {
@@ -264,7 +264,7 @@ const TRANSLATIONS = {
  "missed_snooze": {
   "nl": "+15 min",
   "en": "+15 min",
-  "de": "+15 Min",
+  "de": "+15 Min.",
   "fr": "+15 min",
   "es": "+15 min",
   "tr": "+15 dk",
@@ -272,20 +272,20 @@ const TRANSLATIONS = {
  },
  "missed_taken_anyway": {
   "nl": "Alsnog genomen",
-  "en": "Mark as taken",
+  "en": "Taken anyway",
   "de": "Als genommen markieren",
-  "fr": "Marquer comme pris",
-  "es": "Marcar como tomado",
-  "tr": "Alındı olarak işaretle",
-  "ar": "تمييز كمأخوذة"
+  "fr": "Pris quand m\u00eame",
+  "es": "Tomado de todos modos",
+  "tr": "Yine de alındı",
+  "ar": "تم تناولها رغم ذلك"
  },
  "refill_title": {
   "nl": "Tijd om een herhaalrecept aan te vragen",
   "en": "Time to request a refill",
-  "de": "Zeit, ein neues Rezept anzufordern",
+  "de": "Zeit, ein Folgerezept anzufordern",
   "fr": "Il est temps de demander un renouvellement",
-  "es": "Hora de pedir una nueva receta",
-  "tr": "Yeni reçete isteme zamanı",
+  "es": "Hora de pedir la renovaci\u00f3n de tu receta",
+  "tr": "Reçete yenileme zamanı",
   "ar": "حان وقت طلب إعادة الصرف"
  },
  "refill_days_left": {
@@ -335,12 +335,12 @@ const TRANSLATIONS = {
  },
  "progress_today_combined_meds_one": {
   "nl": "Van {n} medicijn samen",
-  "en": "From {n} medication combined",
+  "en": "From {n} medication",
   "de": "Von {n} Medikament zusammen",
   "fr": "Pour {n} médicament au total",
   "es": "De {n} medicamento en total",
   "tr": "{n} ilaçtan toplam",
-  "ar": "من دواء واحد مجتمعين"
+  "ar": "من دواء واحد"
  },
  "progress_today_combined_meds_other": {
   "nl": "Van {n} medicijnen samen",
@@ -463,9 +463,9 @@ const TRANSLATIONS = {
   "nl": "Trouw deze week",
   "en": "Adherence this week",
   "de": "Einnahmetreue diese Woche",
-  "fr": "Régularité cette semaine",
-  "es": "Constancia esta semana",
-  "tr": "Bu hafta ilaç uyumu",
+  "fr": "Observance cette semaine",
+  "es": "Adherencia esta semana",
+  "tr": "Bu haftaki tedaviye uyum",
   "ar": "الالتزام هذا الأسبوع"
  },
  "week_today_badge": {
@@ -507,7 +507,7 @@ const TRANSLATIONS = {
  "beheer_search_empty": {
   "nl": "Geen medicatie gevonden voor \"{q}\".",
   "en": "No medication found for \"{q}\".",
-  "de": "Keine Medikamente gefunden für „{q}\".",
+  "de": "Keine Medikamente gefunden für „{q}“.",
   "fr": "Aucun médicament trouvé pour « {q} ».",
   "es": "No se encontró medicación para «{q}».",
   "tr": "\"{q}\" için ilaç bulunamadı.",
@@ -551,7 +551,7 @@ const TRANSLATIONS = {
  },
  "beheer_runout_date": {
   "nl": "· leeg op {date}",
-  "en": "· out on {date}",
+  "en": "· runs out on {date}",
   "de": "· leer am {date}",
   "fr": "· épuisé le {date}",
   "es": "· se agota el {date}",
@@ -667,8 +667,8 @@ const TRANSLATIONS = {
   "ar": "تباين عالٍ"
  },
  "settings_contrast_explain": {
-  "nl": "Maakt tekst en randen donkerder/lichter voor beter leesbaar contrast.",
-  "en": "Makes text and borders darker/lighter for better readable contrast.",
+  "nl": "Maakt tekst en randen donkerder/lichter voor betere leesbaarheid.",
+  "en": "Makes text and borders darker or lighter for better readability.",
   "de": "Macht Text und Ränder dunkler/heller für besser lesbaren Kontrast.",
   "fr": "Assombrit/éclaircit le texte et les bordures pour un contraste plus lisible.",
   "es": "Oscurece/aclara el texto y los bordes para un contraste más legible.",
@@ -686,12 +686,12 @@ const TRANSLATIONS = {
  },
  "settings_notif_label": {
   "nl": "Meldingen bij innametijden",
-  "en": "Reminders at dose times",
-  "de": "Erinnerungen zu den Einnahmezeiten",
-  "fr": "Rappels aux heures de prise",
-  "es": "Recordatorios a las horas de toma",
-  "tr": "Doz saatlerinde hatırlatmalar",
-  "ar": "تذكيرات في أوقات الجرعات"
+  "en": "Notifications at dose times",
+  "de": "Benachrichtigungen zu den Einnahmezeiten",
+  "fr": "Notifications aux heures de prise",
+  "es": "Notificaciones a las horas de toma",
+  "tr": "Doz saatlerinde bildirimler",
+  "ar": "إشعارات في أوقات الجرعات"
  },
  "settings_notif_enable": {
   "nl": "Inschakelen",
@@ -703,13 +703,13 @@ const TRANSLATIONS = {
   "ar": "تفعيل"
  },
  "settings_notif_explain": {
-  "nl": "Meldingen werken zolang deze app open staat. \"Na maaltijd\"-momenten hebben geen vaste tijd, maar je krijgt wel een melding zodra het dagdeel voorbij is als het nog niet is afgevinkt.",
-  "en": "Reminders only work while this app stays open. \"After meal\" moments have no fixed time, but you'll still get a reminder once that part of the day ends if it's not checked off yet.",
-  "de": "Erinnerungen funktionieren nur, solange diese App geöffnet bleibt. „Nach der Mahlzeit\"-Momente haben keine feste Uhrzeit, aber du bekommst trotzdem eine Erinnerung, sobald dieser Tagesabschnitt endet, falls es noch nicht abgehakt ist.",
-  "fr": "Les rappels ne fonctionnent que tant que cette appli reste ouverte. Les moments « après le repas » n'ont pas d'heure fixe, mais tu recevras quand même un rappel dès la fin de cette période de la journée si ce n'est pas encore coché.",
-  "es": "Los recordatorios solo funcionan mientras esta app permanece abierta. Los momentos «después de la comida» no tienen hora fija, pero aun así recibirás un recordatorio cuando termine esa franja del día si todavía no lo has marcado.",
-  "tr": "Hatırlatmalar yalnızca bu uygulama açık kaldığı sürece çalışır. \"Yemekten sonra\" anlarının sabit bir saati yoktur, ancak henüz işaretlenmediyse o gün diliminin sonunda yine de bir hatırlatma alırsın.",
-  "ar": "تعمل التذكيرات فقط أثناء بقاء هذا التطبيق مفتوحًا. لحظات \"بعد الوجبة\" ليس لها وقت ثابت، لكنك ستتلقى تذكيرًا بمجرد انتهاء ذلك الجزء من اليوم إذا لم يتم تسجيلها بعد."
+  "nl": "Meldingen werken zolang deze app open staat. \"Na maaltijd\"-momenten hebben geen vaste tijd, maar je krijgt wel een melding zodra het dagdeel voorbij is, als die inname dan nog niet is afgevinkt.",
+  "en": "Notifications only work while this app stays open. \"After meal\" moments have no fixed time, but you'll still get a notification once that part of the day ends if it's not checked off yet.",
+  "de": "Benachrichtigungen funktionieren nur, solange diese App geöffnet bleibt. „Nach der Mahlzeit“-Momente haben keine feste Uhrzeit, aber du bekommst trotzdem eine Benachrichtigung, sobald dieser Tagesabschnitt endet, falls es noch nicht abgehakt ist.",
+  "fr": "Les notifications ne fonctionnent que tant que cette appli reste ouverte. Les moments « après le repas » n'ont pas d'heure fixe, mais tu recevras quand même une notification dès la fin de cette période de la journée si ce n'est pas encore coché.",
+  "es": "Las notificaciones solo funcionan mientras esta app permanece abierta. Los momentos «después de la comida» no tienen hora fija, pero aun así recibirás una notificación cuando termine esa franja del día si todavía no lo has marcado.",
+  "tr": "Bildirimler yalnızca bu uygulama açık kaldığı sürece çalışır. \"Yemekten sonra\" anlarının sabit bir saati yoktur, ancak henüz işaretlenmediyse o gün diliminin sonunda yine de bir bildirim alırsın.",
+  "ar": "تعمل الإشعارات فقط أثناء بقاء هذا التطبيق مفتوحًا. لحظات \"بعد الوجبة\" ليس لها وقت ثابت، لكنك ستتلقى إشعارًا بمجرد انتهاء تلك الفترة من اليوم إذا لم يتم تسجيلها بعد."
  },
  "settings_notif_denied_label": {
   "nl": "Geblokkeerd",
@@ -750,7 +750,7 @@ const TRANSLATIONS = {
  "settings_home_iphone": {
   "nl": "tik in Safari op het deelknopje onderin en kies \"Zet op beginscherm\".",
   "en": "in Safari, tap the share button at the bottom and choose \"Add to Home Screen\".",
-  "de": "tippe in Safari unten auf das Teilen-Symbol und wähle „Zum Home-Bildschirm\".",
+  "de": "tippe in Safari unten auf das Teilen-Symbol und wähle „Zum Home-Bildschirm“.",
   "fr": "dans Safari, appuie sur le bouton de partage en bas et choisis « Sur l'écran d'accueil ».",
   "es": "en Safari, toca el botón de compartir en la parte inferior y elige «Añadir a pantalla de inicio».",
   "tr": "Safari'de alttaki paylaş simgesine dokun ve \"Ana Ekrana Ekle\" seçeneğini seç.",
@@ -759,7 +759,7 @@ const TRANSLATIONS = {
  "settings_home_android": {
   "nl": "tik in Chrome op de drie puntjes rechtsboven en kies \"Toevoegen aan startscherm\".",
   "en": "in Chrome, tap the three dots top-right and choose \"Add to Home screen\".",
-  "de": "tippe in Chrome oben rechts auf die drei Punkte und wähle „Zum Startbildschirm hinzufügen\".",
+  "de": "tippe in Chrome oben rechts auf die drei Punkte und wähle „Zum Startbildschirm hinzufügen“.",
   "fr": "dans Chrome, appuie sur les trois points en haut à droite et choisis « Ajouter à l'écran d'accueil ».",
   "es": "en Chrome, toca los tres puntos arriba a la derecha y elige «Añadir a pantalla de inicio».",
   "tr": "Chrome'da sağ üstteki üç noktaya dokun ve \"Ana ekrana ekle\" seçeneğini seç.",
@@ -806,7 +806,7 @@ const TRANSLATIONS = {
   "en": "Want someone else to use MedBox too, separate from your data? Share this link. They'll start with their own, empty MedBox on their own phone — this doesn't share any of your medications or profiles.",
   "de": "Möchte jemand anders MedBox auch nutzen, unabhängig von deinen Daten? Teile diesen Link. Diese Person startet mit einer eigenen, leeren MedBox auf dem eigenen Handy — dabei werden keine deiner Medikamente oder Profile geteilt.",
   "fr": "Tu veux que quelqu'un d'autre utilise aussi MedBox, indépendamment de tes données ? Partage ce lien. Cette personne démarre avec sa propre MedBox vide sur son propre téléphone — cela ne partage aucun de tes médicaments ni profils.",
-  "es": "¿Quieres que otra persona también use MedBox, de forma independiente a tus datos? Comparte este enlace. Esa persona empezará con su propia MedBox vacía en su propio teléfono — esto no comparte tus medicamentos ni perfiles.",
+  "es": "¿Quieres que otra persona también use MedBox, de forma independiente de tus datos? Comparte este enlace. Esa persona empezará con su propia MedBox vacía en su propio teléfono — esto no comparte tus medicamentos ni perfiles.",
   "tr": "Başka birinin de MedBox'ı, senin verilerinden bağımsız olarak kullanmasını mı istiyorsun? Bu bağlantıyı paylaş. O kişi kendi telefonunda kendi, boş MedBox'ıyla başlar — bu, ilaçlarını veya profillerini paylaşmaz.",
   "ar": "هل تريد أن يستخدم شخص آخر MedBox أيضًا، بشكل مستقل عن بياناتك؟ شارك هذا الرابط. سيبدأ ذلك الشخص بنسخة MedBox فارغة خاصة به على هاتفه — هذا لا يشارك أيًا من أدويتك أو ملفاتك الشخصية."
  },
@@ -822,7 +822,7 @@ const TRANSLATIONS = {
  "settings_share_app_copied": {
   "nl": "Link gekopieerd! Je kunt hem nu plakken in een bericht.",
   "en": "Link copied! You can now paste it into a message.",
-  "de": "Link kopiert! Du kannst ihn jetzt in einem Bericht einfügen.",
+  "de": "Link kopiert! Du kannst ihn jetzt in einer Nachricht einfügen.",
   "fr": "Lien copié ! Tu peux maintenant le coller dans un message.",
   "es": "¡Enlace copiado! Ahora puedes pegarlo en un mensaje.",
   "tr": "Bağlantı kopyalandı! Şimdi bir mesaja yapıştırabilirsin.",
@@ -934,7 +934,7 @@ const TRANSLATIONS = {
   "fr": "Ajuster les périodes de la journée",
   "es": "Ajustar las franjas del día",
   "tr": "Gün dilimlerini ayarla",
-  "ar": "تعديل أوقات اليوم"
+  "ar": "تعديل فترات اليوم"
  },
  "settings_calendar_title": {
   "nl": "Agenda-export",
@@ -957,9 +957,9 @@ const TRANSLATIONS = {
  "settings_calendar_explain": {
   "nl": "Maakt een .ics-bestand met de innametijden van je medicatie, dat je kunt openen in Google Agenda, Apple Agenda of Outlook. Momenten \"na een maaltijd\" krijgen een geschat tijdstip.",
   "en": "Creates an .ics file with your medication times, which you can open in Google Calendar, Apple Calendar or Outlook. \"After a meal\" moments get an estimated time.",
-  "de": "Erstellt eine .ics-Datei mit deinen Einnahmezeiten, die du in Google Kalender, Apple Kalender oder Outlook öffnen kannst. Momente \"nach einer Mahlzeit\" erhalten eine geschätzte Uhrzeit.",
-  "fr": "Crée un fichier .ics avec tes heures de prise, à ouvrir dans Google Agenda, Apple Agenda ou Outlook. Les moments \"après un repas\" reçoivent une heure estimée.",
-  "es": "Crea un archivo .ics con tus horarios de medicación, que puedes abrir en Google Calendar, Apple Calendario u Outlook. Los momentos \"después de una comida\" reciben una hora estimada.",
+  "de": "Erstellt eine .ics-Datei mit deinen Einnahmezeiten, die du in Google Kalender, Apple Kalender oder Outlook öffnen kannst. Momente „nach einer Mahlzeit“ erhalten eine geschätzte Uhrzeit.",
+  "fr": "Crée un fichier .ics avec tes heures de prise, à ouvrir dans Google Agenda, Apple Agenda ou Outlook. Les moments « après un repas » reçoivent une heure estimée.",
+  "es": "Crea un archivo .ics con tus horarios de medicación, que puedes abrir en Google Calendar, Apple Calendario u Outlook. Los momentos «después de una comida» reciben una hora estimada.",
   "tr": "İlaç saatlerinle bir .ics dosyası oluşturur; bunu Google Takvim, Apple Takvim veya Outlook'ta açabilirsin. \"Öğünden sonra\" anları tahmini bir saat alır.",
   "ar": "ينشئ ملف .ics بأوقات دوائك، يمكنك فتحه في تقويم Google أو تقويم Apple أو Outlook. تحصل لحظات \"بعد وجبة\" على وقت تقديري."
  },
@@ -984,11 +984,11 @@ const TRANSLATIONS = {
  "settings_periods_explain": {
   "nl": "Vanaf welk tijdstip begint elk dagdeel? \"Na maaltijd\"-momenten volgen altijd hun eigen dagdeel (ontbijt → ochtend, lunch → middag, diner → avond).",
   "en": "What time does each part of the day start? \"After meal\" moments always follow their own period (breakfast → morning, lunch → afternoon, dinner → evening).",
-  "de": "Um wie viel Uhr beginnt jeder Tagesabschnitt? „Nach der Mahlzeit\"-Momente folgen immer ihrem eigenen Abschnitt (Frühstück → Morgen, Mittagessen → Nachmittag, Abendessen → Abend).",
+  "de": "Um wie viel Uhr beginnt jeder Tagesabschnitt? „Nach der Mahlzeit“-Momente folgen immer ihrem eigenen Abschnitt (Frühstück → Morgen, Mittagessen → Nachmittag, Abendessen → Abend).",
   "fr": "À quelle heure commence chaque période de la journée ? Les moments « après le repas » suivent toujours leur propre période (petit-déjeuner → matin, déjeuner → après-midi, dîner → soir).",
   "es": "¿A qué hora empieza cada franja del día? Los momentos «después de la comida» siempre siguen su propia franja (desayuno → mañana, comida → tarde, cena → noche).",
   "tr": "Her gün dilimi saat kaçta başlar? \"Yemekten sonra\" anları her zaman kendi dilimini takip eder (kahvaltı → sabah, öğle yemeği → öğleden sonra, akşam yemeği → akşam).",
-  "ar": "في أي وقت يبدأ كل جزء من اليوم؟ لحظات \"بعد الوجبة\" تتبع دائمًا فترتها الخاصة (الفطور ← الصباح، الغداء ← بعد الظهر، العشاء ← المساء)."
+  "ar": "في أي وقت تبدأ كل فترة من اليوم؟ لحظات \"بعد الوجبة\" تتبع دائمًا فترتها الخاصة (الفطور ← الصباح، الغداء ← بعد الظهر، العشاء ← المساء)."
  },
  "settings_periods_from": {
   "nl": "{period} vanaf",
@@ -1036,7 +1036,7 @@ const TRANSLATIONS = {
   "ar": "مثال: البنسلين"
  },
  "field_contact_name": {
-  "nl": "Noodcontact naam",
+  "nl": "Naam noodcontact",
   "en": "Emergency contact name",
   "de": "Name Notfallkontakt",
   "fr": "Nom du contact d'urgence",
@@ -1045,7 +1045,7 @@ const TRANSLATIONS = {
   "ar": "اسم جهة اتصال الطوارئ"
  },
  "field_contact_phone": {
-  "nl": "Noodcontact telefoon",
+  "nl": "Telefoon noodcontact",
   "en": "Emergency contact phone",
   "de": "Telefon Notfallkontakt",
   "fr": "Téléphone du contact d'urgence",
@@ -1054,7 +1054,7 @@ const TRANSLATIONS = {
   "ar": "هاتف جهة اتصال الطوارئ"
  },
  "field_doctor_name": {
-  "nl": "Huisarts naam",
+  "nl": "Naam huisarts",
   "en": "GP name",
   "de": "Name Hausarzt",
   "fr": "Nom du médecin traitant",
@@ -1063,7 +1063,7 @@ const TRANSLATIONS = {
   "ar": "اسم طبيب الأسرة"
  },
  "field_doctor_phone": {
-  "nl": "Huisarts telefoon",
+  "nl": "Telefoon huisarts",
   "en": "GP phone",
   "de": "Telefon Hausarzt",
   "fr": "Téléphone du médecin traitant",
@@ -1072,7 +1072,7 @@ const TRANSLATIONS = {
   "ar": "هاتف طبيب الأسرة"
  },
  "field_pharmacy_name": {
-  "nl": "Apotheek naam",
+  "nl": "Naam apotheek",
   "en": "Pharmacy name",
   "de": "Name Apotheke",
   "fr": "Nom de la pharmacie",
@@ -1081,7 +1081,7 @@ const TRANSLATIONS = {
   "ar": "اسم الصيدلية"
  },
  "field_pharmacy_phone": {
-  "nl": "Apotheek telefoon",
+  "nl": "Telefoon apotheek",
   "en": "Pharmacy phone",
   "de": "Telefon Apotheke",
   "fr": "Téléphone de la pharmacie",
@@ -1175,7 +1175,7 @@ const TRANSLATIONS = {
   "en": "No medication added yet.",
   "de": "Noch keine Medikamente hinzugefügt.",
   "fr": "Aucun médicament ajouté pour l'instant.",
-  "es": "Aún no se ha añadido medicación.",
+  "es": "Aún no has añadido medicación.",
   "tr": "Henüz ilaç eklenmedi.",
   "ar": "لم تتم إضافة أي دواء بعد."
  },
@@ -1236,10 +1236,10 @@ const TRANSLATIONS = {
  "onboarding_step1_body": {
   "nl": "Hier tik je je potjes aan zodra je je medicatie hebt genomen. Dit is je startpagina — hier open je de app negen van de tien keer voor.",
   "en": "This is where you tap your doses once you've taken your medication. It's your home page — the one you'll open nine times out of ten.",
-  "de": "Hier tippst du deine Dosen an, sobald du dein Medikament genommen hast. Das ist deine Startseite — die, die du neunmal von zehn öffnest.",
+  "de": "Hier tippst du deine Dosen an, sobald du dein Medikament genommen hast. Das ist deine Startseite — die, die du neun von zehn Mal öffnest.",
   "fr": "C'est ici que tu coches tes doses une fois ton médicament pris. C'est ta page d'accueil — celle que tu ouvriras neuf fois sur dix.",
   "es": "Aquí es donde marcas tus dosis en cuanto tomas tu medicación. Es tu página principal — la que abrirás nueve de cada diez veces.",
-  "tr": "İlacını aldıktan sonra dozlarını buradan işaretlersin. Burası ana sayfan — on seferden dokuzunda buraya gireceksin.",
+  "tr": "İlacını aldıktan sonra dozlarını buradan işaretlersin. Burası ana sayfan — on seferden dokuzunda buraya girersin.",
   "ar": "هنا تنقر على جرعاتك بمجرد تناول دوائك. هذه هي صفحتك الرئيسية — الصفحة التي ستفتحها تسع مرات من كل عشر."
  },
  "onboarding_step2_title": {
@@ -1293,7 +1293,7 @@ const TRANSLATIONS = {
   "de": "Benachrichtigungen, ein Backup erstellen, und deine Notfallkarte mit wichtigen Daten.",
   "fr": "Notifications, création d'une sauvegarde, et ta carte d'urgence avec les détails importants.",
   "es": "Notificaciones, hacer una copia de seguridad, y tu tarjeta de emergencia con datos importantes.",
-  "tr": "Bildirimler, yedek alma, ve önemli bilgileri içeren acil durum kartın.",
+  "tr": "Bildirimler, yedek alma ve önemli bilgileri içeren acil durum kartın.",
   "ar": "الإشعارات، إنشاء نسخة احتياطية، وبطاقة الطوارئ الخاصة بك التي تحتوي على التفاصيل المهمة."
  },
  "onboarding_skip": {
@@ -1374,7 +1374,7 @@ const TRANSLATIONS = {
   "de": "Trage ein, wie viel du erhalten hast.",
   "fr": "Indique la quantité reçue.",
   "es": "Indica cuánto has recibido.",
-  "tr": "Ne kadar aldığını gir.",
+  "tr": "Ne kadar eklediğini gir.",
   "ar": "أدخل الكمية التي استلمتها."
  },
  "common_cancel": {
@@ -1443,11 +1443,11 @@ const TRANSLATIONS = {
  "profiles_manage_explain": {
   "nl": "Beheer meerdere mensen in dezelfde MedBox — elk profiel heeft zijn eigen medicatie en geschiedenis.",
   "en": "Manage several people in the same MedBox — each profile has its own medication and history.",
-  "de": "Verwalte mehrere Personen in derselben MedBox — jedes Profil hat seine eigene Medikation und Historie.",
+  "de": "Verwalte mehrere Personen in derselben MedBox — jedes Profil hat seine eigenen Medikamente und seinen eigenen Verlauf.",
   "fr": "Gère plusieurs personnes dans la même MedBox — chaque profil a ses propres médicaments et son propre historique.",
   "es": "Gestiona a varias personas en la misma MedBox — cada perfil tiene su propia medicación e historial.",
   "tr": "Aynı MedBox içinde birden fazla kişiyi yönet — her profilin kendi ilaçları ve geçmişi vardır.",
-  "ar": "أدر عدّة أشخاص في نفس الـ MedBox — لكل ملف شخصي أدويته وسجلّه الخاص."
+  "ar": "أدر عدّة أشخاص في نفس تطبيق MedBox — لكل ملف شخصي أدويته وسجلّه الخاص."
  },
  "profiles_active_badge": {
   "nl": "Actief",
@@ -1479,7 +1479,7 @@ const TRANSLATIONS = {
  "profile_type_adult": {
   "nl": "Volwassene",
   "en": "Adult",
-  "de": "Erwachsen",
+  "de": "Erwachsener",
   "fr": "Adulte",
   "es": "Adulto/a",
   "tr": "Yetişkin",
@@ -1506,11 +1506,11 @@ const TRANSLATIONS = {
  "profiles_delete_confirm": {
   "nl": "Dit profiel verwijderen? Alle medicatie en geschiedenis van dit profiel gaan mee verloren.",
   "en": "Delete this profile? All medication and history for this profile will be lost too.",
-  "de": "Dieses Profil löschen? Alle Medikation und Historie dieses Profils gehen ebenfalls verloren.",
+  "de": "Dieses Profil löschen? Alle Medikamente und der gesamte Verlauf dieses Profils gehen ebenfalls verloren.",
   "fr": "Supprimer ce profil ? Tous les médicaments et l'historique de ce profil seront perdus aussi.",
   "es": "¿Eliminar este perfil? También se perderán toda la medicación y el historial de este perfil.",
   "tr": "Bu profil silinsin mi? Bu profile ait tüm ilaçlar ve geçmiş de kaybolacak.",
-  "ar": "حذف هذا الملف الشخصي؟ ستُفقد أيضًا كل الأدوية والسجلّ الخاصّان بهذا الملف."
+  "ar": "حذف هذا الملف الشخصي؟ ستُفقد أيضًا كل الأدوية وسجلّ هذا الملف."
  },
  "profiles_delete_last_blocked": {
   "nl": "Je kunt het laatste profiel niet verwijderen.",
@@ -1544,7 +1544,7 @@ const TRANSLATIONS = {
   "en": "Edit medication",
   "de": "Medikament bearbeiten",
   "fr": "Modifier le médicament",
-  "es": "Editar medicación",
+  "es": "Editar medicamento",
   "tr": "İlacı düzenle",
   "ar": "تعديل الدواء"
  },
@@ -1623,11 +1623,11 @@ const TRANSLATIONS = {
  "prn_explain": {
   "nl": "Geen vast schema — je vinkt dit af via de knop \"Nu genomen\" op het hoofdscherm, wanneer je het nodig hebt.",
   "en": "No fixed schedule — you check this off with the \"Taken now\" button on the home screen, whenever you need it.",
-  "de": "Kein fester Zeitplan — du hakst dies mit der Schaltfläche „Jetzt genommen\" auf dem Startbildschirm ab, wann immer du es brauchst.",
+  "de": "Kein fester Zeitplan — du hakst dies mit der Schaltfläche „Jetzt genommen“ auf der Startseite ab, wann immer du es brauchst.",
   "fr": "Pas d'horaire fixe — tu coches cela avec le bouton « Pris maintenant » sur l'écran d'accueil, quand tu en as besoin.",
   "es": "Sin horario fijo — lo marcas con el botón «Tomado ahora» en la pantalla principal, cuando lo necesites.",
   "tr": "Sabit bir programı yok — ihtiyaç duyduğunda ana ekrandaki \"Şimdi alındı\" düğmesiyle işaretlersin.",
-  "ar": "لا يوجد جدول ثابت — تُسجّله عبر زر \"تم الآن\" في الشاشة الرئيسية، متى احتجت إليه."
+  "ar": "لا يوجد جدول ثابت — تُسجّله عبر زر \"تم الآن\" في الصفحة الرئيسية، متى احتجت إليه."
  },
  "field_photo": {
   "nl": "Herkenbare afbeelding",
@@ -1651,7 +1651,7 @@ const TRANSLATIONS = {
   "nl": "Bezig…",
   "en": "Working…",
   "de": "Wird bearbeitet…",
-  "fr": "Travail en cours…",
+  "fr": "En cours…",
   "es": "Procesando…",
   "tr": "İşleniyor…",
   "ar": "جارٍ العمل…"
@@ -1685,7 +1685,7 @@ const TRANSLATIONS = {
  },
  "field_shape": {
   "nl": "Vorm",
-  "en": "Form",
+  "en": "Shape",
   "de": "Form",
   "fr": "Forme",
   "es": "Forma",
@@ -1762,7 +1762,7 @@ const TRANSLATIONS = {
   "fr": "Indique le nombre total de {unit} par jour — l'appli saura ainsi combien répartir.",
   "es": "Indica el número total de {unit} al día — así la app sabrá cuánto repartir.",
   "tr": "Günde toplam kaç {unit} olduğunu gir — böylece uygulama ne kadar dağıtacağını bilir.",
-  "ar": "أدخل العدد الإجمالي لِـ {unit} يوميًا — بذلك يعرف التطبيق كيفية توزيعها."
+  "ar": "أدخل العدد الإجمالي من {unit} يوميًا — بذلك يعرف التطبيق كيفية توزيعها."
  },
  "daily_dose_distributed": {
   "nl": "Verdeeld over de dagdelen: {a} van {b} {unit}",
@@ -1779,7 +1779,7 @@ const TRANSLATIONS = {
   "de": "Stärke pro {unit}",
   "fr": "Dosage par {unit}",
   "es": "Concentración por {unit}",
-  "tr": "{unit} başına güç",
+  "tr": "{unit} başına doz gücü",
   "ar": "التركيز لكل {unit}"
  },
  "strength_mg_placeholder": {
@@ -1806,7 +1806,7 @@ const TRANSLATIONS = {
   "de": "Gib die Stärke ein — Medikamente haben immer eine Dosierung, daher darf dieses Feld nicht leer bleiben.",
   "fr": "Indique le dosage — un médicament a toujours une posologie, ce champ ne peut donc pas rester vide.",
   "es": "Indica la concentración — la medicación siempre tiene una dosis, así que este campo no puede quedar vacío.",
-  "tr": "Gücü gir — ilaçların her zaman bir dozu vardır, bu yüzden bu alan boş bırakılamaz.",
+  "tr": "Doz gücünü gir — ilaçların her zaman bir dozu vardır, bu yüzden bu alan boş bırakılamaz.",
   "ar": "أدخل التركيز — للدواء دائمًا جرعة محددة، لذا لا يمكن ترك هذا الحقل فارغًا."
  },
  "field_moments": {
@@ -1860,22 +1860,22 @@ const TRANSLATIONS = {
   "de": "Nach-Mahlzeit-Momente",
   "fr": "moments après repas",
   "es": "momentos después de la comida",
-  "tr": "yemek sonrası anlar",
+  "tr": "yemek sonrası an",
   "ar": "لحظات بعد الوجبة"
  },
  "moments_hidden_prefix": {
   "nl": "+ {n} {label} verborgen — tik op \"{tabLabel}\" om te tonen",
   "en": "+ {n} {label} hidden — tap \"{tabLabel}\" to show",
-  "de": "+ {n} {label} ausgeblendet — tippe auf „{tabLabel}\", um sie anzuzeigen",
-  "fr": "+ {n} {label} masqué(s) — appuie sur « {tabLabel} » pour afficher",
-  "es": "+ {n} {label} ocultos — toca «{tabLabel}» para mostrar",
+  "de": "+ {n} {label} ausgeblendet — tippe auf „{tabLabel}“, um sie anzuzeigen",
+  "fr": "+ {n} {label} en plus — appuie sur « {tabLabel} » pour les afficher",
+  "es": "+ {n} {label} sin mostrar — toca «{tabLabel}» para ver más",
   "tr": "+ {n} {label} gizli — göstermek için \"{tabLabel}\" öğesine dokun",
   "ar": "+ {n} {label} مخفية — اضغط على \"{tabLabel}\" للعرض"
  },
  "moments_at_max": {
   "nl": "Je hebt je volledige dagdosering van {n} {unit} al verdeeld over de momenten hierboven. Verwijder eerst een moment, of verhoog het totaal bij \"Dagdosering\", om er nog een toe te voegen.",
   "en": "You've already distributed your full daily dose of {n} {unit} across the moments above. Remove a moment first, or raise the total under \"Daily dose\", to add another one.",
-  "de": "Du hast deine gesamte Tagesdosis von {n} {unit} bereits auf die obigen Momente verteilt. Entferne zuerst einen Moment oder erhöhe die Gesamtmenge unter „Tagesdosis\", um einen weiteren hinzuzufügen.",
+  "de": "Du hast deine gesamte Tagesdosis von {n} {unit} bereits auf die obigen Momente verteilt. Entferne zuerst einen Moment oder erhöhe die Gesamtmenge unter „Tagesdosis“, um einen weiteren hinzuzufügen.",
   "fr": "Tu as déjà réparti ta dose journalière complète de {n} {unit} sur les moments ci-dessus. Supprime d'abord un moment, ou augmente le total dans « Dose journalière », pour en ajouter un autre.",
   "es": "Ya has repartido tu dosis diaria completa de {n} {unit} entre los momentos anteriores. Elimina primero un momento, o aumenta el total en «Dosis diaria», para añadir otro.",
   "tr": "{n} {unit}'lik tüm günlük dozunu zaten yukarıdaki anlara dağıttın. Bir tane daha eklemek için önce bir anı kaldır veya \"Günlük doz\" altındaki toplamı artır.",
@@ -1905,17 +1905,17 @@ const TRANSLATIONS = {
   "de": "Frühstück, Mittag- und Abendessen sind bereits eingestellt — jeder Mahlzeit-Moment kann nur einmal hinzugefügt werden. Passe die Anzahl an, wenn mehr von diesem Medikament dorthin gehört.",
   "fr": "Le petit-déjeuner, le déjeuner et le dîner sont déjà configurés — chaque moment de repas ne peut être ajouté qu'une seule fois. Ajuste la quantité si davantage de ce médicament doit y figurer.",
   "es": "El desayuno, la comida y la cena ya están configurados — cada momento de comida solo se puede añadir una vez. Ajusta la cantidad si corresponde más de este medicamento ahí.",
-  "tr": "Kahvaltı, öğle ve akşam yemeği zaten ayarlandı — her yemek anı yalnızca bir kez eklenebilir. Bu ilaçtan orada daha fazlası gerekiyorsa sayıyı ayarla.",
+  "tr": "Kahvaltı, öğle ve akşam yemeği zaten ayarlandı — her yemek anı yalnızca bir kez eklenebilir. Bu ilaçtan daha fazlası gerekiyorsa sayıyı ayarla.",
   "ar": "تم بالفعل ضبط الفطور والغداء والعشاء — يمكن إضافة كل لحظة وجبة مرة واحدة فقط. عدّل العدد إذا كانت هناك كمية إضافية من هذا الدواء تخصّ تلك اللحظة."
  },
  "moments_meal_hint": {
   "nl": "Handig als het innamemoment per dag verschilt. Je krijgt automatisch een melding zodra het dagdeel voorbij is als dit nog niet is afgevinkt.",
-  "en": "Handy when the dose time varies by day. You'll automatically get a reminder once that period ends if this isn't checked off yet.",
-  "de": "Praktisch, wenn die Einnahmezeit von Tag zu Tag variiert. Du bekommst automatisch eine Erinnerung, sobald dieser Tagesabschnitt endet, falls es noch nicht abgehakt ist.",
-  "fr": "Pratique quand l'heure de prise varie selon les jours. Tu recevras automatiquement un rappel dès la fin de cette période si ce n'est pas encore coché.",
-  "es": "Útil cuando la hora de toma varía según el día. Recibirás automáticamente un recordatorio en cuanto termine esa franja si todavía no lo has marcado.",
-  "tr": "Doz zamanı güne göre değiştiğinde kullanışlıdır. Henüz işaretlenmediyse o dilim sona erdiğinde otomatik olarak bir hatırlatma alırsın.",
-  "ar": "مفيدة عندما يختلف وقت الجرعة من يوم لآخر. ستتلقى تذكيرًا تلقائيًا بمجرد انتهاء تلك الفترة إذا لم يتم تسجيلها بعد."
+  "en": "Handy when the dose time varies by day. You'll automatically get a notification once that period ends if this isn't checked off yet.",
+  "de": "Praktisch, wenn die Einnahmezeit von Tag zu Tag variiert. Du bekommst automatisch eine Benachrichtigung, sobald dieser Tagesabschnitt endet, falls es noch nicht abgehakt ist.",
+  "fr": "Pratique quand l'heure de prise varie selon les jours. Tu recevras automatiquement une notification dès la fin de cette période si ce n'est pas encore coché.",
+  "es": "Útil cuando la hora de toma varía según el día. Recibirás automáticamente una notificación en cuanto termine esa franja si todavía no lo has marcado.",
+  "tr": "Doz zamanı güne göre değiştiğinde kullanışlıdır. Henüz işaretlenmediyse o dilim sona erdiğinde otomatik olarak bir bildirim alırsın.",
+  "ar": "مفيدة عندما يختلف وقت الجرعة من يوم لآخر. ستتلقى إشعارًا تلقائيًا بمجرد انتهاء تلك الفترة إذا لم يتم تسجيلها بعد."
  },
  "field_prn_amount": {
   "nl": "Hoeveel neem je per keer?",
@@ -1937,7 +1937,7 @@ const TRANSLATIONS = {
  },
  "field_count_short": {
   "nl": "aantal",
-  "en": "amount",
+  "en": "count",
   "de": "Anzahl",
   "fr": "quantité",
   "es": "cantidad",
@@ -1974,7 +1974,7 @@ const TRANSLATIONS = {
  "stock_prn_note": {
   "nl": "Bij \"indien nodig\" kan de app niet voorspellen hoeveel dagen de voorraad meegaat — je ziet alleen het aantal in stuks.",
   "en": "For \"as needed\" medication the app can't predict how many days the stock will last — you'll just see the count in units.",
-  "de": "Bei „bei Bedarf\"-Medikamenten kann die App nicht vorhersagen, wie viele Tage der Vorrat reicht — du siehst nur die Anzahl in Einheiten.",
+  "de": "Bei „bei Bedarf“-Medikamenten kann die App nicht vorhersagen, wie viele Tage der Vorrat reicht — du siehst nur die Anzahl in Einheiten.",
   "fr": "Pour un médicament « au besoin », l'appli ne peut pas prédire combien de jours le stock durera — tu verras juste le nombre en unités.",
   "es": "Para medicación «si es necesario» la app no puede predecir cuántos días durarán las existencias — solo verás el recuento en unidades.",
   "tr": "\"Gerektiğinde\" alınan ilaçlarda uygulama stokun kaç gün süreceğini tahmin edemez — sadece birim sayısını görürsün.",
@@ -2149,7 +2149,7 @@ const TRANSLATIONS = {
   "fr": "Pris",
   "es": "Tomado",
   "tr": "Alındı",
-  "ar": "مأخوذة"
+  "ar": "تم التناول"
  },
  "report_status_missed": {
   "nl": "Gemist",
@@ -2344,7 +2344,7 @@ const TRANSLATIONS = {
   "nl": "{period} is voorbij",
   "en": "{period} is over",
   "de": "{period} ist vorbei",
-  "fr": "{period} est terminé",
+  "fr": "La période « {period} » est terminée",
   "es": "{period} ha terminado",
   "tr": "{period} sona erdi",
   "ar": "انتهت فترة {period}"
@@ -2364,7 +2364,7 @@ const TRANSLATIONS = {
   "de": "Wird knapp: {name}",
   "fr": "Stock faible : {name}",
   "es": "Existencias bajas: {name}",
-  "tr": "Azalıyor: {name}",
+  "tr": "Neredeyse bitiyor: {name}",
   "ar": "أوشك على النفاد: {name}"
  },
  "notif_refill_body": {
@@ -2431,7 +2431,7 @@ const TRANSLATIONS = {
   "ar": "تم بالفعل تثبيت MedBox كتطبيق على هذا الجهاز."
  },
  "settings_install_explain": {
-  "nl": "Zet MedBox op je startscherm als een volwaardige app — sneller opstarten, een eigen icoon, en werkt ook zonder internetverbinding.",
+  "nl": "Zet MedBox op je beginscherm als een volwaardige app — sneller opstarten, een eigen icoon, en werkt ook zonder internetverbinding.",
   "en": "Add MedBox to your home screen as a full app — faster to open, its own icon, and it keeps working without an internet connection.",
   "de": "Füge MedBox als eigenständige App zu deinem Startbildschirm hinzu — schnellerer Start, ein eigenes Symbol, und funktioniert auch ohne Internetverbindung.",
   "fr": "Ajoute MedBox à ton écran d'accueil comme une véritable application — démarrage plus rapide, icône dédiée, et fonctionne aussi sans connexion internet.",
