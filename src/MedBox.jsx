@@ -4556,15 +4556,21 @@ export default function App() {
             {nextUpcomingGroup.length > 1 && (
               <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16 }}>
                 <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("home_next")}</div>
-                <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 10 }}>{nextDoseTiming(nextUpcoming.t, scheduleNow, todayISO, L)}</div>
-                {nextUpcomingGroup.map((d, i) => (
-                  <div key={logKeyFor(d.med.id, todayISO, d.t)} style={{ display: "flex", alignItems: "center", gap: 14, marginTop: i > 0 ? 10 : 0 }}>
-                    <Compartment status={d.status} color={d.med.color} unitType={d.med.unitType} size={44} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: L("aria_dose_upcoming") })} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div title={d.med.name} style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.med.name}</div>
+                <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12 }}>{nextDoseTiming(nextUpcoming.t, scheduleNow, todayISO, L)}</div>
+                {/* Max 2 per row, always -- fixed 2-column grid rather than
+                    auto-fill, so this stays readable on a phone screen no
+                    matter how many meds share this exact moment; a 3rd (and
+                    4th, etc.) item just wraps onto the next row below. Same
+                    icon-above-name-below tile shape used for the "Voortgang
+                    vandaag" and Week-view grids, so it reads as one family. */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+                  {nextUpcomingGroup.map((d) => (
+                    <div key={logKeyFor(d.med.id, todayISO, d.t)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, minWidth: 0 }}>
+                      <Compartment status={d.status} color={d.med.color} unitType={d.med.unitType} size={44} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: L("aria_dose_upcoming") })} />
+                      <div title={d.med.name} style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 700, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", width: "100%" }}>{d.med.name}</div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
 
