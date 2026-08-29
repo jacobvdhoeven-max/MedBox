@@ -289,12 +289,12 @@ const TRANSLATIONS = {
   "ar": "حان وقت طلب إعادة الصرف"
  },
  "refill_days_left": {
-  "nl": "— nog ongeveer {days} {unit} voorraad, op {date} helemaal op",
-  "en": "— about {days} {unit} of supply left, runs out on {date}",
-  "de": "— noch etwa {days} {unit} Vorrat, leer am {date}",
-  "fr": "— environ {days} {unit} de stock restant, épuisé le {date}",
-  "es": "— quedan aproximadamente {days} {unit} de existencias, se agotan el {date}",
-  "tr": "— yaklaşık {days} {unit} stok kaldı, {date} tarihinde biter",
+  "nl": "— nog ongeveer {days} {unit} voorraad — op {date} helemaal op",
+  "en": "— about {days} {unit} of supply left — runs out on {date}",
+  "de": "— noch etwa {days} {unit} Vorrat — leer am {date}",
+  "fr": "— environ {days} {unit} de stock restant — épuisé le {date}",
+  "es": "— quedan aproximadamente {days} {unit} de existencias — se agotan el {date}",
+  "tr": "— yaklaşık {days} {unit} stok kaldı — {date} tarihinde biter",
   "ar": "— تبقّى ما يقارب {days} {unit} من المخزون، وينفد في {date}"
  },
  "settings_vacation_title": {
@@ -339,7 +339,7 @@ const TRANSLATIONS = {
   "de": "Das Rückkehrdatum muss am oder nach dem Abreisedatum liegen.",
   "fr": "La date de retour doit être égale ou postérieure à la date de départ.",
   "es": "La fecha de regreso debe ser igual o posterior a la fecha de salida.",
-  "tr": "Dönüş tarihi, gidiş tarihiyle aynı veya sonrasında olmalıdır.",
+  "tr": "Dönüş tarihi gidiş tarihiyle aynı veya sonrasında olmalıdır.",
   "ar": "يجب أن يكون تاريخ العودة في تاريخ المغادرة أو بعده."
  },
  "vacation_freeze_toggle": {
@@ -1009,11 +1009,11 @@ const TRANSLATIONS = {
   "ar": "استيراد"
  },
  "settings_backup_import_hint": {
-  "nl": "Haalt eerder opgeslagen gegevens terug uit zo'n bestand. Handig na een nieuwe telefoon, een herinstallatie van de app, of als je per ongeluk iets hebt verwijderd. Let op: dit vervangt je huidige gegevens.",
+  "nl": "Haalt eerder opgeslagen gegevens terug uit zo'n bestand. Handig na een nieuwe telefoon, een herinstallatie van de app of als je per ongeluk iets hebt verwijderd. Let op: dit vervangt je huidige gegevens.",
   "en": "Brings back data you saved earlier in such a file. Handy after a new phone, reinstalling the app, or if you accidentally deleted something. Note: this replaces your current data.",
   "de": "Holt zuvor gespeicherte Daten aus so einer Datei zurück. Praktisch nach einem neuen Handy, einer Neuinstallation der App oder wenn du versehentlich etwas gelöscht hast. Achtung: Dies ersetzt deine aktuellen Daten.",
-  "fr": "Récupère les données enregistrées précédemment dans un tel fichier. Utile après un nouveau téléphone, une réinstallation de l'app, ou si tu as accidentellement supprimé quelque chose. Attention : cela remplace tes données actuelles.",
-  "es": "Recupera los datos guardados anteriormente en ese archivo. Útil después de un teléfono nuevo, al reinstalar la app, o si borraste algo por accidente. Ten en cuenta: esto reemplaza tus datos actuales.",
+  "fr": "Récupère les données enregistrées précédemment dans un tel fichier. Utile après un nouveau téléphone, une réinstallation de l'app ou si tu as accidentellement supprimé quelque chose. Attention : cela remplace tes données actuelles.",
+  "es": "Recupera los datos guardados anteriormente en ese archivo. Útil después de un teléfono nuevo, al reinstalar la app o si borraste algo por accidente. Ten en cuenta: esto reemplaza tus datos actuales.",
   "tr": "Daha önce böyle bir dosyaya kaydedilen verileri geri getirir. Yeni bir telefon aldığında, uygulamayı yeniden yüklediğinde veya yanlışlıkla bir şey sildiğinde işine yarar. Dikkat: bu, mevcut verilerinin yerini alır.",
   "ar": "يستعيد البيانات المحفوظة سابقًا من ملف كهذا. مفيد بعد شراء هاتف جديد أو إعادة تثبيت التطبيق أو إذا حذفت شيئًا عن طريق الخطأ. ملاحظة: سيؤدي هذا إلى استبدال بياناتك الحالية."
  },
@@ -1392,7 +1392,7 @@ const TRANSLATIONS = {
   "de": "Sieh Tag für Tag, was du genommen und was du verpasst hast, und blättere durch frühere Wochen zurück.",
   "fr": "Consulte jour par jour ce que tu as pris et ce que tu as manqué, et navigue dans les semaines précédentes.",
   "es": "Consulta día a día lo que has tomado y lo que has olvidado, y navega por semanas anteriores.",
-  "tr": "Gün gün neyi aldığını ve neyi kaçırdığını gör, önceki haftalara geri dön.",
+  "tr": "Gün gün neyi aldığını ve neyi kaçırdığını gör. Önceki haftalara geri dön.",
   "ar": "اطّلع يومًا بيوم على ما تناولته وما فاتك، وتصفّح الأسابيع السابقة."
  },
  "onboarding_step3_title": {
@@ -1408,7 +1408,7 @@ const TRANSLATIONS = {
   "nl": "Voeg medicatie toe, pas doses aan, of vul je voorraad bij zodra er een nieuwe verpakking bij komt.",
   "en": "Add medication, adjust doses, or restock as soon as a new package arrives.",
   "de": "Füge Medikamente hinzu, passe Dosen an oder fülle den Vorrat auf, sobald eine neue Packung ankommt.",
-  "fr": "Ajoute des médicaments, ajuste les doses, ou réapprovisionne dès qu'une nouvelle boîte arrive.",
+  "fr": "Ajoute des médicaments, ajuste les doses ou réapprovisionne dès qu'une nouvelle boîte arrive.",
   "es": "Añade medicación, ajusta las dosis o repone existencias en cuanto llegue un envase nuevo.",
   "tr": "İlaç ekle, dozları ayarla veya yeni bir paket geldiğinde stok ekle.",
   "ar": "أضف دواءً، أو عدّل الجرعات، أو جدّد المخزون بمجرد وصول عبوة جديدة."
@@ -1423,11 +1423,11 @@ const TRANSLATIONS = {
   "ar": "الإعدادات"
  },
  "onboarding_step4_body": {
-  "nl": "Meldingen, een back-up maken, en je noodkaart met belangrijke gegevens.",
+  "nl": "Meldingen, een back-up maken en je noodkaart met belangrijke gegevens.",
   "en": "Notifications, making a backup, and your emergency card with important details.",
-  "de": "Benachrichtigungen, ein Backup erstellen, und deine Notfallkarte mit wichtigen Daten.",
-  "fr": "Notifications, création d'une sauvegarde, et ta carte d'urgence avec les détails importants.",
-  "es": "Notificaciones, hacer una copia de seguridad, y tu tarjeta de emergencia con datos importantes.",
+  "de": "Benachrichtigungen, ein Backup erstellen und deine Notfallkarte mit wichtigen Daten.",
+  "fr": "Notifications, création d'une sauvegarde et ta carte d'urgence avec les détails importants.",
+  "es": "Notificaciones, hacer una copia de seguridad y tu tarjeta de emergencia con datos importantes.",
   "tr": "Bildirimler, yedek alma ve önemli bilgileri içeren acil durum kartın.",
   "ar": "الإشعارات، إنشاء نسخة احتياطية، وبطاقة الطوارئ الخاصة بك التي تحتوي على التفاصيل المهمة."
  },
@@ -1954,7 +1954,7 @@ const TRANSLATIONS = {
   "ar": "أدخل التركيز — للدواء دائمًا جرعة محددة، لذا لا يمكن ترك هذا الحقل فارغًا."
  },
  "field_moments": {
-  "nl": "Innamemomenten — vaste tijd, of na een maaltijd",
+  "nl": "Innamemomenten — vaste tijd of na een maaltijd",
   "en": "Dose times — fixed time, or after a meal",
   "de": "Einnahmezeiten — feste Uhrzeit oder nach einer Mahlzeit",
   "fr": "Heures de prise — heure fixe ou après un repas",
@@ -2053,7 +2053,7 @@ const TRANSLATIONS = {
   "ar": "تم بالفعل ضبط الفطور والغداء والعشاء — يمكن إضافة كل لحظة وجبة مرة واحدة فقط. عدّل العدد إذا كانت هناك كمية إضافية من هذا الدواء تخصّ تلك اللحظة."
  },
  "moments_meal_hint": {
-  "nl": "Handig als het innamemoment per dag verschilt. Je krijgt automatisch een melding zodra het dagdeel voorbij is als dit nog niet is afgevinkt.",
+  "nl": "Handig als het innamemoment per dag verschilt. Je krijgt automatisch een melding zodra het dagdeel voorbij is, als dit nog niet is afgevinkt.",
   "en": "Handy when the dose time varies by day. You'll automatically get a notification once that period ends if this isn't checked off yet.",
   "de": "Praktisch, wenn die Einnahmezeit von Tag zu Tag variiert. Du bekommst automatisch eine Benachrichtigung, sobald dieser Tagesabschnitt endet, falls es noch nicht abgehakt ist.",
   "fr": "Pratique quand l'heure de prise varie selon les jours. Tu recevras automatiquement une notification dès la fin de cette période si ce n'est pas encore coché.",
@@ -2120,7 +2120,7 @@ const TRANSLATIONS = {
   "en": "For \"as needed\" medication the app can't predict how many days the stock will last — you'll just see the count in units.",
   "de": "Bei „bei Bedarf“-Medikamenten kann die App nicht vorhersagen, wie viele Tage der Vorrat reicht — du siehst nur die Anzahl in Einheiten.",
   "fr": "Pour un médicament « au besoin », l'appli ne peut pas prédire combien de jours le stock durera — tu verras juste le nombre en unités.",
-  "es": "Para medicación «si es necesario» la app no puede predecir cuántos días durarán las existencias — solo verás el recuento en unidades.",
+  "es": "Para medicación «si es necesario», la app no puede predecir cuántos días durarán las existencias — solo verás el recuento en unidades.",
   "tr": "\"Gerektiğinde\" alınan ilaçlarda uygulama stokun kaç gün süreceğini tahmin edemez — sadece birim sayısını görürsün.",
   "ar": "بالنسبة لدواء \"عند الحاجة\" لا يستطيع التطبيق توقّع عدد الأيام التي سيدوم فيها المخزون — سترى فقط العدد بالوحدات."
  },
@@ -2338,7 +2338,7 @@ const TRANSLATIONS = {
   "fr": "{name}, {moment}, {status}",
   "es": "{name}, {moment}, {status}",
   "tr": "{name}, {moment}, {status}",
-  "ar": "{name}, {moment}, {status}"
+  "ar": "{name}، {moment}، {status}"
  },
  "meal_breakfast": {
   "nl": "Na het ontbijt",
@@ -2575,10 +2575,10 @@ const TRANSLATIONS = {
   "ar": "تم بالفعل تثبيت MedBox كتطبيق على هذا الجهاز."
  },
  "settings_install_explain": {
-  "nl": "Zet MedBox op je beginscherm als een volwaardige app — sneller opstarten, een eigen icoon, en werkt ook zonder internetverbinding.",
+  "nl": "Zet MedBox op je beginscherm als een volwaardige app — sneller opstarten, een eigen icoon en werkt ook zonder internetverbinding.",
   "en": "Add MedBox to your home screen as a full app — faster to open, its own icon, and it keeps working without an internet connection.",
-  "de": "Füge MedBox als eigenständige App zu deinem Startbildschirm hinzu — schnellerer Start, ein eigenes Symbol, und funktioniert auch ohne Internetverbindung.",
-  "fr": "Ajoute MedBox à ton écran d'accueil comme une véritable application — démarrage plus rapide, icône dédiée, et fonctionne aussi sans connexion internet.",
+  "de": "Füge MedBox als eigenständige App zu deinem Startbildschirm hinzu — schnellerer Start, ein eigenes Symbol und funktioniert auch ohne Internetverbindung.",
+  "fr": "Ajoute MedBox à ton écran d'accueil comme une véritable application — démarrage plus rapide, icône dédiée et fonctionne aussi sans connexion internet.",
   "es": "Añade MedBox a tu pantalla de inicio como una aplicación completa — se abre más rápido, tiene su propio icono y también funciona sin conexión a internet.",
   "tr": "MedBox'ı tam bir uygulama olarak ana ekranına ekle — daha hızlı açılır, kendi simgesine sahiptir ve internet bağlantısı olmadan da çalışır.",
   "ar": "أضف MedBox إلى شاشتك الرئيسية كتطبيق كامل — يفتح أسرع، وله أيقونة خاصة، ويعمل أيضًا بدون اتصال بالإنترنت."
@@ -4950,9 +4950,7 @@ export default function App() {
               )}
             </div>
 
-            <div onClick={() => setVacationOpen((v) => !v)} style={{ cursor: "pointer" }}>
-              <SectionTitle trailing={vacationOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}>{L("settings_vacation_title")}</SectionTitle>
-            </div>
+            <CollapsibleSectionBar icon={<Luggage size={18} />} label={L("settings_vacation_title")} open={vacationOpen} onClick={() => setVacationOpen((v) => !v)} />
             {vacationOpen && (
               <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: 16, marginBottom: 24 }}>
                 <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_vacation_explain")}</div>
@@ -5069,9 +5067,7 @@ export default function App() {
               })()}
             </div>
 
-            <div onClick={() => setSettingsOpen((v) => !v)} style={{ cursor: "pointer" }}>
-              <SectionTitle trailing={settingsOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}>{L("settings_periods_title")}</SectionTitle>
-            </div>
+            <CollapsibleSectionBar icon={<Clock size={18} />} label={L("settings_periods_title")} open={settingsOpen} onClick={() => setSettingsOpen((v) => !v)} />
             {settingsOpen && (
               <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: 16, marginBottom: 24 }}>
                 <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_periods_explain")}</div>
@@ -5294,6 +5290,36 @@ function LanguagePicker({ language, onChange }) {
 function SectionTitle({ children, trailing }) {
   const T = useThemeColors();
   return <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, marginTop: 4, minHeight: 32 }}><div className="wd-display" style={{ fontSize: "calc(17px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink }}>{children}</div>{trailing}</div>;
+}
+// A section header that visibly reads as a button — filled background, border,
+// icon badge and a chevron that flips — instead of the plain SectionTitle
+// text, specifically for the settings sections that are collapsed by
+// default (Vakantie, Dagdelen aanpassen): those two are easy to miss as
+// clickable when they look like every other, non-interactive section title.
+function CollapsibleSectionBar({ icon, label, open, onClick }) {
+  const T = useThemeColors();
+  return (
+    <button
+      type="button"
+      className="wd-btn"
+      onClick={onClick}
+      aria-expanded={open}
+      style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
+        width: "100%", boxSizing: "border-box", textAlign: "left",
+        background: open ? T.primarySoft : T.surfaceSoft,
+        border: `1.5px solid ${open ? `${T.primary}66` : T.border}`,
+        borderRadius: 16, padding: "14px 16px", marginTop: 4, marginBottom: 12, minHeight: 56,
+        cursor: "pointer", color: T.ink, font: "inherit",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 34, height: 34, borderRadius: 10, background: open ? T.primary : T.primarySoft, color: open ? "#fff" : T.primary, flexShrink: 0 }}>{icon}</div>
+        <span className="wd-display" style={{ fontSize: "calc(15px * var(--wd-text-scale, 1))", fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</span>
+      </div>
+      {open ? <ChevronUp size={19} style={{ color: T.primary, flexShrink: 0 }} /> : <ChevronDown size={19} style={{ color: T.muted, flexShrink: 0 }} />}
+    </button>
+  );
 }
 function StatPill({ icon, label, value, color, bg }) {
   const T = useThemeColors();
