@@ -1379,13 +1379,13 @@ const TRANSLATIONS = {
   "ar": "اليوم"
  },
  "onboarding_step1_body": {
-  "nl": "Tik je potjes aan zodra je je medicatie hebt genomen. Dit is je startpagina — die je het vaakst opent.",
-  "en": "Tap your jars once you've taken your medication. This is your home page — the one you'll open most often.",
-  "de": "Tippe deine Dosen an, sobald du dein Medikament genommen hast. Das ist deine Startseite — die du am häufigsten öffnest.",
-  "fr": "Coche tes doses dès que tu as pris ton médicament. C'est ta page d'accueil — celle que tu ouvres le plus souvent.",
-  "es": "Marca tus dosis en cuanto tomes tu medicación. Es tu página principal —la que más usas.",
-  "tr": "İlacını aldıktan sonra dozlarını işaretle. Burası en sık kullandığın ana sayfan.",
-  "ar": "انقر على جرعاتك بمجرد تناول دوائك. هذه صفحتك الرئيسية، التي تفتحها غالبًا."
+  "nl": "Tik je potjes aan zodra je je medicatie hebt genomen.",
+  "en": "Tap your jars once you've taken your medication.",
+  "de": "Tippe deine Dosen an, sobald du dein Medikament genommen hast.",
+  "fr": "Coche tes doses dès que tu as pris ton médicament.",
+  "es": "Marca tus dosis en cuanto tomes tu medicación.",
+  "tr": "İlacını aldıktan sonra dozlarını işaretle.",
+  "ar": "انقر على جرعاتك بمجرد تناول دوائك."
  },
  "onboarding_step2_title": {
   "nl": "Week",
@@ -5894,13 +5894,18 @@ function HelpTour({ initialStep = 0, onClose }) {
           onPointerUp={handlePointerUp}
           style={{ display: "flex", alignItems: "center", gap: 4, touchAction: "pan-y" }}
         >
-          <button onClick={goPrev} disabled={atStart} aria-label={L("common_previous")} className="wd-iconbtn" style={{ background: "none", border: "none", color: atStart ? T.mutedSoft : T.muted, cursor: atStart ? "default" : "pointer", flexShrink: 0, visibility: atStart ? "hidden" : "visible" }}><ChevronLeft size={22} /></button>
+          {/* Solid, filled circular buttons -- not just a bare muted icon --
+              so these unmistakably read as pressable controls. Left visible
+              (but dimmed and disabled) at the boundary instead of vanishing
+              entirely, so it's obvious from the very first open that there's
+              more to page through in the other direction. */}
+          <button onClick={goPrev} disabled={atStart} aria-label={L("common_previous")} className="wd-btn" style={{ width: 36, height: 36, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: atStart ? T.surfaceSoft : T.primarySoft, border: `1.5px solid ${atStart ? T.border : T.primary}66`, color: atStart ? T.mutedSoft : T.primary, cursor: atStart ? "default" : "pointer", flexShrink: 0, opacity: atStart ? 0.4 : 1 }}><ChevronLeft size={20} /></button>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ width: 56, height: 56, borderRadius: "50%", background: T.primarySoft, color: T.primary, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>{s.icon}</div>
             <div className="wd-display" style={{ fontSize: "calc(22px * var(--wd-text-scale, 1))", fontWeight: 700, marginBottom: 8 }}>{s.title}</div>
             <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.muted, lineHeight: 1.5 }}>{s.body}</div>
           </div>
-          <button onClick={goNext} disabled={atEnd} aria-label={L("onboarding_next")} className="wd-iconbtn" style={{ background: "none", border: "none", color: atEnd ? T.mutedSoft : T.muted, cursor: atEnd ? "default" : "pointer", flexShrink: 0, visibility: atEnd ? "hidden" : "visible" }}><ChevronRight size={22} /></button>
+          <button onClick={goNext} disabled={atEnd} aria-label={L("onboarding_next")} className="wd-btn" style={{ width: 36, height: 36, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: atEnd ? T.surfaceSoft : T.primarySoft, border: `1.5px solid ${atEnd ? T.border : T.primary}66`, color: atEnd ? T.mutedSoft : T.primary, cursor: atEnd ? "default" : "pointer", flexShrink: 0, opacity: atEnd ? 0.4 : 1 }}><ChevronRight size={20} /></button>
         </div>
         <div style={{ display: "flex", justifyContent: "center", gap: 8, margin: "20px 0" }}>
           {steps.map((_, i) => (
