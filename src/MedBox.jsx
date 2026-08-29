@@ -5,7 +5,7 @@ import {
   Image as ImageIcon, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
   Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight, TrendingUp,
-  Pill, User, Baby, Share2, Link2,
+  Pill, User, Baby, Share2, Link2, Luggage,
 } from "lucide-react";
 
 const TRANSLATIONS = {
@@ -296,6 +296,141 @@ const TRANSLATIONS = {
   "es": "— quedan aproximadamente {days} {unit} de existencias, se agotan el {date}",
   "tr": "— yaklaşık {days} {unit} stok kaldı, {date} tarihinde biter",
   "ar": "— تبقّى ما يقارب {days} {unit} من المخزون، وينفد في {date}"
+ },
+ "settings_vacation_title": {
+  "nl": "Vakantie",
+  "en": "Vacation",
+  "de": "Urlaub",
+  "fr": "Vacances",
+  "es": "Vacaciones",
+  "tr": "Tatil",
+  "ar": "الإجازة"
+ },
+ "settings_vacation_explain": {
+  "nl": "Plan een reisperiode om te checken of je genoeg medicatie meehebt, en om je doseertijden desgewenst op thuistijd te houden.",
+  "en": "Plan a trip to check whether you'll have enough medication with you, and optionally keep your dose times on home time.",
+  "de": "Plane eine Reise, um zu prüfen, ob du genug Medikamente dabei hast, und halte deine Einnahmezeiten optional auf Heimatzeit.",
+  "fr": "Planifiez un voyage pour vérifier si vous aurez assez de médicaments, et gardez éventuellement vos horaires de prise à l'heure de chez vous.",
+  "es": "Planifica un viaje para comprobar si tendrás suficiente medicación, y mantén opcionalmente tus horarios de toma en la hora de casa.",
+  "tr": "Yeterli ilaçınız olup olmadığını kontrol etmek için bir seyahat planlayın ve isterseniz doz saatlerinizi ev saatinde tutun.",
+  "ar": "خطّط لرحلة للتحقق مما إذا كان لديك ما يكفي من الدواء، واختياريًا أبقِ أوقات جرعاتك على توقيت بلدك."
+ },
+ "vacation_start_label": {
+  "nl": "Vertrekdatum",
+  "en": "Departure date",
+  "de": "Abreisedatum",
+  "fr": "Date de départ",
+  "es": "Fecha de salida",
+  "tr": "Gidiş tarihi",
+  "ar": "تاريخ المغادرة"
+ },
+ "vacation_end_label": {
+  "nl": "Terugkomstdatum",
+  "en": "Return date",
+  "de": "Rückkehrdatum",
+  "fr": "Date de retour",
+  "es": "Fecha de regreso",
+  "tr": "Dönüş tarihi",
+  "ar": "تاريخ العودة"
+ },
+ "vacation_dates_invalid": {
+  "nl": "Terugkomstdatum moet op of na de vertrekdatum liggen.",
+  "en": "The return date must be on or after the departure date.",
+  "de": "Das Rückkehrdatum muss am oder nach dem Abreisedatum liegen.",
+  "fr": "La date de retour doit être égale ou postérieure à la date de départ.",
+  "es": "La fecha de regreso debe ser igual o posterior a la fecha de salida.",
+  "tr": "Dönüş tarihi, gidiş tarihiyle aynı veya sonrasında olmalıdır.",
+  "ar": "يجب أن يكون تاريخ العودة في تاريخ المغادرة أو بعده."
+ },
+ "vacation_freeze_toggle": {
+  "nl": "Blijf op thuistijd tijdens de reis",
+  "en": "Keep dose times on home time while traveling",
+  "de": "Während der Reise auf Heimatzeit bleiben",
+  "fr": "Garder l'heure de chez vous pendant le voyage",
+  "es": "Mantener la hora de casa durante el viaje",
+  "tr": "Seyahat sırasında ev saatinde kal",
+  "ar": "البقاء على توقيت بلدك أثناء السفر"
+ },
+ "vacation_freeze_explain": {
+  "nl": "Je telefoon past de tijd normaal automatisch aan het land aan waar je bent. Zet dit aan als je liever wilt dat je doseertijden niet meteen meeschuiven bij een tijdsverschil — handig bij medicatie waar het tijdstip van inname nauw luistert. Zet dit vóór vertrek aan: MedBox onthoudt dan je huidige tijdzone.",
+  "en": "Your phone normally adjusts its clock automatically to wherever you are. Turn this on if you'd rather your dose times not shift immediately with a time difference — useful for medication where timing matters. Turn it on before you leave: MedBox will remember your current timezone.",
+  "de": "Dein Handy passt die Uhrzeit normalerweise automatisch an dein aktuelles Land an. Aktiviere dies, wenn deine Einnahmezeiten bei einem Zeitunterschied nicht sofort mitverschoben werden sollen — nützlich bei Medikamenten, bei denen der Einnahmezeitpunkt genau eingehalten werden muss. Aktiviere dies vor der Abreise: MedBox merkt sich dann deine aktuelle Zeitzone.",
+  "fr": "Votre téléphone ajuste normalement l'heure automatiquement selon le pays où vous êtes. Activez ceci si vous préférez que vos horaires de prise ne changent pas immédiatement avec le décalage horaire — utile pour les médicaments dont l'horaire de prise est important. Activez-le avant le départ : MedBox mémorisera votre fuseau horaire actuel.",
+  "es": "Tu teléfono normalmente ajusta la hora automáticamente al país donde estás. Activa esto si prefieres que tus horarios de toma no cambien de inmediato con la diferencia horaria — útil para medicación cuyo horario de toma es importante. Actívalo antes de salir: MedBox recordará tu zona horaria actual.",
+  "tr": "Telefonunuz normalde saati bulunduğunuz ülkeye göre otomatik ayarlar. Doz saatlerinizin zaman farkıyla hemen kaymasını istemiyorsanız bunu açın — alım zamanı önemli olan ilaçlar için kullanışlıdır. Yola çıkmadan önce açın: MedBox mevcut saat diliminizi hatırlar.",
+  "ar": "يضبط هاتفك الوقت تلقائيًا عادةً حسب البلد الذي تكون فيه. فعّل هذا الخيار إذا كنت تفضّل ألا تتغيّر أوقات جرعاتك فورًا مع فارق التوقيت — مفيد للأدوية التي يهم فيها توقيت الجرعة. فعّله قبل السفر: سيتذكّر MedBox المنطقة الزمنية الحالية لديك."
+ },
+ "vacation_clear_button": {
+  "nl": "Vakantie wissen",
+  "en": "Clear trip",
+  "de": "Reise löschen",
+  "fr": "Supprimer le voyage",
+  "es": "Borrar viaje",
+  "tr": "Seyahati temizle",
+  "ar": "مسح الرحلة"
+ },
+ "vacation_ok_message": {
+  "nl": "Goed nieuws: je voorraad is voldoende voor deze hele reis (inclusief de gebruikelijke veiligheidsmarge van 30 dagen na terugkomst).",
+  "en": "Good news: your supply is enough for this whole trip (including the usual 30-day safety margin after you're back).",
+  "de": "Gute Nachricht: Dein Vorrat reicht für die gesamte Reise (inklusive der üblichen Sicherheitsmarge von 30 Tagen nach der Rückkehr).",
+  "fr": "Bonne nouvelle : votre stock est suffisant pour tout le voyage (avec la marge de sécurité habituelle de 30 jours après le retour).",
+  "es": "Buenas noticias: tus existencias son suficientes para todo el viaje (incluyendo el margen de seguridad habitual de 30 días tras el regreso).",
+  "tr": "İyi haber: stoğunuz bu seyahatin tamamı için yeterli (dönüşten sonraki olağan 30 günlük güvenlik payı dahil).",
+  "ar": "خبر جيد: مخزونك كافٍ لهذه الرحلة بأكملها (شاملاً هامش الأمان المعتاد البالغ 30 يومًا بعد العودة)."
+ },
+ "vacation_shortfall_title": {
+  "nl": "Let op: dit is te weinig voor je vakantie",
+  "en": "Heads up: this isn't enough for your trip",
+  "de": "Achtung: Das reicht nicht für deine Reise",
+  "fr": "Attention : ce n'est pas suffisant pour votre voyage",
+  "es": "Atención: esto no es suficiente para tu viaje",
+  "tr": "Dikkat: bu seyahatiniz için yeterli değil",
+  "ar": "تنبيه: هذا غير كافٍ لرحلتك"
+ },
+ "vacation_shortfall_amount": {
+  "nl": "— nog {n} {unit} extra nodig vóór vertrek",
+  "en": "— need {n} more {unit} before you leave",
+  "de": "— noch {n} {unit} mehr nötig vor der Abreise",
+  "fr": "— encore {n} {unit} nécessaires avant le départ",
+  "es": "— necesitas {n} {unit} más antes de salir",
+  "tr": "— yola çıkmadan önce {n} {unit} daha gerekiyor",
+  "ar": "— تحتاج إلى {n} {unit} إضافية قبل السفر"
+ },
+ "vacation_shortfall_line": {
+  "nl": "{name}: nog {n} {unit} extra nodig vóór vertrek",
+  "en": "{name}: need {n} more {unit} before you leave",
+  "de": "{name}: noch {n} {unit} mehr nötig vor der Abreise",
+  "fr": "{name} : encore {n} {unit} nécessaires avant le départ",
+  "es": "{name}: necesitas {n} {unit} más antes de salir",
+  "tr": "{name}: yola çıkmadan önce {n} {unit} daha gerekiyor",
+  "ar": "{name}: تحتاج إلى {n} {unit} إضافية قبل السفر"
+ },
+ "vacation_banner_explain": {
+  "nl": "Op basis van je geplande terugkomst op {date} kom je voor onderstaande medicatie tekort:",
+  "en": "Based on your planned return on {date}, you'll be short on the following medication:",
+  "de": "Basierend auf deiner geplanten Rückkehr am {date} reicht folgendes Medikament nicht:",
+  "fr": "D'après votre retour prévu le {date}, vous serez en manque pour les médicaments suivants :",
+  "es": "Según tu regreso previsto el {date}, te faltará lo siguiente:",
+  "tr": "{date} tarihindeki planlanan dönüşünüze göre, aşağıdaki ilaçlar için eksiğiniz olacak:",
+  "ar": "استنادًا إلى عودتك المخطَّطة في {date}، ستنقصك الأدوية التالية:"
+ },
+ "notif_vacation_title": {
+  "nl": "Te weinig {name} voor je vakantie",
+  "en": "Not enough {name} for your trip",
+  "de": "Zu wenig {name} für deine Reise",
+  "fr": "Pas assez de {name} pour votre voyage",
+  "es": "No hay suficiente {name} para tu viaje",
+  "tr": "Seyahatiniz için yeterli {name} yok",
+  "ar": "لا يوجد {name} كافٍ لرحلتك"
+ },
+ "notif_vacation_body": {
+  "nl": "Je hebt nog {n} {unit} extra nodig vóór vertrek.",
+  "en": "You need {n} more {unit} before you leave.",
+  "de": "Du brauchst noch {n} {unit} mehr vor der Abreise.",
+  "fr": "Il vous faut encore {n} {unit} avant le départ.",
+  "es": "Necesitas {n} {unit} más antes de salir.",
+  "tr": "Yola çıkmadan önce {n} {unit} daha gerekiyor.",
+  "ar": "تحتاج إلى {n} {unit} إضافية قبل السفر."
  },
  "empty_no_meds_title": {
   "nl": "Nog geen medicatie toegevoegd",
@@ -2616,6 +2751,12 @@ function usePlural() {
 
 const MED_COLORS = ["#2F6B5E", "#B4502C", "#D8A339", "#3E6FA6", "#6E5A9C", "#C2555C", "#5C8A63"];
 const EMPTY_EMERGENCY_INFO = { allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "" };
+// A planned trip: start/end are "" until both are set. freezeHomeTime, when
+// on, keeps dose scheduling pinned to homeTimeZone (captured the moment the
+// checkbox is switched on, since that's presumably still before departure)
+// instead of drifting with the device's live timezone while away — see
+// scheduleNow below.
+const EMPTY_VACATION = { start: "", end: "", freezeHomeTime: false, homeTimeZone: "" };
 const DAY_NAMES = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"];
 const DAY_SHORT = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
 const REFILL_LEAD_DAYS = 30;
@@ -3436,6 +3577,10 @@ export default function App() {
   const [snoozedUntil, setSnoozedUntil] = useState({});
   const [emergencyInfo, setEmergencyInfo] = useState({ allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "" });
   const [showEmergencyCard, setShowEmergencyCard] = useState(false);
+  // Per-profile, same pattern as emergencyInfo: only the active profile's
+  // trip lives here, the rest sit in profilesDataRef until switched to.
+  const [vacation, setVacation] = useState(EMPTY_VACATION);
+  const [vacationOpen, setVacationOpen] = useState(false);
   const [lastBackupAt, setLastBackupAt] = useState(null);
   const [onboardingSeen, setOnboardingSeen] = useState(false);
   const [beheerSearch, setBeheerSearch] = useState("");
@@ -3487,6 +3632,33 @@ export default function App() {
     return str;
   }, [language]);
   const [now, setNow] = useState(new Date());
+  // While vacation.freezeHomeTime is on and today falls within the trip
+  // window, this re-expresses "now" using the wall-clock time it would read
+  // in the home timezone captured when the checkbox was switched on — every
+  // schedule-facing computation below (today's date, which dose is due or
+  // missed, notification timing) reads this instead of the device's live,
+  // possibly-shifted local time, so doses stay pinned to "8 uur thuistijd"
+  // instead of instantly drifting the moment the phone's own clock switches
+  // timezone mid-trip. Declared this early (right after `now`, before
+  // anything else) for the same TDZ reason activeMedications is declared
+  // right after `medications` — a couple of effects below reference it in
+  // their dependency array, which is evaluated during render, before this
+  // point, if declared any later. Real timestamps (takenAt/createdAt/
+  // deletedAt) are never touched by this — those are always logged via a
+  // fresh `new Date()` at the moment of the action, not through this value.
+  const scheduleNow = useMemo(() => {
+    if (!vacation.freezeHomeTime || !vacation.homeTimeZone || !vacation.start || !vacation.end) return now;
+    const todayReal = isoDate(now);
+    if (todayReal < vacation.start || todayReal > vacation.end) return now;
+    try {
+      const parts = new Intl.DateTimeFormat("en-US", { timeZone: vacation.homeTimeZone, hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }).formatToParts(now);
+      const get = (type) => Number(parts.find((p) => p.type === type)?.value);
+      const hour24 = get("hour") % 24; // Intl can report midnight as "24"
+      return new Date(get("year"), get("month") - 1, get("day"), hour24, get("minute"), get("second"));
+    } catch (e) {
+      return now;
+    }
+  }, [now, vacation.freezeHomeTime, vacation.homeTimeZone, vacation.start, vacation.end]);
   const [notifPerm, setNotifPerm] = useState(typeof Notification !== "undefined" ? Notification.permission : "unsupported");
   // The browser's own notification permission can only move forward
   // (default -> granted/denied) via Notification.requestPermission(); once
@@ -3681,6 +3853,7 @@ export default function App() {
           setMedications((active.medications || []).map(normalizeMed));
           setLog(active.log || {});
           setEmergencyInfo({ allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "", ...(active.emergencyInfo || {}) });
+          setVacation({ ...EMPTY_VACATION, ...(active.vacation || {}) });
         } else {
           const migratedId = uid();
           setProfiles([{ id: migratedId, name: L("profile_default_name"), color: MED_COLORS[0], personType: "volwassene" }]);
@@ -3688,6 +3861,7 @@ export default function App() {
           setMedications((data.medications || []).map(normalizeMed));
           setLog(data.log || {});
           setEmergencyInfo({ allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "", ...(data.emergencyInfo || {}) });
+          setVacation({ ...EMPTY_VACATION, ...(data.vacation || {}) });
         }
         setPeriodBounds(data.periodBounds || DEFAULT_PERIOD_BOUNDS);
         setDarkMode(!!data.darkMode);
@@ -3726,13 +3900,13 @@ export default function App() {
     // save — medications/log/emergencyInfo only live as top-level state for
     // whichever profile is active right now, so this is where that gets
     // folded back in alongside the other (currently inactive) profiles.
-    profilesDataRef.current = { ...profilesDataRef.current, [activeProfileId]: { medications, log, emergencyInfo } };
+    profilesDataRef.current = { ...profilesDataRef.current, [activeProfileId]: { medications, log, emergencyInfo, vacation } };
     (async () => {
       try {
         await window.storage.set("medbox_v1", JSON.stringify({ profiles, activeProfileId, profilesData: profilesDataRef.current, periodBounds, darkMode, textSize, highContrast, icsExportEnabled, language, homeTipDismissed, customMedNames, lastBackupAt, onboardingSeen, notifDisabledByUser }), false);
       } catch (e) { console.error("Opslaan mislukt", e); }
     })();
-  }, [medications, log, periodBounds, darkMode, textSize, highContrast, icsExportEnabled, language, homeTipDismissed, customMedNames, emergencyInfo, lastBackupAt, onboardingSeen, notifDisabledByUser, storageIssue, profiles, activeProfileId]);
+  }, [medications, log, periodBounds, darkMode, textSize, highContrast, icsExportEnabled, language, homeTipDismissed, customMedNames, emergencyInfo, vacation, lastBackupAt, onboardingSeen, notifDisabledByUser, storageIssue, profiles, activeProfileId]);
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 30000);
@@ -3740,17 +3914,19 @@ export default function App() {
   }, []);
 
   // Dose-time notifications — only possible for fixed-time moments; "na het ontbijt" etc. has no clock trigger.
+  // Uses scheduleNow (not now) throughout so reminders fire on home time
+  // while a frozen vacation is active, same as the rest of the schedule.
   useEffect(() => {
     if (!notifActive) return;
-    const todayISO = isoDate(now);
+    const todayISO = isoDate(scheduleNow);
     // Active-only — a deleted medication shouldn't keep firing reminders.
     activeMedications.forEach((med) => {
-      if (!isDayScheduled(med, now)) return;
+      if (!isDayScheduled(med, scheduleNow)) return;
       med.times.forEach((t) => {
         if (isMeal(t)) return;
         const key = logKeyFor(med.id, todayISO, t);
         const dt = scheduledDateTime(todayISO, t.time);
-        const diffMin = (now - dt) / 60000;
+        const diffMin = (scheduleNow - dt) / 60000;
         const taken = log[key]?.taken;
         if (!taken && diffMin >= 0 && diffMin < 1 && !firedRef.current.has(key)) {
           firedRef.current.add(key);
@@ -3758,23 +3934,23 @@ export default function App() {
         }
       });
     });
-  }, [now, activeMedications, log, notifActive, L]);
+  }, [scheduleNow, activeMedications, log, notifActive, L]);
 
   // Period-end catch-up notification — fires once when a dagdeel ends, listing anything in it
   // that's still unchecked (this covers "na maaltijd" moments, which have no clock time of their
   // own; it also quietly catches a missed fixed-time dose from that period).
   useEffect(() => {
     if (!notifActive) return;
-    const todayISO = isoDate(now);
+    const todayISO = isoDate(scheduleNow);
     const ends = periodEndDateTimes(periodBounds, todayISO);
     Object.entries(ends).forEach(([period, endDt]) => {
-      const diffMin = (now - endDt) / 60000;
+      const diffMin = (scheduleNow - endDt) / 60000;
       if (diffMin < 0 || diffMin >= 1) return;
       const fireKey = `periodend_${period}_${todayISO}`;
       if (periodEndFiredRef.current.has(fireKey)) return;
       periodEndFiredRef.current.add(fireKey);
       const pending = [];
-      activeMedications.forEach((med) => { if (isDayScheduled(med, now)) med.times.forEach((t) => {
+      activeMedications.forEach((med) => { if (isDayScheduled(med, scheduleNow)) med.times.forEach((t) => {
         if (momentPeriod(t, periodBounds) !== period) return;
         if (!log[logKeyFor(med.id, todayISO, t)]?.taken) pending.push(`${med.name}${isMeal(t) ? ` (${momentLabel(t, L)})` : ""}`);
       }); });
@@ -3782,7 +3958,7 @@ export default function App() {
         try { new Notification(L("notif_period_title", { period: L(PERIOD_KEY_MAP[period] || period) }), { body: L("notif_period_body", { list: pending.join(", ") }), tag: fireKey }); } catch (e) {}
       }
     });
-  }, [now, activeMedications, log, notifActive, periodBounds, L]);
+  }, [scheduleNow, activeMedications, log, notifActive, periodBounds, L]);
 
   const requestNotif = async () => {
     if (typeof Notification === "undefined") return;
@@ -3804,14 +3980,18 @@ export default function App() {
     if (perm === "granted") setNotifDisabledByUser(false);
   };
 
-  const todayISO = isoDate(now);
+  // scheduleNow, not now — see its declaration above. todayISO is the one
+  // "what day is it" used everywhere doses get matched/logged/notified, so
+  // this single line is what makes the whole schedule follow home time
+  // during a frozen vacation.
+  const todayISO = isoDate(scheduleNow);
   const periodEnds = useMemo(() => periodEndDateTimes(periodBounds, todayISO), [periodBounds, todayISO]);
-  const currentPeriod = useMemo(() => computePeriodForTime(`${now.getHours()}:${now.getMinutes()}`, periodBounds), [now, periodBounds]);
+  const currentPeriod = useMemo(() => computePeriodForTime(`${scheduleNow.getHours()}:${scheduleNow.getMinutes()}`, periodBounds), [scheduleNow, periodBounds]);
 
   const getStatus = useCallback((med, t, dateISO) => {
     const key = logKeyFor(med.id, dateISO, t);
-    return momentStatus({ ...t, _logKey: key }, dateISO, log, now, todayISO, periodEnds);
-  }, [log, now, todayISO, periodEnds]);
+    return momentStatus({ ...t, _logKey: key }, dateISO, log, scheduleNow, todayISO, periodEnds);
+  }, [log, scheduleNow, todayISO, periodEnds]);
 
   const hideUndoToast = useCallback(() => {
     if (undoTimerRef.current) { clearTimeout(undoTimerRef.current); undoTimerRef.current = null; }
@@ -3856,7 +4036,7 @@ export default function App() {
   };
 
   const logPRN = (med) => {
-    const dISO = isoDate(now);
+    const dISO = isoDate(scheduleNow);
     const key = `${med.id}_${dISO}_prn:${uid()}`;
     const amount = med.prnDoseCount || 1;
     setLog((prev) => ({ ...prev, [key]: { taken: true, takenAt: new Date().toISOString(), amount } }));
@@ -3871,7 +4051,7 @@ export default function App() {
   };
 
   const undoLastPRN = (med) => {
-    const dISO = isoDate(now);
+    const dISO = isoDate(scheduleNow);
     const prefix = `${med.id}_${dISO}_prn:`;
     const keys = Object.keys(log).filter((k) => k.startsWith(prefix));
     if (keys.length === 0) return;
@@ -3918,11 +4098,12 @@ export default function App() {
   // profilesDataRef and hydrates state from the incoming one's snapshot.
   const switchProfile = (newId) => {
     if (newId === activeProfileId) { setShowProfiles(false); return; }
-    profilesDataRef.current = { ...profilesDataRef.current, [activeProfileId]: { medications, log, emergencyInfo } };
+    profilesDataRef.current = { ...profilesDataRef.current, [activeProfileId]: { medications, log, emergencyInfo, vacation } };
     const next = profilesDataRef.current[newId] || {};
     setMedications((next.medications || []).map(normalizeMed));
     setLog(next.log || {});
     setEmergencyInfo({ ...EMPTY_EMERGENCY_INFO, ...(next.emergencyInfo || {}) });
+    setVacation({ ...EMPTY_VACATION, ...(next.vacation || {}) });
     setActiveProfileId(newId);
     // Close anything mid-edit so it can never end up pointed at the profile
     // that was just left.
@@ -3940,11 +4121,12 @@ export default function App() {
     const usedColors = new Set(profiles.map((p) => p.color));
     const color = MED_COLORS.find((c) => !usedColors.has(c)) || MED_COLORS[profiles.length % MED_COLORS.length];
     const newId = uid();
-    profilesDataRef.current = { ...profilesDataRef.current, [activeProfileId]: { medications, log, emergencyInfo }, [newId]: { medications: [], log: {}, emergencyInfo: EMPTY_EMERGENCY_INFO } };
+    profilesDataRef.current = { ...profilesDataRef.current, [activeProfileId]: { medications, log, emergencyInfo, vacation }, [newId]: { medications: [], log: {}, emergencyInfo: EMPTY_EMERGENCY_INFO, vacation: EMPTY_VACATION } };
     setProfiles((prev) => [...prev, { id: newId, name: trimmed, color, personType: personType === "kind" ? "kind" : "volwassene" }]);
     setMedications([]);
     setLog({});
     setEmergencyInfo(EMPTY_EMERGENCY_INFO);
+    setVacation(EMPTY_VACATION);
     setActiveProfileId(newId);
     setShowAdd(false);
     setEditingMed(null);
@@ -3970,6 +4152,7 @@ export default function App() {
       setMedications((fdata.medications || []).map(normalizeMed));
       setLog(fdata.log || {});
       setEmergencyInfo({ ...EMPTY_EMERGENCY_INFO, ...(fdata.emergencyInfo || {}) });
+      setVacation({ ...EMPTY_VACATION, ...(fdata.vacation || {}) });
       setActiveProfileId(fallback.id);
     }
   };
@@ -4029,16 +4212,16 @@ export default function App() {
   };
 
   const weekDates = useMemo(() => {
-    const ref = new Date(now);
+    const ref = new Date(scheduleNow);
     ref.setDate(ref.getDate() + weekOffset * 7);
     return getWeekDates(ref);
-  }, [now.toDateString(), weekOffset]);
+  }, [scheduleNow.toDateString(), weekOffset]);
 
   const todaysDoses = useMemo(() => {
     const items = [];
-    activeMedications.forEach((med) => { if (isDayScheduled(med, now)) med.times.forEach((t) => items.push({ med, t, period: momentPeriod(t, periodBounds), sortValue: momentSortValue(t), status: getStatus(med, t, todayISO) })); });
+    activeMedications.forEach((med) => { if (isDayScheduled(med, scheduleNow)) med.times.forEach((t) => items.push({ med, t, period: momentPeriod(t, periodBounds), sortValue: momentSortValue(t), status: getStatus(med, t, todayISO) })); });
     return items.sort((a, b) => a.sortValue - b.sortValue);
-  }, [activeMedications, todayISO, getStatus, periodBounds, now]);
+  }, [activeMedications, todayISO, getStatus, periodBounds, scheduleNow]);
 
   // Same shape as todaysDoses, generalized to any date — used by the week
   // view, which lists one day per row instead of one column per day. Unlike
@@ -4057,7 +4240,7 @@ export default function App() {
     return map;
   }, [todaysDoses]);
 
-  const medsScheduledToday = useMemo(() => activeMedications.filter((m) => m.frequency !== "indien_nodig" && isDayScheduled(m, now)), [activeMedications, now]);
+  const medsScheduledToday = useMemo(() => activeMedications.filter((m) => m.frequency !== "indien_nodig" && isDayScheduled(m, scheduleNow)), [activeMedications, scheduleNow]);
 
   const progressByMed = useMemo(() => {
     const map = {};
@@ -4149,7 +4332,7 @@ export default function App() {
     if (medications.length === 0) return 0;
     let count = 0;
     for (let back = 1; back <= 30; back++) {
-      const d = new Date(now);
+      const d = new Date(scheduleNow);
       d.setDate(d.getDate() - back);
       const dISO = isoDate(d);
       let allTaken = true, hadDoses = false;
@@ -4161,7 +4344,7 @@ export default function App() {
       if (allTaken) count++; else break;
     }
     return count;
-  }, [medications, log, now]);
+  }, [medications, log, scheduleNow]);
 
   const prevStreakRef = useRef(0);
   useEffect(() => {
@@ -4200,6 +4383,44 @@ export default function App() {
       }
     });
   }, [needsRefill, notifActive, todayISO, L, language]);
+
+  // Vacation stock check — generalizes the exact same 30-day safety margin
+  // used above (lowStock/needsRefill), just evaluated as of the planned
+  // return date instead of today: will there still be REFILL_LEAD_DAYS worth
+  // of stock left by the time you're back? vacationDaysUntilReturn === 0 for
+  // "returning today" reduces this to the ordinary lowStock check, so this
+  // is a strict generalization, not a separate rule. Self-expiring: once the
+  // return date is in the past, vacationDaysUntilReturn goes negative and
+  // nothing is flagged any more — no manual cleanup needed.
+  const vacationDatesValid = !vacation.start || !vacation.end || vacation.end >= vacation.start;
+  const vacationActive = !!(vacation.start && vacation.end) && vacationDatesValid;
+  const vacationDaysUntilReturn = useMemo(() => {
+    if (!vacationActive) return null;
+    const endDay = new Date(`${vacation.end}T00:00:00`);
+    const today0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return Math.ceil((endDay.getTime() - today0.getTime()) / 86400000);
+  }, [vacationActive, vacation.end, now]);
+  const vacationUpcomingOrOngoing = vacationActive && vacationDaysUntilReturn != null && vacationDaysUntilReturn >= 0;
+  const vacationShortfall = useMemo(() => {
+    if (!vacationUpcomingOrOngoing) return [];
+    return medsWithSupply
+      .filter((m) => m.frequency !== "indien_nodig" && typeof m.stock === "number")
+      .map((m) => ({ ...m, neededStock: m.dosesPerDay * (Math.max(0, vacationDaysUntilReturn) + REFILL_LEAD_DAYS) }))
+      .filter((m) => m.stock < m.neededStock)
+      .map((m) => ({ ...m, shortBy: Math.ceil(m.neededStock - m.stock) }));
+  }, [vacationUpcomingOrOngoing, vacationDaysUntilReturn, medsWithSupply]);
+
+  const vacationFiredRef = useRef(new Set());
+  useEffect(() => {
+    if (!notifActive) return;
+    vacationShortfall.forEach((m) => {
+      const key = `vacation_${m.id}_${vacation.start}_${vacation.end}`;
+      if (!vacationFiredRef.current.has(key)) {
+        vacationFiredRef.current.add(key);
+        try { new Notification(L("notif_vacation_title", { name: m.name }), { body: L("notif_vacation_body", { n: m.shortBy, unit: unitWordFor(m, m.shortBy, L) }), tag: key }); } catch (e) {}
+      }
+    });
+  }, [vacationShortfall, notifActive, vacation.start, vacation.end, L]);
 
   const navigateTo = (key) => {
     setActiveNav(key);
@@ -4304,7 +4525,7 @@ export default function App() {
 
         {activeNav === "vandaag" && (
           <>
-            <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 18 }}>{DAY_NAMES_BY_LANG[language][(now.getDay() + 6) % 7]} · {now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
+            <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 18 }}>{DAY_NAMES_BY_LANG[language][(scheduleNow.getDay() + 6) % 7]} · {scheduleNow.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
 
             {nextUpcomingGroup.length === 1 && (
               <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 14 }}>
@@ -4312,7 +4533,7 @@ export default function App() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>{L("home_next")}</div>
                   <div title={nextUpcoming.med.name} style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis" }}>{nextUpcoming.med.name}</div>
-                  <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>{nextDoseTiming(nextUpcoming.t, now, todayISO, L)}</div>
+                  <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>{nextDoseTiming(nextUpcoming.t, scheduleNow, todayISO, L)}</div>
                 </div>
               </div>
             )}
@@ -4320,7 +4541,7 @@ export default function App() {
             {nextUpcomingGroup.length > 1 && (
               <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16 }}>
                 <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("home_next")}</div>
-                <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 10 }}>{nextDoseTiming(nextUpcoming.t, now, todayISO, L)}</div>
+                <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 10 }}>{nextDoseTiming(nextUpcoming.t, scheduleNow, todayISO, L)}</div>
                 {nextUpcomingGroup.map((d, i) => (
                   <div key={logKeyFor(d.med.id, todayISO, d.t)} style={{ display: "flex", alignItems: "center", gap: 14, marginTop: i > 0 ? 10 : 0 }}>
                     <Compartment status={d.status} color={d.med.color} unitType={d.med.unitType} size={44} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: L("aria_dose_upcoming") })} />
@@ -4433,6 +4654,24 @@ export default function App() {
                 <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#8A6420", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", marginBottom: 8 }}><Package size={16} /> {L("refill_title")}</div>
                 {needsRefill.map((m) => (
                   <div key={m.id} style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", padding: "4px 0" }}><span style={{ fontWeight: 600 }}>{m.name}</span> <span style={{ color: "#8A6420" }}>{L("refill_days_left", { days: m.daysLeft <= 0 ? "0" : m.daysLeft, unit: L(m.daysLeft === 1 ? "stat_streak_days_one" : "stat_streak_days_other"), date: m.runOutDate ? m.runOutDate.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) : "" })}</span></div>
+                ))}
+              </div>
+            )}
+
+            {/* Stays visible on every visit to Vandaag — not just once when the
+                trip was planned — for exactly as long as a shortfall is still
+                real: it disappears the moment stock is topped up enough, or
+                once the return date has passed (vacationShortfall handles
+                both automatically). That's the actual safety value here: a
+                one-time check when you first pick the dates wouldn't catch a
+                shortfall that only appears later, as you keep using up stock
+                in the days before you leave. */}
+            {vacationUpcomingOrOngoing && vacationShortfall.length > 0 && (
+              <div style={{ background: T.goldSoft, border: `1.5px solid ${T.gold}55`, borderRadius: 16, padding: "14px 16px", marginBottom: 20 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#8A6420", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", marginBottom: 8 }}><Luggage size={16} /> {L("vacation_shortfall_title")}</div>
+                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: "#8A6420", marginBottom: 6, lineHeight: 1.4 }}>{L("vacation_banner_explain", { date: new Date(`${vacation.end}T00:00:00`).toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) })}</div>
+                {vacationShortfall.map((m) => (
+                  <div key={m.id} style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", padding: "4px 0" }}><span style={{ fontWeight: 600 }}>{m.name}</span> <span style={{ color: "#8A6420" }}>{L("vacation_shortfall_amount", { n: m.shortBy, unit: unitWordFor(m, m.shortBy, L) })}</span></div>
                 ))}
               </div>
             )}
@@ -4710,6 +4949,62 @@ export default function App() {
                 <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4 }}>{L("settings_notif_explain")}</div>
               )}
             </div>
+
+            <div onClick={() => setVacationOpen((v) => !v)} style={{ cursor: "pointer" }}>
+              <SectionTitle trailing={vacationOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}>{L("settings_vacation_title")}</SectionTitle>
+            </div>
+            {vacationOpen && (
+              <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: 16, marginBottom: 24 }}>
+                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_vacation_explain")}</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+                  <div>
+                    <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 4 }}>{L("vacation_start_label")}</div>
+                    <input type="date" value={vacation.start} onChange={(e) => setVacation((v) => ({ ...v, start: e.target.value }))} style={getInputStyle(T)} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 4 }}>{L("vacation_end_label")}</div>
+                    <input type="date" value={vacation.end} onChange={(e) => setVacation((v) => ({ ...v, end: e.target.value }))} style={getInputStyle(T)} />
+                  </div>
+                </div>
+
+                {!vacationDatesValid && (
+                  <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.warn, marginBottom: 12 }}>{L("vacation_dates_invalid")}</div>
+                )}
+
+                {/* Immediate, visible check as soon as both dates are in — this is
+                    the "safety" purpose of the whole feature, so it shouldn't
+                    require leaving this screen to find out. */}
+                {vacationUpcomingOrOngoing && vacationShortfall.length > 0 && (
+                  <div style={{ background: T.goldSoft, border: `1.5px solid ${T.gold}55`, borderRadius: 14, padding: "12px 14px", marginBottom: 12 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#8A6420", fontWeight: 700, fontSize: "calc(13px * var(--wd-text-scale, 1))", marginBottom: 6 }}><AlertTriangle size={15} /> {L("vacation_shortfall_title")}</div>
+                    {vacationShortfall.map((m) => (
+                      <div key={m.id} style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: "#8A6420", padding: "3px 0" }}>{L("vacation_shortfall_line", { name: m.name, n: m.shortBy, unit: unitWordFor(m, m.shortBy, L) })}</div>
+                    ))}
+                  </div>
+                )}
+                {vacationUpcomingOrOngoing && vacationShortfall.length === 0 && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.success, fontWeight: 600, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", marginBottom: 12, lineHeight: 1.4 }}><Check size={16} style={{ flexShrink: 0 }} /> {L("vacation_ok_message")}</div>
+                )}
+
+                <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", minHeight: 24, marginBottom: 8 }}>
+                  <input
+                    type="checkbox"
+                    checked={vacation.freezeHomeTime}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setVacation((v) => ({ ...v, freezeHomeTime: checked, homeTimeZone: checked ? (Intl.DateTimeFormat().resolvedOptions().timeZone || v.homeTimeZone) : v.homeTimeZone }));
+                    }}
+                    style={{ width: 20, height: 20, accentColor: T.primary }}
+                  />
+                  <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("vacation_freeze_toggle")}</span>
+                </label>
+                <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: (vacation.start || vacation.end) ? 14 : 0 }}>{L("vacation_freeze_explain")}</div>
+
+                {(vacation.start || vacation.end) && (
+                  <button className="wd-btn" onClick={() => setVacation(EMPTY_VACATION)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.surfaceSoft, color: T.muted, border: `1.5px solid ${T.border}`, borderRadius: 12, padding: "11px 14px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 700, cursor: "pointer" }}><X size={15} /> {L("vacation_clear_button")}</button>
+                )}
+              </div>
+            )}
 
             <SectionTitle>{L("settings_home_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
