@@ -3495,6 +3495,25 @@ function AvatarBadge({ name, color, photo, unitType, personType, size = 32 }) {
   );
 }
 
+// A small, static line-art echo of the Compartment jar (no button, no
+// animation, no status) purely for "nothing here yet" moments -- so an
+// empty state gets a bit of the app's own hand-drawn character instead of
+// just muted text on its own.
+function EmptyJarIllustration({ size = 56 }) {
+  const T = useThemeColors();
+  return (
+    <svg viewBox="0 0 44 52" width={size} height={size * 1.16} style={{ display: "block", margin: "0 auto 10px", overflow: "visible" }} aria-hidden="true">
+      <rect x="6" y="18" width="32" height="30" rx="11" fill={T.surfaceSoft} stroke={T.mutedSoft} strokeWidth="2" />
+      <g style={{ transformBox: "view-box", transformOrigin: "22px 34px", transform: "rotate(28deg)" }}>
+        <rect x="14.5" y="28.5" width="15" height="8.4" rx="4.2" fill={T.mutedSoft} opacity="0.55" />
+      </g>
+      <g style={{ transformBox: "view-box", transformOrigin: "22px 19px", transform: "translate(8px,-13px) rotate(24deg) scale(0.6)" }}>
+        <rect x="10" y="10" width="24" height="9" rx="4.5" fill={T.raised} stroke={T.mutedSoft} strokeWidth="1.6" />
+      </g>
+    </svg>
+  );
+}
+
 // ---------- Bottom mobile navigation ----------
 function BottomNav({ active, onNavigate }) {
   const T = useThemeColors();
@@ -3526,7 +3545,7 @@ function BottomNav({ active, onNavigate }) {
       {items.map((it) => (
         <button key={it.key} onClick={() => onNavigate(it.key)} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, background: "none", border: "none", color: active === it.key ? T.primary : T.mutedSoft, cursor: "pointer", minWidth: 68, minHeight: 52, padding: "4px 6px" }}>
           {it.icon}
-          <span style={{ fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{it.label}</span>
+          <span style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{it.label}</span>
         </button>
       ))}
     </div>
@@ -4473,7 +4492,21 @@ export default function App() {
         .wd-pop { animation: wd-pop 0.4s cubic-bezier(.4,1.6,.5,1); }
         @keyframes wd-confetti-fall { 0% { transform: translateY(-6px) rotate(0deg); opacity: 1; } 100% { transform: translateY(46px) rotate(200deg); opacity: 0; } }
         .wd-confetti span { position: absolute; top: 0; display: block; width: 6px; height: 6px; border-radius: 2px; animation: wd-confetti-fall 0.9s ease-out forwards; }
-        .wd-card { box-shadow: ${darkMode ? "0 3px 16px rgba(0,0,0,0.45)" : "0 1px 3px rgba(35,62,56,0.06)"}; }
+        /* Subtle settle-in for the main list screens (Beheer, Week, Vandaag's
+           progress cards) -- each item fades up a touch, staggered a few ms
+           apart via an inline animation-delay, so a list feels like it
+           gently arrives instead of just popping into place all at once. */
+        @keyframes wd-stagger-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .wd-stagger { animation: wd-stagger-in 0.4s cubic-bezier(.2,.7,.3,1) both; }
+        @media (prefers-reduced-motion: reduce) {
+          .wd-pop, .wd-confetti span, .wd-stagger { animation: none !important; }
+        }
+        .wd-card { box-shadow: ${darkMode ? "0 3px 16px rgba(0,0,0,0.45)" : "0 1px 2px rgba(35,62,56,0.05), 0 3px 10px rgba(35,62,56,0.06)"}; }
+        /* A second, more pronounced elevation step for the few surfaces
+           that should visibly sit above everything else -- the "Volgende"
+           hero card and modals -- so those specific moments get real depth
+           instead of the same faint shadow as every ordinary list row. */
+        .wd-elevated { box-shadow: ${darkMode ? "0 6px 24px rgba(0,0,0,0.55)" : "0 2px 6px rgba(35,62,56,0.09), 0 12px 28px rgba(35,62,56,0.12)"}; }
         input[type=number] { -moz-appearance: textfield; }
         input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input::placeholder, select::placeholder, textarea::placeholder { color: ${T.mutedSoft}; opacity: 1; }
@@ -4509,7 +4542,7 @@ export default function App() {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, gap: 10, flexWrap: "wrap", rowGap: 8 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
             <Logo />
-            <div title={`${streak} ${L(streak === 1 ? "stat_streak_days_one" : "stat_streak_days_other")}`} style={{ display: "flex", alignItems: "center", gap: 4, background: streak >= 3 ? T.goldSoft : T.successSoft, color: streak >= 3 ? T.gold : T.success, borderRadius: 999, padding: "6px 9px", fontWeight: 700, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", flexShrink: 0 }}>
+            <div title={`${streak} ${L(streak === 1 ? "stat_streak_days_one" : "stat_streak_days_other")}`} style={{ display: "flex", alignItems: "center", gap: 4, background: streak >= 3 ? T.goldSoft : T.successSoft, color: streak >= 3 ? T.gold : T.success, borderRadius: 999, padding: "6px 9px", fontWeight: 700, fontSize: "calc(13px * var(--wd-text-scale, 1))", flexShrink: 0 }}>
               {streak >= 3 ? <Flame size={14} /> : <Clock size={14} />} {streak}
             </div>
           </div>
@@ -4533,8 +4566,8 @@ export default function App() {
         {storageIssue && (
           <div style={{ background: T.warnSoft, border: `1.5px solid ${T.warn}55`, borderRadius: 16, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
             <AlertTriangle size={16} color={T.warn} style={{ flexShrink: 0 }} />
-            <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.warn, lineHeight: 1.4, flex: 1, minWidth: 200 }}>{L("storage_issue_text")}</div>
-            <button className="wd-btn" onClick={() => window.location.reload()} style={{ background: T.warn, color: "#fff", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>{L("storage_issue_retry")}</button>
+            <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.warn, lineHeight: 1.4, flex: 1, minWidth: 200 }}>{L("storage_issue_text")}</div>
+            <button className="wd-btn" onClick={() => window.location.reload()} style={{ background: T.warn, color: "#fff", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>{L("storage_issue_retry")}</button>
           </div>
         )}
 
@@ -4543,18 +4576,18 @@ export default function App() {
             <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 18 }}>{DAY_NAMES_BY_LANG[language][(scheduleNow.getDay() + 6) % 7]} · {scheduleNow.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" })}</div>
 
             {nextUpcomingGroup.length === 1 && (
-              <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 14 }}>
+              <div className="wd-card wd-elevated" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16, display: "flex", alignItems: "center", gap: 14 }}>
                 <Compartment status={nextUpcoming.status} color={nextUpcoming.med.color} unitType={nextUpcoming.med.unitType} size={44} onClick={() => toggleTaken(nextUpcoming.med, todayISO, nextUpcoming.t)} pop={poppedKey === logKeyFor(nextUpcoming.med.id, todayISO, nextUpcoming.t)} label={L("aria_dose_label", { name: nextUpcoming.med.name, moment: momentLabel(nextUpcoming.t, L), status: L("aria_dose_upcoming") })} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>{L("home_next")}</div>
-                  <div title={nextUpcoming.med.name} style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis" }}>{nextUpcoming.med.name}</div>
+                  <div title={nextUpcoming.med.name} style={{ fontSize: "calc(16px * var(--wd-text-scale, 1))", fontWeight: 700, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis" }}>{nextUpcoming.med.name}</div>
                   <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>{nextDoseTiming(nextUpcoming.t, scheduleNow, todayISO, L)}</div>
                 </div>
               </div>
             )}
 
             {nextUpcomingGroup.length > 1 && (
-              <div className="wd-card" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16 }}>
+              <div className="wd-card wd-elevated" style={{ background: T.primarySoft, border: `1.5px solid ${T.primary}55`, borderRadius: 18, padding: "14px 16px", marginBottom: 16 }}>
                 <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("home_next")}</div>
                 <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12 }}>{nextDoseTiming(nextUpcoming.t, scheduleNow, todayISO, L)}</div>
                 {/* Max 2 per row, always -- fixed 2-column grid rather than
@@ -4567,7 +4600,7 @@ export default function App() {
                   {nextUpcomingGroup.map((d) => (
                     <div key={logKeyFor(d.med.id, todayISO, d.t)} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, minWidth: 0 }}>
                       <Compartment status={d.status} color={d.med.color} unitType={d.med.unitType} size={44} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: L("aria_dose_upcoming") })} />
-                      <div title={d.med.name} style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 700, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", width: "100%" }}>{d.med.name}</div>
+                      <div title={d.med.name} style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 700, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", width: "100%" }}>{d.med.name}</div>
                     </div>
                   ))}
                 </div>
@@ -4598,7 +4631,7 @@ export default function App() {
                           onClick={() => setExpandedPeriods((prev) => ({ ...prev, [period]: true }))}
                           style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: T.successSoft, border: `1.5px solid ${T.success}40`, borderRadius: 12, padding: "10px 14px", cursor: "pointer", fontFamily: "inherit" }}
                         >
-                          <span style={{ display: "flex", alignItems: "center", gap: 7, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.success }}><Check size={14} /> {L("home_period_all_taken", { period: periodLabel })}</span>
+                          <span style={{ display: "flex", alignItems: "center", gap: 7, fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.success }}><Check size={14} /> {L("home_period_all_taken", { period: periodLabel })}</span>
                           <span style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", color: T.muted }}>{items.length} {L(items.length === 1 ? "home_period_potjes_one" : "home_period_potjes_other")}</span>
                         </button>
                       ) : (
@@ -4606,7 +4639,7 @@ export default function App() {
                           <button
                             className={`wd-mono${allTaken ? " wd-btn" : ""}`}
                             onClick={allTaken ? () => setExpandedPeriods((prev) => ({ ...prev, [period]: false })) : undefined}
-                            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: isCurrent ? "#fff" : T.primary, textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 10, background: isCurrent ? T.primary : "transparent", borderRadius: 8, padding: isCurrent ? "4px 10px" : 0, border: "none", cursor: allTaken ? "pointer" : "default", fontFamily: "inherit" }}
+                            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 700, color: isCurrent ? "#fff" : T.primary, textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 10, background: isCurrent ? T.primary : "transparent", borderRadius: 8, padding: isCurrent ? "4px 10px" : 0, border: "none", cursor: allTaken ? "pointer" : "default", fontFamily: "inherit" }}
                           >
                             {periodLabel}{allTaken && " ✓"}
                           </button>
@@ -4615,9 +4648,9 @@ export default function App() {
                               <div key={d.med.id + d.t.id} className="wd-card" style={{ background: T.surface, borderRadius: 18, padding: "16px 12px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, border: `1.5px solid ${isCurrent ? T.primary + "55" : T.border}` }}>
                                 <AvatarBadge name={d.med.name} color={d.med.color} photo={d.med.photo} unitType={d.med.unitType} size={26} />
                                 <Compartment status={d.status} color={d.med.color} unitType={d.med.unitType} size={isCurrent ? 56 : 46} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: statusLabel(d.status, L) })} />
-                                <div title={d.med.name} style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", width: "100%" }}>{d.med.name}</div>
-                                <div className={isMeal(d.t) ? "" : "wd-mono"} style={{ fontSize: isMeal(d.t) ? "calc(11px * var(--wd-text-scale, 1))" : "calc(11.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center" }}>{momentLabel(d.t, L)}</div>
-                                {doseLabel(d.med, d.t, L) && <div style={{ fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, textAlign: "center" }}>{doseLabel(d.med, d.t, L)}</div>}
+                                <div title={d.med.name} style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", width: "100%" }}>{d.med.name}</div>
+                                <div className={isMeal(d.t) ? "" : "wd-mono"} style={{ fontSize: isMeal(d.t) ? "calc(11px * var(--wd-text-scale, 1))" : "calc(12px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center" }}>{momentLabel(d.t, L)}</div>
+                                {doseLabel(d.med, d.t, L) && <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, textAlign: "center" }}>{doseLabel(d.med, d.t, L)}</div>}
                               </div>
                             ))}
                           </div>
@@ -4660,10 +4693,10 @@ export default function App() {
                 <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.warn, fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", marginBottom: 8 }}><AlertTriangle size={16} /> {L(visibleMissed.length === 1 ? "missed_count_one" : "missed_count_other", { n: visibleMissed.length })}</div>
                 {visibleMissed.map((d) => (
                   <div key={d.med.id + d.t.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 0", gap: 8, flexWrap: "wrap" }}>
-                    <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))"}}><span style={{ fontWeight: 600 }}>{d.med.name}</span> <span style={{ color: T.muted }} className={isMeal(d.t) ? "" : "wd-mono"}>{momentLabel(d.t, L)}</span></div>
+                    <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))"}}><span style={{ fontWeight: 600 }}>{d.med.name}</span> <span style={{ color: T.muted }} className={isMeal(d.t) ? "" : "wd-mono"}>{momentLabel(d.t, L)}</span></div>
                     <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
                       <button className="wd-btn" onClick={() => snoozeDose(d.med, d.t)} style={{ background: "none", color: T.warn, border: `1.5px solid ${T.warn}55`, borderRadius: 10, padding: "9px 12px", fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer" }}>{L("missed_snooze")}</button>
-                      <button className="wd-btn" onClick={() => toggleTaken(d.med, todayISO, d.t)} style={{ background: T.warn, color: "#fff", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer" }}>{L("missed_taken_anyway")}</button>
+                      <button className="wd-btn" onClick={() => toggleTaken(d.med, todayISO, d.t)} style={{ background: T.warn, color: "#fff", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer" }}>{L("missed_taken_anyway")}</button>
                     </div>
                   </div>
                 ))}
@@ -4674,7 +4707,7 @@ export default function App() {
               <div style={{ background: T.goldSoft, border: `1.5px solid ${T.gold}55`, borderRadius: 16, padding: "14px 16px", marginBottom: 20 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#8A6420", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", marginBottom: 8 }}><Package size={16} /> {L("refill_title")}</div>
                 {needsRefill.map((m) => (
-                  <div key={m.id} style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", padding: "4px 0" }}><span style={{ fontWeight: 600 }}>{m.name}</span> <span style={{ color: "#8A6420" }}>{L("refill_days_left", { days: m.daysLeft <= 0 ? "0" : m.daysLeft, unit: L(m.daysLeft === 1 ? "stat_streak_days_one" : "stat_streak_days_other"), date: m.runOutDate ? m.runOutDate.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) : "" })}</span></div>
+                  <div key={m.id} style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", padding: "4px 0" }}><span style={{ fontWeight: 600 }}>{m.name}</span> <span style={{ color: "#8A6420" }}>{L("refill_days_left", { days: m.daysLeft <= 0 ? "0" : m.daysLeft, unit: L(m.daysLeft === 1 ? "stat_streak_days_one" : "stat_streak_days_other"), date: m.runOutDate ? m.runOutDate.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) : "" })}</span></div>
                 ))}
               </div>
             )}
@@ -4690,9 +4723,9 @@ export default function App() {
             {vacationUpcomingOrOngoing && vacationShortfall.length > 0 && (
               <div style={{ background: T.goldSoft, border: `1.5px solid ${T.gold}55`, borderRadius: 16, padding: "14px 16px", marginBottom: 20 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#8A6420", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", marginBottom: 8 }}><Luggage size={16} /> {L("vacation_shortfall_title")}</div>
-                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: "#8A6420", marginBottom: 6, lineHeight: 1.4 }}>{L("vacation_banner_explain", { date: new Date(`${vacation.end}T00:00:00`).toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) })}</div>
+                <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: "#8A6420", marginBottom: 6, lineHeight: 1.4 }}>{L("vacation_banner_explain", { date: new Date(`${vacation.end}T00:00:00`).toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long" }) })}</div>
                 {vacationShortfall.map((m) => (
-                  <div key={m.id} style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", padding: "4px 0" }}><span style={{ fontWeight: 600 }}>{m.name}</span> <span style={{ color: "#8A6420" }}>{L("vacation_shortfall_amount", { n: m.shortBy, unit: unitWordFor(m, m.shortBy, L) })}</span></div>
+                  <div key={m.id} style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", padding: "4px 0" }}><span style={{ fontWeight: 600 }}>{m.name}</span> <span style={{ color: "#8A6420" }}>{L("vacation_shortfall_amount", { n: m.shortBy, unit: unitWordFor(m, m.shortBy, L) })}</span></div>
                 ))}
               </div>
             )}
@@ -4703,9 +4736,10 @@ export default function App() {
                 state from showing once nothing is actively tracked anymore. */}
             {activeMedications.length === 0 && (
               <div className="wd-card" style={{ background: T.surface, border: `1.5px dashed ${T.border}`, borderRadius: 20, padding: "36px 20px", textAlign: "center", marginBottom: 20 }}>
+                <EmptyJarIllustration />
                 <div className="wd-display" style={{ fontSize: "calc(18px * var(--wd-text-scale, 1))", fontWeight: 600, marginBottom: 6 }}>{L("empty_no_meds_title")}</div>
-                <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16 }}>{L("empty_no_meds_body")}</div>
-                <button className="wd-btn" onClick={() => setShowAdd(true)} style={{ background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "14px 22px", fontWeight: 700, fontSize: "calc(15px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("empty_add_med_button")}</button>
+                <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16 }}>{L("empty_no_meds_body")}</div>
+                <button className="wd-btn" onClick={() => setShowAdd(true)} style={{ background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "14px 22px", fontWeight: 700, fontSize: "calc(16px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("empty_add_med_button")}</button>
               </div>
             )}
 
@@ -4721,12 +4755,12 @@ export default function App() {
                         (now with the matching icon); it only splits into
                         multiple cards once more than one shape is actually
                         scheduled for today. */}
-                    {progressByShape.map((p) => (
-                      <div key={p.shape} className="wd-card" style={{ background: T.surface, borderRadius: 16, padding: "14px 16px", display: "flex", alignItems: "center", gap: 16, marginBottom: 12, border: `1.5px solid ${T.border}` }}>
+                    {progressByShape.map((p, i) => (
+                      <div key={p.shape} className="wd-card wd-stagger" style={{ background: T.surface, borderRadius: 16, padding: "14px 16px", display: "flex", alignItems: "center", gap: 16, marginBottom: 12, border: `1.5px solid ${T.border}`, animationDelay: `${i * 35}ms` }}>
                         <ProgressShape shape={p.shape} color={T.primary} taken={p.taken} total={p.total} size={58} />
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <div className="wd-mono" style={{ fontSize: "calc(19px * var(--wd-text-scale, 1))", fontWeight: 700, color: p.taken >= p.total ? T.success : T.ink }}>{p.taken}/{p.total}</div>
-                          <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginTop: 2 }}>{L(p.count === 1 ? "progress_today_combined_meds_one" : "progress_today_combined_meds_other", { n: p.count })}</div>
+                          <div className="wd-mono" style={{ fontSize: "calc(18px * var(--wd-text-scale, 1))", fontWeight: 700, color: p.taken >= p.total ? T.success : T.ink }}>{p.taken}/{p.total}</div>
+                          <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginTop: 2 }}>{L(p.count === 1 ? "progress_today_combined_meds_one" : "progress_today_combined_meds_other", { n: p.count })}</div>
                         </div>
                       </div>
                     ))}
@@ -4765,13 +4799,14 @@ export default function App() {
             <SectionTitle>{L("week_title")}</SectionTitle>
             {medications.length === 0 ? (
               <div className="wd-card" style={{ background: T.surface, border: `1.5px dashed ${T.border}`, borderRadius: 20, padding: "36px 20px", textAlign: "center" }}>
-                <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.muted }}>{L("week_empty")}</div>
+                <EmptyJarIllustration />
+                <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.muted }}>{L("week_empty")}</div>
               </div>
             ) : (
               <>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, gap: 8 }}>
                   <button className="wd-btn" onClick={() => setWeekOffset((o) => Math.max(-12, o - 1))} disabled={weekOffset <= -12} style={{ background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: weekOffset <= -12 ? T.mutedSoft : T.ink, borderRadius: 10, padding: "9px 14px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: weekOffset <= -12 ? "not-allowed" : "pointer", minHeight: 40 }}>{L("week_prev")}</button>
-                  <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.muted }}>{weekOffset === 0 ? L("week_this") : weekOffset === -1 ? L("week_last") : L("week_weeks_ago", { n: Math.abs(weekOffset) })}</div>
+                  <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.muted }}>{weekOffset === 0 ? L("week_this") : weekOffset === -1 ? L("week_last") : L("week_weeks_ago", { n: Math.abs(weekOffset) })}</div>
                   <button className="wd-btn" onClick={() => setWeekOffset((o) => Math.min(0, o + 1))} disabled={weekOffset >= 0} style={{ background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: weekOffset >= 0 ? T.mutedSoft : T.ink, borderRadius: 10, padding: "9px 14px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: weekOffset >= 0 ? "not-allowed" : "pointer", minHeight: 40 }}>{L("week_next")}</button>
                 </div>
 
@@ -4793,7 +4828,7 @@ export default function App() {
                           <div style={{ width: "100%", maxWidth: 26, height: 52, background: T.surfaceSoft, borderRadius: 6, display: "flex", alignItems: "flex-end", overflow: "hidden" }}>
                             {showBar && <div style={{ width: "100%", height: `${Math.max(pct, 6)}%`, background: barColor, borderRadius: "6px 6px 0 0" }} />}
                           </div>
-                          <div className="wd-mono" style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", fontWeight: isToday ? 700 : 600, color: isToday ? T.primary : T.muted }}>{DAY_SHORT_BY_LANG[language][i]}</div>
+                          <div className="wd-mono" style={{ fontSize: "calc(10px * var(--wd-text-scale, 1))", fontWeight: isToday ? 700 : 600, color: isToday ? T.primary : T.muted }}>{DAY_SHORT_BY_LANG[language][i]}</div>
                         </div>
                       );
                     })}
@@ -4808,14 +4843,18 @@ export default function App() {
                     const dayByPeriod = { Ochtend: [], Middag: [], Avond: [], Nacht: [] };
                     dayDoses.forEach((it) => dayByPeriod[it.period].push(it));
                     return (
-                      <div key={i} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${isToday ? T.primary : T.border}`, borderRadius: 16, padding: "13px 15px" }}>
+                      <div key={i} className="wd-card wd-stagger" style={{ background: T.surface, border: `1.5px solid ${isToday ? T.primary : T.border}`, borderRadius: 16, padding: dayDoses.length > 0 ? "13px 15px" : "11px 15px", animationDelay: `${i * 35}ms` }}>
                         <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: dayDoses.length > 0 ? 10 : 0 }}>
                           <div style={{ fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", color: isToday ? T.primary : T.ink }}>{DAY_NAMES_BY_LANG[language][i]}</div>
                           <div className="wd-mono" style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>{d.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "short" })}</div>
-                          {isToday && <span style={{ marginLeft: "auto", fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, background: T.primarySoft, borderRadius: 8, padding: "3px 9px", flexShrink: 0 }}>{L("week_today_badge")}</span>}
+                          {isToday && <span style={{ marginLeft: "auto", fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary, background: T.primarySoft, borderRadius: 8, padding: "3px 9px", flexShrink: 0 }}>{L("week_today_badge")}</span>}
                         </div>
                         {dayDoses.length === 0 ? (
-                          <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted }}>{L("week_no_meds_day")}</div>
+                          // Lighter and slightly smaller than a populated day's
+                          // content -- this is the common, unremarkable case
+                          // (most weeks have several med-free days), so it should
+                          // recede rather than compete visually with real doses.
+                          <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft }}>{L("week_no_meds_day")}</div>
                         ) : (
                           PERIOD_ORDER.filter((p) => dayByPeriod[p].length > 0).map((period) => (
                             <div key={period} style={{ marginBottom: 10 }}>
@@ -4824,7 +4863,7 @@ export default function App() {
                                 {dayByPeriod[period].map((it) => (
                                   <div key={it.med.id + it.t.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, width: 54 }}>
                                     <Compartment status={it.status} color={it.med.color} unitType={it.med.unitType} size={38} onClick={() => toggleTaken(it.med, dISO, it.t)} pop={poppedKey === logKeyFor(it.med.id, dISO, it.t)} label={L("aria_dose_label", { name: it.med.name, moment: `${DAY_NAMES_BY_LANG[language][i]} ${momentLabel(it.t, L)}`, status: statusLabel(it.status, L) })} />
-                                    <div title={it.med.name} style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", width: "100%" }}>{it.med.name}</div>
+                                    <div title={it.med.name} style={{ fontSize: "calc(10px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", width: "100%" }}>{it.med.name}</div>
                                   </div>
                                 ))}
                               </div>
@@ -4848,7 +4887,7 @@ export default function App() {
                 <AvatarBadge name={activeProfile?.name} color={activeProfile?.color || T.primary} personType={activeProfile?.personType} size={38} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{activeProfile?.name}</div>
-                  <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary }}>{L("profiles_active_badge")}</div>
+                  <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.primary }}>{L("profiles_active_badge")}</div>
                 </div>
               </div>
               <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: 14 }}>{L("profiles_manage_explain")}</div>
@@ -4866,12 +4905,12 @@ export default function App() {
               {medsWithSupply.filter((med) => med.name.toLowerCase().includes(beheerSearch.trim().toLowerCase())).length === 0 && beheerSearch.trim() && (
                 <div className="wd-card" style={{ background: T.surface, border: `1.5px dashed ${T.border}`, borderRadius: 16, padding: "24px 16px", textAlign: "center", fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted }}>{L("beheer_search_empty", { q: beheerSearch.trim() })}</div>
               )}
-              {medsWithSupply.filter((med) => med.name.toLowerCase().includes(beheerSearch.trim().toLowerCase())).map((med) => (
-                <div key={med.id} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 14, padding: "12px 12px" }}>
+              {medsWithSupply.filter((med) => med.name.toLowerCase().includes(beheerSearch.trim().toLowerCase())).map((med, i) => (
+                <div key={med.id} className="wd-card wd-stagger" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 14, padding: "12px 12px", animationDelay: `${Math.min(i, 8) * 35}ms` }}>
                   <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", rowGap: 8, gap: 12 }}>
                     <AvatarBadge name={med.name} color={med.color} photo={med.photo} unitType={med.unitType} size={34} />
                     <div style={{ flex: "1 1 140px", minWidth: 0 }}>
-                      <div title={med.name} style={{ fontWeight: 600, fontSize: "calc(14.5px * var(--wd-text-scale, 1))", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{med.name}</div>
+                      <div title={med.name} style={{ fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{med.name}</div>
                       <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>
                         {med.frequency === "indien_nodig" ? (
                           <>{L("beheer_prn_summary")} · {doseLabel(med, { count: med.prnDoseCount }, L)}</>
@@ -4916,7 +4955,7 @@ export default function App() {
             <SectionTitle>{L("settings_trend_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               {medications.length === 0 ? (
-                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>
+                <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>
               ) : (
                 <AdherenceTrend medications={medications} log={log} now={now} periodBounds={periodBounds} />
               )}
@@ -4929,7 +4968,7 @@ export default function App() {
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", minHeight: 24, marginBottom: 12 }}>
                 <input type="checkbox" checked={icsExportEnabled} onChange={(e) => setIcsExportEnabled(e.target.checked)} style={{ width: 20, height: 20, accentColor: T.primary }} />
-                <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_calendar_toggle")}</span>
+                <span style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_calendar_toggle")}</span>
               </label>
               <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: icsExportEnabled ? 14 : 0 }}>{L("settings_calendar_explain")}</div>
               {icsExportEnabled && (
@@ -4943,7 +4982,7 @@ export default function App() {
           <>
             <SectionTitle icon={<Accessibility size={18} />}>{L("settings_accessibility_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600, marginBottom: 10 }}>{L("settings_textsize_label")}</div>
+              <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 600, marginBottom: 10 }}>{L("settings_textsize_label")}</div>
               <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
                 {["normaal", "groot", "extra-groot"].map((size) => (
                   <button key={size} type="button" onClick={() => setTextSize(size)} style={getToggleBtnStyle(T, textSize === size)}>
@@ -4953,7 +4992,7 @@ export default function App() {
               </div>
               <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", minHeight: 24 }}>
                 <input type="checkbox" checked={highContrast} onChange={(e) => setHighContrast(e.target.checked)} style={{ width: 20, height: 20, accentColor: T.primary }} />
-                <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_contrast_toggle")}</span>
+                <span style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_contrast_toggle")}</span>
               </label>
               <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginTop: 8 }}>{L("settings_contrast_explain")}</div>
             </div>
@@ -4961,7 +5000,7 @@ export default function App() {
             <SectionTitle icon={<Bell size={18} />}>{L("settings_notif_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: !notifActive ? 8 : 0 }}>
-                <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_notif_label")}</span>
+                <span style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_notif_label")}</span>
                 <IconToggleButton onClick={requestNotif} active={notifActive} icon={notifActive ? <Bell size={16} /> : <BellOff size={16} />} label={notifPerm === "denied" ? L("settings_notif_denied_label") : notifActive ? L("stat_notif_on") : notifPerm === "granted" ? L("stat_notif_off") : L("settings_notif_enable")} />
               </div>
               {notifPerm === "denied" ? (
@@ -4974,20 +5013,20 @@ export default function App() {
             <CollapsibleSectionBar icon={<Luggage size={18} />} label={L("settings_vacation_title")} open={vacationOpen} onClick={() => setVacationOpen((v) => !v)} />
             {vacationOpen && (
               <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: 16, marginBottom: 24 }}>
-                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_vacation_explain")}</div>
+                <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_vacation_explain")}</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
                   <div>
-                    <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 4 }}>{L("vacation_start_label")}</div>
+                    <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 4 }}>{L("vacation_start_label")}</div>
                     <input type="date" value={vacation.start} onChange={(e) => setVacation((v) => ({ ...v, start: e.target.value }))} style={getInputStyle(T)} />
                   </div>
                   <div>
-                    <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 4 }}>{L("vacation_end_label")}</div>
+                    <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 4 }}>{L("vacation_end_label")}</div>
                     <input type="date" value={vacation.end} onChange={(e) => setVacation((v) => ({ ...v, end: e.target.value }))} style={getInputStyle(T)} />
                   </div>
                 </div>
 
                 {!vacationDatesValid && (
-                  <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.warn, marginBottom: 12 }}>{L("vacation_dates_invalid")}</div>
+                  <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.warn, marginBottom: 12 }}>{L("vacation_dates_invalid")}</div>
                 )}
 
                 {/* Immediate, visible check as soon as both dates are in — this is
@@ -4997,12 +5036,12 @@ export default function App() {
                   <div style={{ background: T.goldSoft, border: `1.5px solid ${T.gold}55`, borderRadius: 14, padding: "12px 14px", marginBottom: 12 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#8A6420", fontWeight: 700, fontSize: "calc(13px * var(--wd-text-scale, 1))", marginBottom: 6 }}><AlertTriangle size={15} /> {L("vacation_shortfall_title")}</div>
                     {vacationShortfall.map((m) => (
-                      <div key={m.id} style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: "#8A6420", padding: "3px 0" }}>{L("vacation_shortfall_line", { name: m.name, n: m.shortBy, unit: unitWordFor(m, m.shortBy, L) })}</div>
+                      <div key={m.id} style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: "#8A6420", padding: "3px 0" }}>{L("vacation_shortfall_line", { name: m.name, n: m.shortBy, unit: unitWordFor(m, m.shortBy, L) })}</div>
                     ))}
                   </div>
                 )}
                 {vacationUpcomingOrOngoing && vacationShortfall.length === 0 && (
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.success, fontWeight: 600, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", marginBottom: 12, lineHeight: 1.4 }}><Check size={16} style={{ flexShrink: 0 }} /> {L("vacation_ok_message")}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.success, fontWeight: 600, fontSize: "calc(13px * var(--wd-text-scale, 1))", marginBottom: 12, lineHeight: 1.4 }}><Check size={16} style={{ flexShrink: 0 }} /> {L("vacation_ok_message")}</div>
                 )}
 
                 <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", minHeight: 24, marginBottom: 8 }}>
@@ -5015,7 +5054,7 @@ export default function App() {
                     }}
                     style={{ width: 20, height: 20, accentColor: T.primary }}
                   />
-                  <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("vacation_freeze_toggle")}</span>
+                  <span style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("vacation_freeze_toggle")}</span>
                 </label>
                 <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginBottom: (vacation.start || vacation.end) ? 14 : 0 }}>{L("vacation_freeze_explain")}</div>
 
@@ -5032,7 +5071,7 @@ export default function App() {
               ) : installPromptEvent ? (
                 <>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.primary, fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", marginBottom: 8 }}><Smartphone size={17} /> {L("settings_home_headline")}</div>
-                  <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.ink, lineHeight: 1.5, marginBottom: 12 }}>{L("settings_install_explain")}</div>
+                  <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.ink, lineHeight: 1.5, marginBottom: 12 }}>{L("settings_install_explain")}</div>
                   <button className="wd-btn" onClick={handleInstallClick} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.primary, color: "#fff", border: "none", borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44 }}><Download size={17} /> {L("settings_install_button")}</button>
                 </>
               ) : !homeTipDismissed ? (
@@ -5041,7 +5080,7 @@ export default function App() {
                     <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.primary, fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))"}}><Smartphone size={17} /> {L("settings_home_headline")}</div>
                     <button className="wd-iconbtn" onClick={() => setHomeTipDismissed(true)} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer", flexShrink: 0 }}><X size={16} /></button>
                   </div>
-                  <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.ink, lineHeight: 1.5 }}>
+                  <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.ink, lineHeight: 1.5 }}>
                     <strong>iPhone:</strong> {L("settings_home_iphone")}<br />
                     <strong>Android:</strong> {L("settings_home_android")}<br />
                     {L("settings_home_footer")}
@@ -5049,24 +5088,24 @@ export default function App() {
                 </>
               ) : (
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-                  <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted }}>{L("settings_home_hidden")}</div>
-                  <button onClick={() => setHomeTipDismissed(false)} style={{ background: "none", border: "none", color: T.primary, fontWeight: 600, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: "pointer", flexShrink: 0 }}>{L("settings_home_show_again")}</button>
+                  <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted }}>{L("settings_home_hidden")}</div>
+                  <button onClick={() => setHomeTipDismissed(false)} style={{ background: "none", border: "none", color: T.primary, fontWeight: 600, fontSize: "calc(13px * var(--wd-text-scale, 1))", cursor: "pointer", flexShrink: 0 }}>{L("settings_home_show_again")}</button>
                 </div>
               )}
             </div>
 
             <SectionTitle icon={<Share2 size={18} />}>{L("settings_share_app_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_share_app_explain")}</div>
+              <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_share_app_explain")}</div>
               <button className="wd-btn" onClick={handleShareApp} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.primary, color: "#fff", border: "none", borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44 }}><Share2 size={17} /> {L("settings_share_app_button")}</button>
               {shareCopied && (
-                <div style={{ display: "flex", alignItems: "center", gap: 6, color: T.success, fontWeight: 600, fontSize: "calc(11.5px * var(--wd-text-scale, 1))", marginTop: 10 }}><Link2 size={14} /> {L("settings_share_app_copied")}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, color: T.success, fontWeight: 600, fontSize: "calc(12px * var(--wd-text-scale, 1))", marginTop: 10 }}><Link2 size={14} /> {L("settings_share_app_copied")}</div>
               )}
             </div>
 
             <SectionTitle icon={<CloudUpload size={18} />}>{L("settings_backup_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16, lineHeight: 1.4 }}>{L("settings_backup_explain")}</div>
+              <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16, lineHeight: 1.4 }}>{L("settings_backup_explain")}</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <div>
                   <button className="wd-btn" onClick={handleExport} disabled={medications.length === 0} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: medications.length === 0 ? T.mutedSoft : T.primarySoft, color: medications.length === 0 ? "#fff" : T.primary, border: "none", borderRadius: 12, padding: "11px 14px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 700, cursor: medications.length === 0 ? "not-allowed" : "pointer" }}><Download size={15} /> {L("settings_backup_export")}</button>
@@ -5084,18 +5123,18 @@ export default function App() {
                 const daysSince = lastBackupAt ? Math.floor((now - new Date(lastBackupAt)) / 86400000) : null;
                 const needsNudge = daysSince === null || daysSince >= 30;
                 const text = daysSince === null ? L("settings_backup_never") : daysSince === 0 ? L("settings_backup_today") : daysSince === 1 ? L("settings_backup_yesterday") : L("settings_backup_days_ago", { n: daysSince });
-                return <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: needsNudge ? 700 : 500, color: needsNudge ? T.warn : T.mutedSoft, marginTop: 10 }}>{text}{needsNudge ? L("settings_backup_nudge") : ""}</div>;
+                return <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: needsNudge ? 700 : 500, color: needsNudge ? T.warn : T.mutedSoft, marginTop: 10 }}>{text}{needsNudge ? L("settings_backup_nudge") : ""}</div>;
               })()}
             </div>
 
             <CollapsibleSectionBar icon={<Clock size={18} />} label={L("settings_periods_title")} open={settingsOpen} onClick={() => setSettingsOpen((v) => !v)} />
             {settingsOpen && (
               <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: 16, marginBottom: 24 }}>
-                <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_periods_explain")}</div>
+                <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_periods_explain")}</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                   {PERIOD_ORDER.map((p) => (
                     <div key={p}>
-                      <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 4 }}>{L("settings_periods_from", { period: L(PERIOD_KEY_MAP[p] || p) })}</div>
+                      <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 4 }}>{L("settings_periods_from", { period: L(PERIOD_KEY_MAP[p] || p) })}</div>
                       <input type="time" value={periodBounds[p]} onChange={(e) => setPeriodBounds((prev) => ({ ...prev, [p]: e.target.value }))} style={getInputStyle(T)} />
                     </div>
                   ))}
@@ -5105,7 +5144,7 @@ export default function App() {
 
             <SectionTitle icon={<Cross size={18} />}>{L("settings_emergency_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
-              <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_emergency_explain")}</div>
+              <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_emergency_explain")}</div>
               <Field label={L("field_allergies")}><input value={emergencyInfo.allergies} onChange={(e) => setEmergencyInfo((p) => ({ ...p, allergies: e.target.value }))} placeholder={L("field_allergies_placeholder")} style={getInputStyle(T)} /></Field>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 <Field label={L("field_contact_name")}><input value={emergencyInfo.contactName} onChange={(e) => setEmergencyInfo((p) => ({ ...p, contactName: e.target.value }))} placeholder={L("field_name_placeholder")} style={getInputStyle(T)} /></Field>
@@ -5115,7 +5154,7 @@ export default function App() {
                 <Field label={L("field_pharmacy_name")}><input value={emergencyInfo.pharmacyName} onChange={(e) => setEmergencyInfo((p) => ({ ...p, pharmacyName: e.target.value }))} placeholder={L("field_pharmacy_placeholder")} style={getInputStyle(T)} /></Field>
                 <Field label={L("field_pharmacy_phone")}><input type="tel" value={emergencyInfo.pharmacyPhone} onChange={(e) => setEmergencyInfo((p) => ({ ...p, pharmacyPhone: e.target.value }))} placeholder="0..." style={getInputStyle(T)} /></Field>
               </div>
-              <button className="wd-btn" onClick={() => setShowEmergencyCard(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.warnSoft, border: `1.5px solid ${T.warn}55`, color: T.warn, borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(13.5px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44, marginTop: 4 }}><Cross size={16} /> {L("settings_emergency_view_button")}</button>
+              <button className="wd-btn" onClick={() => setShowEmergencyCard(true)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.warnSoft, border: `1.5px solid ${T.warn}55`, color: T.warn, borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44, marginTop: 4 }}><Cross size={16} /> {L("settings_emergency_view_button")}</button>
             </div>
           </>
         )}
@@ -5155,8 +5194,8 @@ export default function App() {
       {undoToast && (
         <div className="no-print" style={{ position: "fixed", left: "50%", transform: "translateX(-50%)", bottom: 86, zIndex: 55, background: T.ink, color: T.bg, borderRadius: 14, padding: "11px 8px 11px 14px", display: "flex", alignItems: "center", gap: 10, boxShadow: "0 8px 24px rgba(0,0,0,0.28)", maxWidth: "calc(100% - 28px)", width: 380 }}>
           <Check size={16} style={{ flexShrink: 0 }} />
-          <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{L("undo_toast_text", { name: undoToast.med.name })}</div>
-          <button className="wd-btn" onClick={() => { toggleTaken(undoToast.med, undoToast.dateISO, undoToast.t); hideUndoToast(); }} style={{ background: "none", border: "none", color: "inherit", fontWeight: 700, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: "pointer", flexShrink: 0, textDecoration: "underline", padding: "6px 4px" }}>{L("undo_toast_button")}</button>
+          <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{L("undo_toast_text", { name: undoToast.med.name })}</div>
+          <button className="wd-btn" onClick={() => { toggleTaken(undoToast.med, undoToast.dateISO, undoToast.t); hideUndoToast(); }} style={{ background: "none", border: "none", color: "inherit", fontWeight: 700, fontSize: "calc(13px * var(--wd-text-scale, 1))", cursor: "pointer", flexShrink: 0, textDecoration: "underline", padding: "6px 4px" }}>{L("undo_toast_button")}</button>
           <button className="wd-iconbtn" onClick={hideUndoToast} aria-label={L("undo_toast_dismiss")} style={{ background: "none", border: "none", color: "inherit", opacity: 0.65, cursor: "pointer", flexShrink: 0, minWidth: 32, minHeight: 32 }}><X size={15} /></button>
         </div>
       )}
@@ -5193,7 +5232,7 @@ function Logo({ size = 30, scaleText = true }) {
         <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
         <line x1={lidX + 18} y1={lidY + 2.5} x2={lidX + 18} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
       </svg>
-      <span className="wd-display" style={{ fontSize: scaleText ? "calc(24px * var(--wd-text-scale, 1))" : fontSize, fontWeight: 700, color: T.ink, lineHeight: 1 }}>MedBox</span>
+      <span className="wd-display" style={{ fontSize: scaleText ? "calc(22px * var(--wd-text-scale, 1))" : fontSize, fontWeight: 700, color: T.ink, lineHeight: 1 }}>MedBox</span>
     </div>
   );
 }
@@ -5214,7 +5253,11 @@ function SplashJar({ size = 160 }) {
         <rect x="14.5" y="28.5" width="15" height="8.4" rx="4.2" fill={T.primary} />
         <rect x="14.5" y="28.5" width="7" height="8.4" rx="4.2" fill="#ffffff" opacity="0.35" />
       </g>
-      <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={T.raised} stroke={T.mutedSoft} strokeWidth="1.6" />
+      {/* Lid in the brand gold (matching Logo's own jar mark) instead of a
+          neutral tone -- these are the app's two biggest, plainest full-screen
+          moments (boot splash, privacy resume overlay), so a touch of the
+          brand's gold accent here reinforces identity instead of looking flat. */}
+      <rect x={lidX} y={lidY} width={lidW} height={lidH} rx={lidRx} fill={T.gold} stroke={T.mutedSoft} strokeWidth="1.6" />
       <rect x={lidX + 3} y={lidY + 1.6} width={lidW - 6} height="2.4" rx="1.2" fill="#ffffff" opacity="0.18" />
       <line x1={lidX + 6} y1={lidY + 2.5} x2={lidX + 6} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
       <line x1={lidX + 12} y1={lidY + 2.5} x2={lidX + 12} y2={lidY + lidH - 2.5} stroke={groove} strokeWidth="1.2" strokeLinecap="round" />
@@ -5225,7 +5268,7 @@ function SplashJar({ size = 160 }) {
 
 function IconToggleButton({ onClick, active, icon, label }) {
   const T = useThemeColors();
-  return <button className="wd-btn" onClick={onClick} style={{ display: "flex", alignItems: "center", gap: 6, background: active ? T.primarySoft : T.surface, border: `1.5px solid ${active ? T.primary : T.border}`, color: active ? T.primary : T.muted, borderRadius: 12, padding: "10px 13px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer", minHeight: 40 }}>{icon} {label}</button>;
+  return <button className="wd-btn" onClick={onClick} style={{ display: "flex", alignItems: "center", gap: 6, background: active ? T.primarySoft : T.surface, border: `1.5px solid ${active ? T.primary : T.border}`, color: active ? T.primary : T.muted, borderRadius: 12, padding: "10px 13px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer", minHeight: 40 }}>{icon} {label}</button>;
 }
 
 // Compact flag+code button, same visual weight as IconToggleButton, opening a
@@ -5280,9 +5323,9 @@ function LanguagePicker({ language, onChange }) {
         aria-label={L("lang_button")}
         aria-haspopup="listbox"
         aria-expanded={open}
-        style={{ display: "flex", alignItems: "center", gap: 6, background: open ? T.primarySoft : T.surface, border: `1.5px solid ${open ? T.primary : T.border}`, color: open ? T.primary : T.muted, borderRadius: 12, padding: "10px 13px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer", minHeight: 40 }}
+        style={{ display: "flex", alignItems: "center", gap: 6, background: open ? T.primarySoft : T.surface, border: `1.5px solid ${open ? T.primary : T.border}`, color: open ? T.primary : T.muted, borderRadius: 12, padding: "10px 13px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, cursor: "pointer", minHeight: 40 }}
       >
-        <span style={{ fontSize: "calc(15px * var(--wd-text-scale, 1))", lineHeight: 1 }}>{current.flag}</span> {current.code.toUpperCase()}
+        <span style={{ fontSize: "calc(16px * var(--wd-text-scale, 1))", lineHeight: 1 }}>{current.flag}</span> {current.code.toUpperCase()}
       </button>
       {open && (
         <div
@@ -5318,7 +5361,7 @@ function LanguagePicker({ language, onChange }) {
 // help scanning, not to add visual weight — keep it subtle.
 function SectionTitle({ children, trailing, icon }) {
   const T = useThemeColors();
-  return <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, marginTop: 4, minHeight: 32 }}><div className="wd-display" style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "calc(17px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink }}>{icon && <span style={{ display: "flex", color: T.primary, flexShrink: 0 }}>{icon}</span>}{children}</div>{trailing}</div>;
+  return <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, marginTop: 4, minHeight: 32 }}><div className="wd-display" style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "calc(18px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink }}>{icon && <span style={{ display: "flex", color: T.primary, flexShrink: 0 }}>{icon}</span>}{children}</div>{trailing}</div>;
 }
 // A section header that visibly reads as a button — filled background, border,
 // icon badge and a chevron that flips — instead of the plain SectionTitle
@@ -5344,7 +5387,7 @@ function CollapsibleSectionBar({ icon, label, open, onClick }) {
     >
       <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 34, height: 34, borderRadius: 10, background: open ? T.primary : T.primarySoft, color: open ? "#fff" : T.primary, flexShrink: 0 }}>{icon}</div>
-        <span className="wd-display" style={{ fontSize: "calc(15px * var(--wd-text-scale, 1))", fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</span>
+        <span className="wd-display" style={{ fontSize: "calc(16px * var(--wd-text-scale, 1))", fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</span>
       </div>
       {open ? <ChevronUp size={19} style={{ color: T.primary, flexShrink: 0 }} /> : <ChevronDown size={19} style={{ color: T.muted, flexShrink: 0 }} />}
     </button>
@@ -5352,7 +5395,7 @@ function CollapsibleSectionBar({ icon, label, open, onClick }) {
 }
 function StatPill({ icon, label, value, color, bg }) {
   const T = useThemeColors();
-  return <div style={{ display: "flex", alignItems: "center", gap: 8, background: bg, color, borderRadius: 12, padding: "9px 13px" }}>{icon}<div><div style={{ fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 600, opacity: 0.85 }}>{label}</div><div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{value}</div></div></div>;
+  return <div style={{ display: "flex", alignItems: "center", gap: 8, background: bg, color, borderRadius: 12, padding: "9px 13px" }}>{icon}<div><div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 600, opacity: 0.85 }}>{label}</div><div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{value}</div></div></div>;
 }
 // A small stat/status card echoing the same shape as the "Voortgang vandaag"
 // jar cards (round icon badge, bold mono value, muted caption) — used for the
@@ -5413,14 +5456,14 @@ function AdherenceTrend({ medications, log, now, periodBounds }) {
 
   const weeksWithData = weeks.filter((w) => w.total > 0);
   if (weeksWithData.length === 0) {
-    return <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>;
+    return <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center", padding: "10px 0" }}>{L("settings_trend_empty")}</div>;
   }
   const avgPct = Math.round(weeksWithData.reduce((sum, w) => sum + w.pct, 0) / weeksWithData.length);
   const barW = 20, gap = 9, chartH = 84;
 
   return (
     <div>
-      <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_trend_explain")}</div>
+      <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_trend_explain")}</div>
       <div className="wd-scroll" style={{ display: "flex", alignItems: "flex-end", gap, overflowX: "auto", paddingBottom: 6 }}>
         {weeks.map((w, i) => {
           const hasData = w.pct != null;
@@ -5432,7 +5475,7 @@ function AdherenceTrend({ medications, log, now, periodBounds }) {
               <div style={{ width: barW, height: chartH, display: "flex", alignItems: "flex-end" }}>
                 <div style={{ width: "100%", height: h, background: color, borderRadius: 4, opacity: hasData ? 1 : 0.35 }} />
               </div>
-              <div className="wd-mono" style={{ fontSize: "calc(9px * var(--wd-text-scale, 1))", color: T.mutedSoft, whiteSpace: "nowrap" }}>{w.weekStart.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "short" })}</div>
+              <div className="wd-mono" style={{ fontSize: "calc(10px * var(--wd-text-scale, 1))", color: T.mutedSoft, whiteSpace: "nowrap" }}>{w.weekStart.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "short" })}</div>
             </div>
           );
         })}
@@ -5501,11 +5544,11 @@ function ReportView({ medications, log, now, periodBounds, onClose }) {
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "flex-start", justifyContent: "center", padding: 12, zIndex: 60, overflowY: "auto" }}>
       <div style={{ background: "#fff", borderRadius: 16, padding: 20, width: "100%", maxWidth: 640, margin: "20px 0", fontFamily: "Arial, Helvetica, sans-serif", color: "#111" }}>
         <div className="no-print" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 10 }}>
-          <div style={{ fontWeight: 700, fontSize: "calc(16.5px * var(--wd-text-scale, 1))"}}>{L("report_title")}</div>
+          <div style={{ fontWeight: 700, fontSize: "calc(16px * var(--wd-text-scale, 1))"}}>{L("report_title")}</div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: "#3F3F3F" }}><X size={20} /></button>
         </div>
         <div className="no-print" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
-          <input type="month" value={month} max={currentMonth} onChange={(e) => setMonth(e.target.value)} style={{ border: "1.5px solid #ddd", borderRadius: 10, padding: "10px 12px", fontSize: "calc(15px * var(--wd-text-scale, 1))", color: "#111", minHeight: 44 }} />
+          <input type="month" value={month} max={currentMonth} onChange={(e) => setMonth(e.target.value)} style={{ border: "1.5px solid #ddd", borderRadius: 10, padding: "10px 12px", fontSize: "calc(16px * var(--wd-text-scale, 1))", color: "#111", minHeight: 44 }} />
           <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 10, padding: "10px 15px", fontWeight: 600, fontSize: "calc(13px * var(--wd-text-scale, 1))", cursor: "pointer" }}><Printer size={14} /> {L("report_print")}</button>
         </div>
         <div style={{ marginBottom: 14 }}>
@@ -5513,7 +5556,7 @@ function ReportView({ medications, log, now, periodBounds, onClose }) {
           <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: "#3F3F3F" }}>{L("report_generated", { date: now.toLocaleDateString(LOCALE_MAP[language], { day: "numeric", month: "long", year: "numeric" }) })}</div>
         </div>
         <div style={{ overflowX: "auto" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", minWidth: 520 }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "calc(13px * var(--wd-text-scale, 1))", minWidth: 520 }}>
           <thead><tr style={{ borderBottom: "2px solid #ddd", textAlign: "left" }}><th style={{ padding: "6px 4px" }}>{L("report_col_date")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_moment")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_med")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_dose")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_status")}</th><th style={{ padding: "6px 4px" }}>{L("report_col_taken_at")}</th></tr></thead>
           <tbody>
             {rows.map((r, i) => (
@@ -5542,8 +5585,8 @@ function ConfirmModal({ message, confirmLabel, danger = true, onCancel, onConfir
   const L = useL();
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 70 }} onClick={onCancel}>
-      <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 340, fontFamily: "'Nunito', sans-serif" }}>
-        <div style={{ fontSize: "calc(14.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, lineHeight: 1.4, marginBottom: 20 }}>{message}</div>
+      <div onClick={(e) => e.stopPropagation()} className="wd-card wd-elevated" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 340, fontFamily: "'Nunito', sans-serif" }}>
+        <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, lineHeight: 1.4, marginBottom: 20 }}>{message}</div>
         <div style={{ display: "flex", gap: 10 }}>
           <button className="wd-btn" onClick={onCancel} style={{ flex: 1, background: T.surfaceSoft, border: `1.5px solid ${T.border}`, color: T.ink, borderRadius: 14, padding: "13px", fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("common_cancel")}</button>
           <button className="wd-btn" onClick={onConfirm} style={{ flex: 1, background: danger ? T.warn : T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{confirmLabel || L("common_continue")}</button>
@@ -5559,8 +5602,8 @@ function AlertModal({ message, onClose }) {
   const L = useL();
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 70 }} onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 340, fontFamily: "'Nunito', sans-serif" }}>
-        <div style={{ fontSize: "calc(14.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, lineHeight: 1.4, marginBottom: 20 }}>{message}</div>
+      <div onClick={(e) => e.stopPropagation()} className="wd-card wd-elevated" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 340, fontFamily: "'Nunito', sans-serif" }}>
+        <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, lineHeight: 1.4, marginBottom: 20 }}>{message}</div>
         <button className="wd-btn" onClick={onClose} style={{ width: "100%", background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("common_ok")}</button>
       </div>
     </div>
@@ -5577,13 +5620,13 @@ function RestockModal({ med, onClose, onConfirm }) {
   const newTotal = current + (valid ? addNum : 0);
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 55 }} onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 340, fontFamily: "'Nunito', sans-serif" }}>
+      <div onClick={(e) => e.stopPropagation()} className="wd-card wd-elevated" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 340, fontFamily: "'Nunito', sans-serif" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
           <div className="wd-display" style={{ fontSize: "calc(18px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{L("restock_title")}</div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: T.muted }}><X size={20} /></button>
         </div>
 
-        <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14 }}>{med.name} — {L("restock_current")} <span style={{ fontWeight: 700, color: T.ink }}>{current} {unitWordFor(med, current, L)}</span></div>
+        <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14 }}>{med.name} — {L("restock_current")} <span style={{ fontWeight: 700, color: T.ink }}>{current} {unitWordFor(med, current, L)}</span></div>
 
         <Field label={L("restock_field_label", { unit: unitWordFor(med, 2, L) })}>
           <input type="number" inputMode="numeric" min="1" autoFocus value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={L("restock_placeholder")} style={getInputStyle(T)} />
@@ -5621,12 +5664,12 @@ function ProfileModal({ profiles, activeProfileId, onSwitch, onAdd, onRename, on
   const previewColor = MED_COLORS.find((c) => !usedColors.has(c)) || MED_COLORS[profiles.length % MED_COLORS.length];
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 55 }} onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 380, maxHeight: "85vh", overflowY: "auto", fontFamily: "'Nunito', sans-serif" }}>
+      <div onClick={(e) => e.stopPropagation()} className="wd-card wd-elevated" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 380, maxHeight: "85vh", overflowY: "auto", fontFamily: "'Nunito', sans-serif" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
           <div className="wd-display" style={{ fontSize: "calc(18px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{L("profiles_title")}</div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: T.muted }}><X size={20} /></button>
         </div>
-        <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16, lineHeight: 1.4 }}>{L("profiles_manage_explain")}</div>
+        <div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16, lineHeight: 1.4 }}>{L("profiles_manage_explain")}</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
           {profiles.map((p) => (
             <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, background: p.id === activeProfileId ? T.primarySoft : T.surfaceSoft, border: `1.5px solid ${p.id === activeProfileId ? T.primary : T.border}`, borderRadius: 14, padding: "10px 12px" }}>
@@ -5641,7 +5684,7 @@ function ProfileModal({ profiles, activeProfileId, onSwitch, onAdd, onRename, on
                   </div>
                   <div style={{ display: "flex", gap: 8 }}>
                     <input autoFocus value={renameValue} onChange={(e) => setRenameValue(e.target.value)} style={{ ...getInputStyle(T), flex: 1, padding: "8px 10px" }} onKeyDown={(e) => { if (e.key === "Enter" && renameValue.trim()) { onRename(p.id, renameValue, renameType); setRenamingId(null); } }} />
-                    <button className="wd-btn" disabled={!renameValue.trim()} onClick={() => { onRename(p.id, renameValue, renameType); setRenamingId(null); }} style={{ background: renameValue.trim() ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 10, padding: "8px 12px", fontWeight: 600, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", cursor: renameValue.trim() ? "pointer" : "not-allowed", flexShrink: 0 }}>{L("common_save")}</button>
+                    <button className="wd-btn" disabled={!renameValue.trim()} onClick={() => { onRename(p.id, renameValue, renameType); setRenamingId(null); }} style={{ background: renameValue.trim() ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 10, padding: "8px 12px", fontWeight: 600, fontSize: "calc(13px * var(--wd-text-scale, 1))", cursor: renameValue.trim() ? "pointer" : "not-allowed", flexShrink: 0 }}>{L("common_save")}</button>
                   </div>
                 </div>
               ) : (
@@ -5707,15 +5750,15 @@ function EmergencyCardView({ medications, info, onClose }) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Cross size={22} color={T.warn} />
-            <div className="wd-display" style={{ fontSize: "calc(21px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{L("emergency_title")}</div>
+            <div className="wd-display" style={{ fontSize: "calc(22px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{L("emergency_title")}</div>
           </div>
           <button onClick={onClose} className="wd-iconbtn no-print" style={{ background: T.surfaceSoft, border: "none", cursor: "pointer", color: T.ink, borderRadius: 10 }}><X size={20} /></button>
         </div>
 
         {info.allergies && (
           <div style={{ background: T.warnSoft, border: `1.5px solid ${T.warn}55`, borderRadius: 14, padding: "14px 16px", marginBottom: 18 }}>
-            <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.warn, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("field_allergies")}</div>
-            <div style={{ fontSize: "calc(15.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{info.allergies}</div>
+            <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.warn, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{L("field_allergies")}</div>
+            <div style={{ fontSize: "calc(16px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{info.allergies}</div>
           </div>
         )}
 
@@ -5726,7 +5769,7 @@ function EmergencyCardView({ medications, info, onClose }) {
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 22 }}>
             {medications.map((med) => (
               <div key={med.id} className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 12, padding: "10px 14px" }}>
-                <div style={{ fontWeight: 700, fontSize: "calc(14.5px * var(--wd-text-scale, 1))"}}>{med.name}{med.dosePerUnit ? ` — ${med.dosePerUnit}` : ""}</div>
+                <div style={{ fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))"}}>{med.name}{med.dosePerUnit ? ` — ${med.dosePerUnit}` : ""}</div>
                 <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.muted }}>
                   {med.frequency === "indien_nodig" ? <>{L("freq_prn")} · {doseLabel(med, { count: med.prnDoseCount }, L)}</> : <>{L("beheer_per_day", { n: med.totalPerDay, unit: unitWordFor(med, med.totalPerDay, L) })} · {med.times.map((t) => momentLabel(t, L)).join(", ")}</>}
                 </div>
@@ -5755,7 +5798,7 @@ function EmergencyContactRow({ label, name, phone, T }) {
     <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 14, padding: "12px 14px", display: "flex", alignItems: "center", gap: 12 }}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: "calc(11px * var(--wd-text-scale, 1))", fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 2 }}>{label}</div>
-        {name && <div style={{ fontSize: "calc(14.5px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{name}</div>}
+        {name && <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{name}</div>}
         {phone && <div className="wd-mono" style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", color: T.muted }}>{phone}</div>}
       </div>
       {phone && (
@@ -5782,17 +5825,17 @@ function OnboardingTour({ onClose }) {
   const s = steps[step];
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.55)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70 }}>
-      <div className="wd-card" style={{ background: T.surface, borderRadius: 24, padding: 26, width: "100%", maxWidth: 360, textAlign: "center", fontFamily: "'Nunito', sans-serif" }}>
+      <div className="wd-card wd-elevated" style={{ background: T.surface, borderRadius: 24, padding: 26, width: "100%", maxWidth: 360, textAlign: "center", fontFamily: "'Nunito', sans-serif" }}>
         <div style={{ width: 56, height: 56, borderRadius: "50%", background: T.primarySoft, color: T.primary, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>{s.icon}</div>
-        <div className="wd-display" style={{ fontSize: "calc(20px * var(--wd-text-scale, 1))", fontWeight: 700, marginBottom: 8 }}>{s.title}</div>
-        <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.muted, lineHeight: 1.5, marginBottom: 20 }}>{s.body}</div>
+        <div className="wd-display" style={{ fontSize: "calc(22px * var(--wd-text-scale, 1))", fontWeight: 700, marginBottom: 8 }}>{s.title}</div>
+        <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.muted, lineHeight: 1.5, marginBottom: 20 }}>{s.body}</div>
         <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 20 }}>
           {steps.map((_, i) => (
             <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: i === step ? T.primary : T.border }} />
           ))}
         </div>
         <div style={{ display: "flex", gap: 10 }}>
-          {!last && <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: "none", border: "none", color: T.muted, fontWeight: 600, fontSize: "calc(13.5px * var(--wd-text-scale, 1))", cursor: "pointer", padding: "13px" }}>{L("onboarding_skip")}</button>}
+          {!last && <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: "none", border: "none", color: T.muted, fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer", padding: "13px" }}>{L("onboarding_skip")}</button>}
           <button className="wd-btn" onClick={() => (last ? onClose() : setStep((v) => v + 1))} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{last ? L("onboarding_done") : <>{L("onboarding_next")} <ArrowRight size={15} /></>}</button>
         </div>
       </div>
@@ -5883,9 +5926,9 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.35)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, zIndex: 50 }} onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="wd-card" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 400, maxHeight: "92vh", overflowY: "auto", fontFamily: "'Nunito', sans-serif" }}>
+      <div onClick={(e) => e.stopPropagation()} className="wd-card wd-elevated" style={{ background: T.surface, borderRadius: 22, padding: 20, width: "100%", maxWidth: 400, maxHeight: "92vh", overflowY: "auto", fontFamily: "'Nunito', sans-serif" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-          <div className="wd-display" style={{ fontSize: "calc(19px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{initial ? L("medmodal_edit_title") : L("medmodal_add_title")}</div>
+          <div className="wd-display" style={{ fontSize: "calc(18px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{initial ? L("medmodal_edit_title") : L("medmodal_add_title")}</div>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: T.muted }}><X size={20} /></button>
         </div>
 
@@ -5903,21 +5946,21 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
           {frequency === "weekdagen" && (
             <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
               {DAY_SHORT_BY_LANG[language].map((d, i) => (
-                <button key={i} type="button" onClick={() => toggleWeekday(i)} style={{ width: 42, height: 42, borderRadius: 10, background: weekdays.includes(i) ? T.primary : T.surfaceSoft, color: weekdays.includes(i) ? "#fff" : T.muted, border: `1.5px solid ${weekdays.includes(i) ? T.primary : T.border}`, fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 700, cursor: "pointer" }}>{d}</button>
+                <button key={i} type="button" onClick={() => toggleWeekday(i)} style={{ width: 42, height: 42, borderRadius: 10, background: weekdays.includes(i) ? T.primary : T.surfaceSoft, color: weekdays.includes(i) ? "#fff" : T.muted, border: `1.5px solid ${weekdays.includes(i) ? T.primary : T.border}`, fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 700, cursor: "pointer" }}>{d}</button>
               ))}
             </div>
           )}
-          {frequency === "weekdagen" && weekdays.length === 0 && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: T.warn }}>{L("weekdays_choose_one")}</div>}
-          {frequency === "indien_nodig" && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, marginTop: 8, lineHeight: 1.4 }}>{L("prn_explain")}</div>}
+          {frequency === "weekdagen" && weekdays.length === 0 && <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: T.warn }}>{L("weekdays_choose_one")}</div>}
+          {frequency === "indien_nodig" && <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, marginTop: 8, lineHeight: 1.4 }}>{L("prn_explain")}</div>}
         </Field>
 
         <Field label={L("field_photo")}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
             <AvatarBadge name={name} color={color} photo={photo} unitType={unitType} size={46} />
-            <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, flex: 1 }}>{L("photo_auto_explain")}</div>
+            <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, flex: 1 }}>{L("photo_auto_explain")}</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            <label style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.primary, cursor: "pointer", background: T.primarySoft, borderRadius: 10, padding: "10px 14px" }}>
+            <label style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.primary, cursor: "pointer", background: T.primarySoft, borderRadius: 10, padding: "10px 14px" }}>
               {photoBusy ? L("photo_busy") : photo ? L("photo_change") : L("photo_add")}
               <input type="file" accept="image/*" onChange={handlePhoto} style={{ display: "none" }} />
             </label>
@@ -5930,11 +5973,23 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
         </Field>
 
         <Field label={L("field_shape")}>
+          {/* Each button now previews its actual shape glyph (same
+              jar/tube/dropper/box icon language used everywhere else once
+              the medication is added, in the color just chosen above)
+              instead of being plain text -- so picking a shape here already
+              looks like the medication it becomes. */}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: unitType === "overig" ? 8 : 0 }}>
-            <button type="button" onClick={() => setUnitType("tabletten")} style={{ ...getToggleBtnStyle(T, unitType === "tabletten"), flex: "1 1 40%" }}>{L("shape_tablets")}</button>
-            <button type="button" onClick={() => setUnitType("zalf")} style={{ ...getToggleBtnStyle(T, unitType === "zalf"), flex: "1 1 40%" }}>{L("shape_ointment")}</button>
-            <button type="button" onClick={() => setUnitType("druppels")} style={{ ...getToggleBtnStyle(T, unitType === "druppels"), flex: "1 1 40%" }}>{L("shape_drops")}</button>
-            <button type="button" onClick={() => setUnitType("overig")} style={{ ...getToggleBtnStyle(T, unitType === "overig"), flex: "1 1 40%" }}>{L("shape_other")}</button>
+            {[
+              { key: "tabletten", labelKey: "shape_tablets" },
+              { key: "zalf", labelKey: "shape_ointment" },
+              { key: "druppels", labelKey: "shape_drops" },
+              { key: "overig", labelKey: "shape_other" },
+            ].map((opt) => (
+              <button key={opt.key} type="button" onClick={() => setUnitType(opt.key)} style={{ ...getToggleBtnStyle(T, unitType === opt.key), flex: "1 1 40%", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: "9px 4px" }}>
+                <AvatarBadge unitType={opt.key} color={color} size={22} />
+                {L(opt.labelKey)}
+              </button>
+            ))}
           </div>
           {unitType === "overig" && <input value={customUnitLabel} onChange={(e) => setCustomUnitLabel(e.target.value)} placeholder={L("shape_other_placeholder")} style={getInputStyle(T)} />}
         </Field>
@@ -5944,8 +5999,8 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
           <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
             <input type="number" inputMode="numeric" min="1" value={totalPerDay} onChange={(e) => setTotalPerDay(e.target.value)} placeholder={L("daily_dose_placeholder")} style={{ ...getInputStyle(T), flex: 1, minWidth: 120 }} />
           </div>
-          {!totalValid && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: T.warn }}>{L("daily_dose_missing", { unit: unitWordFor({ unitType, customUnitLabel }, 2, L) })}</div>}
-          {totalValid && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: distributed === Number(totalPerDay) ? T.success : T.warn }}>{L("daily_dose_distributed", { a: distributed, b: totalPerDay, unit: unitWordFor({ unitType, customUnitLabel }, Number(totalPerDay), L) })}</div>}
+          {!totalValid && <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: T.warn }}>{L("daily_dose_missing", { unit: unitWordFor({ unitType, customUnitLabel }, 2, L) })}</div>}
+          {totalValid && <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: distributed === Number(totalPerDay) ? T.success : T.warn }}>{L("daily_dose_distributed", { a: distributed, b: totalPerDay, unit: unitWordFor({ unitType, customUnitLabel }, Number(totalPerDay), L) })}</div>}
         </Field>
         )}
 
@@ -5957,12 +6012,12 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
           {strengthType === "mg" ? (
             <div style={{ position: "relative" }}>
               <input type="number" inputMode="decimal" min="0" step="any" value={strengthMg} onChange={(e) => setStrengthMg(e.target.value)} placeholder={L("strength_mg_placeholder")} style={{ ...getInputStyle(T), paddingRight: 44 }} />
-              <span style={{ position: "absolute", right: 13, top: "50%", transform: "translateY(-50%)", fontSize: "calc(13.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, fontWeight: 600, pointerEvents: "none" }}>mg</span>
+              <span style={{ position: "absolute", right: 13, top: "50%", transform: "translateY(-50%)", fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.mutedSoft, fontWeight: 600, pointerEvents: "none" }}>mg</span>
             </div>
           ) : (
             <input value={strengthOther} onChange={(e) => setStrengthOther(e.target.value)} placeholder={L("strength_other_placeholder")} style={getInputStyle(T)} />
           )}
-          {!strengthValid && <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: T.warn }}>{L("strength_missing")}</div>}
+          {!strengthValid && <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", marginTop: 6, fontWeight: 600, color: T.warn }}>{L("strength_missing")}</div>}
         </Field>
 
         {!isPRN && (
@@ -5971,11 +6026,11 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
             {times.filter((t) => (newMode === "meal" ? isMeal(t) : !isMeal(t))).map((t) => (
               <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                 {isMeal(t) ? (
-                  <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.goldSoft, color: "#8A6420", borderRadius: 9, padding: "8px 9px", fontSize: "calc(11.5px * var(--wd-text-scale, 1))", fontWeight: 700, minWidth: 92 }}><Utensils size={12} /> {L(MEAL_KEY_MAP[t.meal] || t.meal)}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.goldSoft, color: "#8A6420", borderRadius: 9, padding: "8px 9px", fontSize: "calc(12px * var(--wd-text-scale, 1))", fontWeight: 700, minWidth: 92 }}><Utensils size={12} /> {L(MEAL_KEY_MAP[t.meal] || t.meal)}</div>
                 ) : (
-                  <div className="wd-mono" style={{ background: T.primarySoft, color: T.primary, borderRadius: 9, padding: "8px 9px", fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 700, minWidth: 56, textAlign: "center" }}>{t.time}</div>
+                  <div className="wd-mono" style={{ background: T.primarySoft, color: T.primary, borderRadius: 9, padding: "8px 9px", fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 700, minWidth: 56, textAlign: "center" }}>{t.time}</div>
                 )}
-                <div className="wd-mono" style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, minWidth: 42 }}>{L(PERIOD_KEY_MAP[momentPeriod(t, periodBounds)] || momentPeriod(t, periodBounds))}</div>
+                <div className="wd-mono" style={{ fontSize: "calc(10px * var(--wd-text-scale, 1))", color: T.mutedSoft, minWidth: 42 }}>{L(PERIOD_KEY_MAP[momentPeriod(t, periodBounds)] || momentPeriod(t, periodBounds))}</div>
                 <input type="number" inputMode="numeric" min="1" value={t.count} onChange={(e) => updateTime(t.id, "count", Math.max(1, Number(e.target.value) || 1))} title={L("field_count_short")} style={{ ...getInputStyle(T), width: 60, padding: "8px 4px", textAlign: "center", fontSize: "calc(13px * var(--wd-text-scale, 1))"}} />
                 <input value={t.note} onChange={(e) => updateTime(t.id, "note", e.target.value)} placeholder={L("moments_note_placeholder")} style={{ ...getInputStyle(T), flex: 1, minWidth: 100, padding: "8px 10px", fontSize: "calc(13px * var(--wd-text-scale, 1))"}} />
                 <button className="wd-iconbtn" onClick={() => removeTime(t.id)} style={{ background: "none", border: "none", color: T.muted, cursor: "pointer" }}><X size={16} /></button>
@@ -5986,7 +6041,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
               if (hiddenCount === 0) return null;
               const labelKey = newMode === "meal" ? (hiddenCount === 1 ? "moments_hidden_time_one" : "moments_hidden_time_other") : (hiddenCount === 1 ? "moments_hidden_meal_one" : "moments_hidden_meal_other");
               return (
-                <button type="button" onClick={() => setNewMode(newMode === "meal" ? "time" : "meal")} style={{ background: "none", border: "none", color: T.mutedSoft, fontSize: "calc(11.5px * var(--wd-text-scale, 1))", textAlign: "left", cursor: "pointer", padding: "6px 0" }}>
+                <button type="button" onClick={() => setNewMode(newMode === "meal" ? "time" : "meal")} style={{ background: "none", border: "none", color: T.mutedSoft, fontSize: "calc(12px * var(--wd-text-scale, 1))", textAlign: "left", cursor: "pointer", padding: "6px 0" }}>
                   {L("moments_hidden_prefix", { n: hiddenCount, label: L(labelKey), tabLabel: newMode === "meal" ? L("moment_fixed_time") : L("moment_after_meal") })}
                 </button>
               );
@@ -6033,13 +6088,13 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
 
         <Field label={L("field_stock")}>
           <input type="number" inputMode="numeric" min="0" value={stock} onChange={(e) => setStock(e.target.value)} placeholder={L("stock_placeholder")} style={getInputStyle(T)} />
-          <div style={{ fontSize: "calc(11.5px * var(--wd-text-scale, 1))", color: T.mutedSoft, marginTop: 6, lineHeight: 1.4 }}>{isPRN ? L("stock_prn_note") : L("stock_auto_warn", { n: (totalValid ? Number(totalPerDay) : distributed) * REFILL_LEAD_DAYS, unit: unitWordFor({ unitType, customUnitLabel }, 2, L), days: REFILL_LEAD_DAYS, perday: totalValid ? totalPerDay : distributed })}</div>
+          <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, marginTop: 6, lineHeight: 1.4 }}>{isPRN ? L("stock_prn_note") : L("stock_auto_warn", { n: (totalValid ? Number(totalPerDay) : distributed) * REFILL_LEAD_DAYS, unit: unitWordFor({ unitType, customUnitLabel }, 2, L), days: REFILL_LEAD_DAYS, perday: totalValid ? totalPerDay : distributed })}</div>
         </Field>
 
         <button
           disabled={!canSave}
           onClick={() => onSave({ id: initial?.id || uid(), createdAt: initial?.createdAt || new Date().toISOString(), name: name.trim(), frequency, weekdays: isWeekdays ? weekdays : [], prnDoseCount: Math.max(1, Number(prnDoseCount) || 1), unitType, customUnitLabel: customUnitLabel.trim(), totalPerDay: isPRN ? null : Number(totalPerDay), strengthType, strengthMg, strengthOther: strengthOther.trim(), dosePerUnit: computedDosePerUnit, color, times: isPRN ? [] : times, photo, stock: stock === "" ? null : Number(stock) })}
-          style={{ width: "100%", marginTop: 8, background: canSave ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 14, padding: "16px", fontWeight: 700, fontSize: "calc(15px * var(--wd-text-scale, 1))", cursor: canSave ? "pointer" : "not-allowed" }}
+          style={{ width: "100%", marginTop: 8, background: canSave ? T.primary : T.mutedSoft, color: "#fff", border: "none", borderRadius: 14, padding: "16px", fontWeight: 700, fontSize: "calc(16px * var(--wd-text-scale, 1))", cursor: canSave ? "pointer" : "not-allowed" }}
         >
           {initial ? L("medmodal_save_edit") : L("medmodal_save_add")}
         </button>
@@ -6050,7 +6105,7 @@ function MedModal({ initial, periodBounds, medNameOptions, onClose, onSave }) {
 
 function Field({ label, children, style }) {
   const T = useThemeColors();
-  return <div style={{ marginBottom: 16, ...style }}><div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 7 }}>{label}</div>{children}</div>;
+  return <div style={{ marginBottom: 16, ...style }}><div style={{ fontSize: "calc(13px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, marginBottom: 7 }}>{label}</div>{children}</div>;
 }
 
 function getToggleBtnStyle(T, active) {
