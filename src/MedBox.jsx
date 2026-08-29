@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback, useId } from "react";
 import {
   Bell, BellOff, Plus, X, Check, AlertTriangle, Cross, Package, PackagePlus, Trash2, Clock,
-  Pencil, ChevronDown, ChevronUp, Users, Printer,
+  Pencil, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Users, Printer,
   Image as ImageIcon, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
   Flame, PartyPopper, Smartphone, Search, Phone, TrendingUp,
@@ -1379,13 +1379,13 @@ const TRANSLATIONS = {
   "ar": "اليوم"
  },
  "onboarding_step1_body": {
-  "nl": "Hier tik je je potjes aan zodra je je medicatie hebt genomen. Dit is je startpagina — hier open je de app negen van de tien keer voor.",
-  "en": "This is where you tap your doses once you've taken your medication. It's your home page — the one you'll open nine times out of ten.",
-  "de": "Hier tippst du deine Dosen an, sobald du dein Medikament genommen hast. Das ist deine Startseite — die, die du neun von zehn Mal öffnest.",
-  "fr": "C'est ici que tu coches tes doses une fois ton médicament pris. C'est ta page d'accueil — celle que tu ouvriras neuf fois sur dix.",
-  "es": "Aquí es donde marcas tus dosis en cuanto tomas tu medicación. Es tu página principal — la que abrirás nueve de cada diez veces.",
-  "tr": "İlacını aldıktan sonra dozlarını buradan işaretlersin. Burası ana sayfan — on seferden dokuzunda buraya girersin.",
-  "ar": "هنا تنقر على جرعاتك بمجرد تناول دوائك. هذه هي صفحتك الرئيسية — الصفحة التي ستفتحها تسع مرات من كل عشر."
+  "nl": "Tik je potjes aan zodra je je medicatie hebt genomen. Dit is je startpagina — die je het vaakst opent.",
+  "en": "Tap your jars once you've taken your medication. This is your home page — the one you'll open most often.",
+  "de": "Tippe deine Dosen an, sobald du dein Medikament genommen hast. Das ist deine Startseite — die du am häufigsten öffnest.",
+  "fr": "Coche tes doses dès que tu as pris ton médicament. C'est ta page d'accueil — celle que tu ouvres le plus souvent.",
+  "es": "Marca tus dosis en cuanto tomes tu medicación. Es tu página principal —la que más usas.",
+  "tr": "İlacını aldıktan sonra dozlarını işaretle. Burası en sık kullandığın ana sayfan.",
+  "ar": "انقر على جرعاتك بمجرد تناول دوائك. هذه صفحتك الرئيسية، التي تفتحها غالبًا."
  },
  "onboarding_step2_title": {
   "nl": "Week",
@@ -1397,13 +1397,13 @@ const TRANSLATIONS = {
   "ar": "الأسبوع"
  },
  "onboarding_step2_body": {
-  "nl": "Bekijk per dag wat je hebt genomen en wat je hebt gemist, en blader terug naar vorige weken.",
-  "en": "See day by day what you've taken and what you've missed, and page back through previous weeks.",
-  "de": "Sieh Tag für Tag, was du genommen und was du verpasst hast, und blättere durch frühere Wochen zurück.",
-  "fr": "Consulte jour par jour ce que tu as pris et ce que tu as manqué, et navigue dans les semaines précédentes.",
-  "es": "Consulta día a día lo que has tomado y lo que has olvidado, y navega por semanas anteriores.",
-  "tr": "Gün gün neyi aldığını ve neyi kaçırdığını gör. Önceki haftalara geri dön.",
-  "ar": "اطّلع يومًا بيوم على ما تناولته وما فاتك، وتصفّح الأسابيع السابقة."
+  "nl": "Zie per dag wat je hebt genomen of gemist, en blader terug naar eerdere weken.",
+  "en": "See day by day what you've taken or missed, and page back through earlier weeks.",
+  "de": "Sieh Tag für Tag, was du genommen oder verpasst hast, und blättere zu früheren Wochen zurück.",
+  "fr": "Vois jour par jour ce que tu as pris ou manqué, et reviens aux semaines précédentes.",
+  "es": "Consulta día a día lo que has tomado o olvidado, y navega por semanas anteriores.",
+  "tr": "Gün gün ne aldığını veya kaçırdığını gör ve önceki haftalara geri dön.",
+  "ar": "اطّلع يومًا بيوم على ما تناولته أو فاتك وتصفّح الأسابيع السابقة."
  },
  "onboarding_step3_title": {
   "nl": "Beheer",
@@ -1415,13 +1415,13 @@ const TRANSLATIONS = {
   "ar": "الإدارة"
  },
  "onboarding_step3_body": {
-  "nl": "Voeg medicatie toe, pas doses aan, of vul je voorraad bij zodra er een nieuwe verpakking bij komt.",
-  "en": "Add medication, adjust doses, or restock as soon as a new package arrives.",
-  "de": "Füge Medikamente hinzu, passe Dosen an oder fülle den Vorrat auf, sobald eine neue Packung ankommt.",
-  "fr": "Ajoute des médicaments, ajuste les doses ou réapprovisionne dès qu'une nouvelle boîte arrive.",
-  "es": "Añade medicación, ajusta las dosis o repone existencias en cuanto llegue un envase nuevo.",
-  "tr": "İlaç ekle, dozları ayarla veya yeni bir paket geldiğinde stok ekle.",
-  "ar": "أضف دواءً، أو عدّل الجرعات، أو جدّد المخزون بمجرد وصول عبوة جديدة."
+  "nl": "Voeg medicatie toe, pas doses aan, of vul je voorraad bij.",
+  "en": "Add medication, adjust doses, or restock.",
+  "de": "Füge Medikamente hinzu, passe die Dosierung an oder fülle den Vorrat auf.",
+  "fr": "Ajoute un médicament, ajuste une dose ou réapprovisionne ton stock.",
+  "es": "Añade medicación, ajusta una dosis o repone existencias.",
+  "tr": "İlaç ekle, doz ayarla veya stoğunu doldur.",
+  "ar": "أضف دواءً أو عدّل جرعة أو جدّد المخزون."
  },
  "onboarding_step4_title": {
   "nl": "Instellingen",
@@ -1433,13 +1433,13 @@ const TRANSLATIONS = {
   "ar": "الإعدادات"
  },
  "onboarding_step4_body": {
-  "nl": "Meldingen, een back-up maken en je noodkaart met belangrijke gegevens.",
-  "en": "Notifications, making a backup, and your emergency card with important details.",
-  "de": "Benachrichtigungen, ein Backup erstellen und deine Notfallkarte mit wichtigen Daten.",
-  "fr": "Notifications, création d'une sauvegarde et ta carte d'urgence avec les détails importants.",
-  "es": "Notificaciones, hacer una copia de seguridad y tu tarjeta de emergencia con datos importantes.",
-  "tr": "Bildirimler, yedek alma ve önemli bilgileri içeren acil durum kartın.",
-  "ar": "الإشعارات، إنشاء نسخة احتياطية، وبطاقة الطوارئ الخاصة بك التي تحتوي على التفاصيل المهمة."
+  "nl": "Meldingen, back-ups en je noodkaart met belangrijke gegevens.",
+  "en": "Notifications, backups, and your emergency card with key details.",
+  "de": "Benachrichtigungen, Backups und deine Notfallkarte mit wichtigen Daten.",
+  "fr": "Notifications, sauvegardes et ta carte d'urgence avec les infos importantes.",
+  "es": "Notificaciones, copias de seguridad y tu tarjeta de emergencia con datos importantes.",
+  "tr": "Bildirimler, yedekler ve önemli bilgileri içeren acil durum kartın.",
+  "ar": "الإشعارات، النسخ الاحتياطية وبطاقة الطوارئ الخاصة بك مع بياناتها المهمة."
  },
  "onboarding_skip": {
   "nl": "Overslaan",
@@ -1548,6 +1548,15 @@ const TRANSLATIONS = {
   "es": "Vale",
   "tr": "Tamam",
   "ar": "حسنًا"
+ },
+ "common_previous": {
+  "nl": "Vorige",
+  "en": "Previous",
+  "de": "Vorherige",
+  "fr": "Précédent",
+  "es": "Anterior",
+  "tr": "Önceki",
+  "ar": "السابق"
  },
  "common_delete": {
   "nl": "Verwijderen",
@@ -5856,16 +5865,44 @@ function HelpTour({ initialStep = 0, onClose }) {
     { icon: <Settings2 size={26} />, title: L("onboarding_step4_title"), body: L("onboarding_step4_body") },
   ];
   const s = steps[step];
+  const atStart = step === 0;
+  const atEnd = step === steps.length - 1;
+  const goPrev = () => setStep((v) => Math.max(v - 1, 0));
+  const goNext = () => setStep((v) => Math.min(v + 1, steps.length - 1));
+  // Swipe between the four explanations, tracked with a single pointer so it
+  // covers touch and mouse drag alike -- the dots alone were a fiddly target
+  // to navigate by. A moved pointer that stays under the threshold (a tap)
+  // still falls through to whatever it landed on (dot, chevron, backdrop).
+  const dragX = useRef(null);
+  const handlePointerDown = (e) => { dragX.current = e.clientX; };
+  const handlePointerUp = (e) => {
+    if (dragX.current == null) return;
+    const dx = e.clientX - dragX.current;
+    dragX.current = null;
+    const THRESHOLD = 40;
+    if (dx <= -THRESHOLD) goNext();
+    else if (dx >= THRESHOLD) goPrev();
+  };
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.55)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70 }} onClick={onClose}>
       <div onClick={(e) => e.stopPropagation()} className="wd-card wd-elevated" style={{ background: T.surface, borderRadius: 24, padding: 26, width: "100%", maxWidth: 360, textAlign: "center", fontFamily: "'Nunito', sans-serif" }}>
         <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: -4 }}>
           <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: T.muted }}><X size={20} /></button>
         </div>
-        <div style={{ width: 56, height: 56, borderRadius: "50%", background: T.primarySoft, color: T.primary, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>{s.icon}</div>
-        <div className="wd-display" style={{ fontSize: "calc(22px * var(--wd-text-scale, 1))", fontWeight: 700, marginBottom: 8 }}>{s.title}</div>
-        <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.muted, lineHeight: 1.5, marginBottom: 20 }}>{s.body}</div>
-        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 20 }}>
+        <div
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          style={{ display: "flex", alignItems: "center", gap: 4, touchAction: "pan-y" }}
+        >
+          <button onClick={goPrev} disabled={atStart} aria-label={L("common_previous")} className="wd-iconbtn" style={{ background: "none", border: "none", color: atStart ? T.mutedSoft : T.muted, cursor: atStart ? "default" : "pointer", flexShrink: 0, visibility: atStart ? "hidden" : "visible" }}><ChevronLeft size={22} /></button>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ width: 56, height: 56, borderRadius: "50%", background: T.primarySoft, color: T.primary, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>{s.icon}</div>
+            <div className="wd-display" style={{ fontSize: "calc(22px * var(--wd-text-scale, 1))", fontWeight: 700, marginBottom: 8 }}>{s.title}</div>
+            <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.muted, lineHeight: 1.5 }}>{s.body}</div>
+          </div>
+          <button onClick={goNext} disabled={atEnd} aria-label={L("onboarding_next")} className="wd-iconbtn" style={{ background: "none", border: "none", color: atEnd ? T.mutedSoft : T.muted, cursor: atEnd ? "default" : "pointer", flexShrink: 0, visibility: atEnd ? "hidden" : "visible" }}><ChevronRight size={22} /></button>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 8, margin: "20px 0" }}>
           {steps.map((_, i) => (
             <button key={i} onClick={() => setStep(i)} aria-label={steps[i].title} style={{ width: 9, height: 9, padding: 0, borderRadius: "50%", background: i === step ? T.primary : T.border, border: "none", cursor: "pointer" }} />
           ))}
