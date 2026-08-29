@@ -6,6 +6,7 @@ import {
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
   Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight, TrendingUp,
   Pill, User, Baby, Share2, Link2, Luggage,
+  Accessibility, CloudUpload,
 } from "lucide-react";
 
 const TRANSLATIONS = {
@@ -4594,7 +4595,7 @@ export default function App() {
                               <div key={d.med.id + d.t.id} className="wd-card" style={{ background: T.surface, borderRadius: 18, padding: "16px 12px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, border: `1.5px solid ${isCurrent ? T.primary + "55" : T.border}` }}>
                                 <AvatarBadge name={d.med.name} color={d.med.color} photo={d.med.photo} unitType={d.med.unitType} size={26} />
                                 <Compartment status={d.status} color={d.med.color} unitType={d.med.unitType} size={isCurrent ? 56 : 46} onClick={() => toggleTaken(d.med, todayISO, d.t)} pop={poppedKey === logKeyFor(d.med.id, todayISO, d.t)} label={L("aria_dose_label", { name: d.med.name, moment: momentLabel(d.t, L), status: statusLabel(d.status, L) })} />
-                                <div title={d.med.name} style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", wordBreak: "break-word", width: "100%" }}>{d.med.name}</div>
+                                <div title={d.med.name} style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", fontWeight: 600, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", width: "100%" }}>{d.med.name}</div>
                                 <div className={isMeal(d.t) ? "" : "wd-mono"} style={{ fontSize: isMeal(d.t) ? "calc(11px * var(--wd-text-scale, 1))" : "calc(11.5px * var(--wd-text-scale, 1))", color: T.muted, textAlign: "center" }}>{momentLabel(d.t, L)}</div>
                                 {doseLabel(d.med, d.t, L) && <div style={{ fontSize: "calc(10.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.muted, textAlign: "center" }}>{doseLabel(d.med, d.t, L)}</div>}
                               </div>
@@ -4803,7 +4804,7 @@ export default function App() {
                                 {dayByPeriod[period].map((it) => (
                                   <div key={it.med.id + it.t.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, width: 54 }}>
                                     <Compartment status={it.status} color={it.med.color} unitType={it.med.unitType} size={38} onClick={() => toggleTaken(it.med, dISO, it.t)} pop={poppedKey === logKeyFor(it.med.id, dISO, it.t)} label={L("aria_dose_label", { name: it.med.name, moment: `${DAY_NAMES_BY_LANG[language][i]} ${momentLabel(it.t, L)}`, status: statusLabel(it.status, L) })} />
-                                    <div title={it.med.name} style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", wordBreak: "break-word", width: "100%" }}>{it.med.name}</div>
+                                    <div title={it.med.name} style={{ fontSize: "calc(9.5px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink, textAlign: "center", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis", width: "100%" }}>{it.med.name}</div>
                                   </div>
                                 ))}
                               </div>
@@ -4920,7 +4921,7 @@ export default function App() {
 
         {activeNav === "instellingen" && (
           <>
-            <SectionTitle>{L("settings_accessibility_title")}</SectionTitle>
+            <SectionTitle icon={<Accessibility size={18} />}>{L("settings_accessibility_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600, marginBottom: 10 }}>{L("settings_textsize_label")}</div>
               <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
@@ -4937,7 +4938,7 @@ export default function App() {
               <div style={{ fontSize: "calc(12px * var(--wd-text-scale, 1))", color: T.mutedSoft, lineHeight: 1.4, marginTop: 8 }}>{L("settings_contrast_explain")}</div>
             </div>
 
-            <SectionTitle>{L("settings_notif_title")}</SectionTitle>
+            <SectionTitle icon={<Bell size={18} />}>{L("settings_notif_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: !notifActive ? 8 : 0 }}>
                 <span style={{ fontSize: "calc(13.5px * var(--wd-text-scale, 1))", fontWeight: 600 }}>{L("settings_notif_label")}</span>
@@ -5004,7 +5005,7 @@ export default function App() {
               </div>
             )}
 
-            <SectionTitle>{L("settings_home_title")}</SectionTitle>
+            <SectionTitle icon={<Smartphone size={18} />}>{L("settings_home_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               {isStandalone ? (
                 <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.success, fontWeight: 600, fontSize: "calc(13px * var(--wd-text-scale, 1))"}}><Check size={16} /> {L("settings_install_already")}</div>
@@ -5034,7 +5035,7 @@ export default function App() {
               )}
             </div>
 
-            <SectionTitle>{L("settings_share_app_title")}</SectionTitle>
+            <SectionTitle icon={<Share2 size={18} />}>{L("settings_share_app_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 12, lineHeight: 1.4 }}>{L("settings_share_app_explain")}</div>
               <button className="wd-btn" onClick={handleShareApp} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", background: T.primary, color: "#fff", border: "none", borderRadius: 12, padding: "13px 14px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer", minHeight: 44 }}><Share2 size={17} /> {L("settings_share_app_button")}</button>
@@ -5043,7 +5044,7 @@ export default function App() {
               )}
             </div>
 
-            <SectionTitle>{L("settings_backup_title")}</SectionTitle>
+            <SectionTitle icon={<CloudUpload size={18} />}>{L("settings_backup_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 16, lineHeight: 1.4 }}>{L("settings_backup_explain")}</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -5082,7 +5083,7 @@ export default function App() {
               </div>
             )}
 
-            <SectionTitle>{L("settings_emergency_title")}</SectionTitle>
+            <SectionTitle icon={<Cross size={18} />}>{L("settings_emergency_title")}</SectionTitle>
             <div className="wd-card" style={{ background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 16, padding: "16px", marginBottom: 24 }}>
               <div style={{ fontSize: "calc(12.5px * var(--wd-text-scale, 1))", color: T.muted, marginBottom: 14, lineHeight: 1.4 }}>{L("settings_emergency_explain")}</div>
               <Field label={L("field_allergies")}><input value={emergencyInfo.allergies} onChange={(e) => setEmergencyInfo((p) => ({ ...p, allergies: e.target.value }))} placeholder={L("field_allergies_placeholder")} style={getInputStyle(T)} /></Field>
@@ -5287,9 +5288,17 @@ function LanguagePicker({ language, onChange }) {
     </div>
   );
 }
-function SectionTitle({ children, trailing }) {
+// `icon` is optional and deliberately lightweight — no badge circle, no
+// border, no background, just the glyph inline before the text (same idea
+// as the small icon+label pairs already used elsewhere in the app, e.g. the
+// "Zet MedBox op je beginscherm" headline). This is NOT the same treatment
+// as CollapsibleSectionBar: those two sections are actual buttons that open
+// and close, so they get the full filled/bordered bar to read as clickable.
+// A plain SectionTitle is never clickable, so an icon here is only meant to
+// help scanning, not to add visual weight — keep it subtle.
+function SectionTitle({ children, trailing, icon }) {
   const T = useThemeColors();
-  return <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, marginTop: 4, minHeight: 32 }}><div className="wd-display" style={{ fontSize: "calc(17px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink }}>{children}</div>{trailing}</div>;
+  return <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, marginTop: 4, minHeight: 32 }}><div className="wd-display" style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "calc(17px * var(--wd-text-scale, 1))", fontWeight: 600, color: T.ink }}>{icon && <span style={{ display: "flex", color: T.primary, flexShrink: 0 }}>{icon}</span>}{children}</div>{trailing}</div>;
 }
 // A section header that visibly reads as a button — filled background, border,
 // icon badge and a chevron that flips — instead of the plain SectionTitle
@@ -5668,14 +5677,19 @@ function EmergencyCardView({ medications, info, onClose }) {
   const L = useL();
   const hasContact = info.contactName || info.contactPhone || info.doctorName || info.doctorPhone || info.pharmacyName || info.pharmacyPhone;
   return (
-    <div className="no-print" style={{ position: "fixed", inset: 0, background: T.bg, zIndex: 65, overflowY: "auto", fontFamily: "'Nunito', sans-serif", color: T.ink }}>
+    <div style={{ position: "fixed", inset: 0, background: T.bg, zIndex: 65, overflowY: "auto", fontFamily: "'Nunito', sans-serif", color: T.ink }}>
       <div style={{ maxWidth: 480, margin: "0 auto", paddingTop: "max(18px, env(safe-area-inset-top))", paddingLeft: 16, paddingRight: 16, paddingBottom: 40 }}>
+        {/* Only the close button is no-print, not this whole row or the
+            modal itself — the card exists specifically so it can be printed
+            or saved as a PDF and shown/handed over in a hurry, so the title
+            and content need to actually render on paper instead of coming
+            out as a blank page. */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Cross size={22} color={T.warn} />
             <div className="wd-display" style={{ fontSize: "calc(21px * var(--wd-text-scale, 1))", fontWeight: 700 }}>{L("emergency_title")}</div>
           </div>
-          <button onClick={onClose} className="wd-iconbtn" style={{ background: T.surfaceSoft, border: "none", cursor: "pointer", color: T.ink, borderRadius: 10 }}><X size={20} /></button>
+          <button onClick={onClose} className="wd-iconbtn no-print" style={{ background: T.surfaceSoft, border: "none", cursor: "pointer", color: T.ink, borderRadius: 10 }}><X size={20} /></button>
         </div>
 
         {info.allergies && (
