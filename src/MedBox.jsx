@@ -4,9 +4,9 @@ import {
   Pencil, ChevronDown, ChevronUp, Users, Printer,
   Image as ImageIcon, Utensils,
   Home, Calendar, ClipboardList, Settings2, Moon, Sun, Download, Upload,
-  Flame, PartyPopper, Smartphone, Search, Phone, ArrowRight, TrendingUp,
+  Flame, PartyPopper, Smartphone, Search, Phone, TrendingUp,
   Pill, User, Baby, Share2, Link2, Luggage,
-  Accessibility, CloudUpload,
+  Accessibility, CloudUpload, HelpCircle,
 } from "lucide-react";
 
 const TRANSLATIONS = {
@@ -1260,6 +1260,15 @@ const TRANSLATIONS = {
   "es": "Ver tarjeta de emergencia",
   "tr": "Acil durum kartını görüntüle",
   "ar": "عرض بطاقة الطوارئ"
+ },
+ "help_button_label": {
+  "nl": "Uitleg",
+  "en": "Help",
+  "de": "Hilfe",
+  "fr": "Aide",
+  "es": "Ayuda",
+  "tr": "Yardım",
+  "ar": "مساعدة"
  },
  "home_emergency_link": {
   "nl": "Noodkaart",
@@ -3091,7 +3100,7 @@ function Compartment({ status, color, unitType, size = 44, onClick, label, pop }
   const boxFillHeight = isTaken ? 0 : boxFillMax;
   const boxFillY = boxFillBottom - boxFillHeight;
   return (
-    <button onClick={onClick} aria-label={label} title={label} className={pop ? "wd-pop" : undefined} style={{ background: "none", border: "none", padding: 0, cursor: onClick ? "pointer" : "default", display: "inline-flex", width: size, height: size * 1.16 }}>
+    <button onClick={onClick} aria-label={label} title={label} className={[onClick && "wd-jarbtn", pop && "wd-pop"].filter(Boolean).join(" ") || undefined} style={{ background: "none", border: "none", padding: 0, cursor: onClick ? "pointer" : "default", display: "inline-flex", width: size, height: size * 1.16 }}>
       <svg viewBox="0 0 44 52" width={size} height={size * 1.16} style={{ overflow: "visible" }}>
         {shape === "jar" && (
           <>
@@ -3597,6 +3606,10 @@ export default function App() {
   const [snoozedUntil, setSnoozedUntil] = useState({});
   const [emergencyInfo, setEmergencyInfo] = useState({ allergies: "", contactName: "", contactPhone: "", doctorName: "", doctorPhone: "", pharmacyName: "", pharmacyPhone: "" });
   const [showEmergencyCard, setShowEmergencyCard] = useState(false);
+  // On-demand per-screen help, opened only via the "?" button in the header --
+  // never shown automatically. Reuses the four onboarding_stepN_* texts, but
+  // as a lookup-anytime reference instead of a forced first-run walkthrough.
+  const [showHelp, setShowHelp] = useState(false);
   // Per-profile, same pattern as emergencyInfo: only the active profile's
   // trip lives here, the rest sit in profilesDataRef until switched to.
   const [vacation, setVacation] = useState(EMPTY_VACATION);
@@ -4507,6 +4520,15 @@ export default function App() {
            hero card and modals -- so those specific moments get real depth
            instead of the same faint shadow as every ordinary list row. */
         .wd-elevated { box-shadow: ${darkMode ? "0 6px 24px rgba(0,0,0,0.55)" : "0 2px 6px rgba(35,62,56,0.09), 0 12px 28px rgba(35,62,56,0.12)"}; }
+        /* Every tappable dose "jar" gets a resting drop-shadow (so it reads
+           as a raised, physical object instead of flat artwork) and a firm
+           press-in reaction the instant it's touched -- scaled down and the
+           shadow flattened, like a real button being pushed -- separate from
+           the wd-pop bounce that already plays as the *confirmation* after
+           the tap lands. drop-shadow (not box-shadow) follows the jar's own
+           silhouette instead of its square bounding box. */
+        .wd-jarbtn { transition: transform 0.12s ease, filter 0.12s ease; filter: drop-shadow(0 2px 2px ${darkMode ? "rgba(0,0,0,0.45)" : "rgba(35,62,56,0.16)"}) drop-shadow(0 5px 9px ${darkMode ? "rgba(0,0,0,0.35)" : "rgba(35,62,56,0.10)"}); }
+        .wd-jarbtn:active { transform: scale(0.93); filter: drop-shadow(0 1px 1px ${darkMode ? "rgba(0,0,0,0.4)" : "rgba(35,62,56,0.14)"}); }
         input[type=number] { -moz-appearance: textfield; }
         input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input::placeholder, select::placeholder, textarea::placeholder { color: ${T.mutedSoft}; opacity: 1; }
@@ -4557,6 +4579,12 @@ export default function App() {
               {notifActive ? <Bell size={16} /> : <BellOff size={16} />}
             </button>
             <IconToggleButton onClick={() => setDarkMode((v) => !v)} active={darkMode} icon={darkMode ? <Sun size={16} /> : <Moon size={16} />} label={darkMode ? L("theme_light") : L("theme_dark")} />
+            {/* On-demand help for the screen you're currently on -- opt-in
+                only, never shown by itself, so it never gets in the way of
+                someone who already knows the app. */}
+            <button onClick={() => setShowHelp(true)} className="no-print" aria-label={L("help_button_label")} title={L("help_button_label")} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: 12, background: T.surface, border: `1.5px solid ${T.border}`, color: T.muted, cursor: "pointer", flexShrink: 0 }}>
+              <HelpCircle size={17} />
+            </button>
             <button onClick={() => setShowEmergencyCard(true)} className="no-print" aria-label={L("home_emergency_link")} title={L("home_emergency_link")} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: 12, background: T.warnSoft, border: `1.5px solid ${T.warn}`, color: T.warn, cursor: "pointer", flexShrink: 0 }}>
               <Cross size={17} />
             </button>
@@ -5187,6 +5215,8 @@ export default function App() {
 
       {showProfiles && <ProfileModal profiles={profiles} activeProfileId={activeProfileId} onSwitch={switchProfile} onAdd={addProfile} onRename={renameProfile} onDelete={deleteProfile} onClose={() => setShowProfiles(false)} askConfirm={askConfirm} showAlert={showAlert} />}
 
+      {showHelp && <HelpTour initialStep={HELP_STEP_BY_NAV[activeNav] ?? 0} onClose={() => setShowHelp(false)} />}
+
       {confirmDialog && <ConfirmModal message={confirmDialog.message} confirmLabel={confirmDialog.confirmLabel} danger={confirmDialog.danger !== false} onCancel={() => { confirmDialog.onCancel?.(); setConfirmDialog(null); }} onConfirm={() => { confirmDialog.onConfirm?.(); setConfirmDialog(null); }} />}
 
       {alertDialog && <AlertModal message={alertDialog.message} onClose={() => setAlertDialog(null)} />}
@@ -5808,36 +5838,39 @@ function EmergencyContactRow({ label, name, phone, T }) {
   );
 }
 
-// Shown once, the very first time someone opens the app — a quick tap-through
-// of the four bottom-nav pages instead of leaving people to figure the
-// redesign out themselves.
-function OnboardingTour({ onClose }) {
+// On-demand explanation of what each of the four bottom-nav pages is for --
+// opened only via the "?" button in the header, never shown automatically
+// (an earlier version popped up by itself on first launch and got in the
+// way, so this one is purely opt-in). Opens straight to the screen you're
+// currently looking at; the dots double as a way to browse the other three
+// without closing and reopening.
+const HELP_STEP_BY_NAV = { vandaag: 0, week: 1, beheer: 2, instellingen: 3 };
+function HelpTour({ initialStep = 0, onClose }) {
   const T = useThemeColors();
   const L = useL();
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(initialStep);
   const steps = [
     { icon: <Home size={26} />, title: L("onboarding_step1_title"), body: L("onboarding_step1_body") },
     { icon: <Calendar size={26} />, title: L("onboarding_step2_title"), body: L("onboarding_step2_body") },
     { icon: <ClipboardList size={26} />, title: L("onboarding_step3_title"), body: L("onboarding_step3_body") },
     { icon: <Settings2 size={26} />, title: L("onboarding_step4_title"), body: L("onboarding_step4_body") },
   ];
-  const last = step === steps.length - 1;
   const s = steps[step];
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.55)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70 }}>
-      <div className="wd-card wd-elevated" style={{ background: T.surface, borderRadius: 24, padding: 26, width: "100%", maxWidth: 360, textAlign: "center", fontFamily: "'Nunito', sans-serif" }}>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(27,58,52,0.55)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70 }} onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} className="wd-card wd-elevated" style={{ background: T.surface, borderRadius: 24, padding: 26, width: "100%", maxWidth: 360, textAlign: "center", fontFamily: "'Nunito', sans-serif" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: -4 }}>
+          <button onClick={onClose} className="wd-iconbtn" style={{ background: "none", border: "none", cursor: "pointer", color: T.muted }}><X size={20} /></button>
+        </div>
         <div style={{ width: 56, height: 56, borderRadius: "50%", background: T.primarySoft, color: T.primary, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>{s.icon}</div>
         <div className="wd-display" style={{ fontSize: "calc(22px * var(--wd-text-scale, 1))", fontWeight: 700, marginBottom: 8 }}>{s.title}</div>
         <div style={{ fontSize: "calc(14px * var(--wd-text-scale, 1))", color: T.muted, lineHeight: 1.5, marginBottom: 20 }}>{s.body}</div>
-        <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 20 }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 20 }}>
           {steps.map((_, i) => (
-            <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: i === step ? T.primary : T.border }} />
+            <button key={i} onClick={() => setStep(i)} aria-label={steps[i].title} style={{ width: 9, height: 9, padding: 0, borderRadius: "50%", background: i === step ? T.primary : T.border, border: "none", cursor: "pointer" }} />
           ))}
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
-          {!last && <button className="wd-btn" onClick={onClose} style={{ flex: 1, background: "none", border: "none", color: T.muted, fontWeight: 600, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer", padding: "13px" }}>{L("onboarding_skip")}</button>}
-          <button className="wd-btn" onClick={() => (last ? onClose() : setStep((v) => v + 1))} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{last ? L("onboarding_done") : <>{L("onboarding_next")} <ArrowRight size={15} /></>}</button>
-        </div>
+        <button className="wd-btn" onClick={onClose} style={{ width: "100%", background: T.primary, color: "#fff", border: "none", borderRadius: 14, padding: "13px", fontWeight: 700, fontSize: "calc(14px * var(--wd-text-scale, 1))", cursor: "pointer" }}>{L("common_ok")}</button>
       </div>
     </div>
   );
