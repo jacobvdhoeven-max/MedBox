@@ -4423,6 +4423,20 @@ export default function App() {
     });
   }, [vacationShortfall, notifActive, vacation.start, vacation.end, L]);
 
+  // Once the trip is over, forget it automatically instead of leaving a
+  // stale return date sitting in the Vakantie section forever — the whole
+  // point of the feature is planning an UPCOMING trip, so a past one should
+  // clear itself out of the way rather than needing a manual "Vakantie
+  // wissen" tap. Exact same reset as that button, just triggered by the
+  // date passing instead of a click. todayISO already follows scheduleNow,
+  // but freezeHomeTime only applies while still inside [start, end] anyway,
+  // so by the time todayISO > end it's equivalent to the device's real date.
+  useEffect(() => {
+    if (vacation.start && vacation.end && todayISO > vacation.end) {
+      setVacation(EMPTY_VACATION);
+    }
+  }, [todayISO, vacation.start, vacation.end]);
+
   const navigateTo = (key) => {
     setActiveNav(key);
     // Always land on the current week when switching into the week page.
